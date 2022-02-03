@@ -1,0 +1,16 @@
+[book]
+title = "The Z-Machine Standards Document, version 1.1 (annotated)"
+description = "(TODO: write a good description)"
+authors = ["Jared Reisinger", "Graham Nelson"]
+language = "en"
+multilingual = false
+# src = "src"
+
+[build]
+# build-dir = "book"
+create-missing = false
+
+[output.html]
+# theme = ""
+curly-quotes = true
+git-repository-url = "https://github.com/JaredReisinger/zspec"
