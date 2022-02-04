@@ -1,0 +1,129 @@
+# 6. The game state: storage and routine calls
+
+![](./images/icon06.gif)
+
+## 6.1
+
+The "state of play" is defined as the following: the contents of dynamic memory; the contents of the stack; the value of the program counter (PC), and the "routine call state" (that is, the chain of routines which have called each other in sequence, and the values of their local variables). Note that the routine call state, the stack and the PC must be stored outside the Z-machine memory map, in the interpreter's private memory.
+
+### 6.1.1
+
+The entire state of play must be stored when the game is saved.
+
+#### 6.1.1.1
+
+The format of a saved game file is not specified.
+
+#### 6.1.1.2
+
+An internal saved game for "undo" purposes (if there is one) is not part of the state of play. This is important: if a saved game file also contained the internal saved game at the time of saving, it would be impossible to undo the act of restoration. It also prevents internal saved games from growing larger and larger as they include their predecessors.
+
+#### 6.1.1.3
+
+It is illegal to save the game (either with **`save`** or **`save_undo`**) during an "interrupt routine" (one coming about through timed input, sound effect termination or newline interrupts). Therefore saved games need not store information capable of restoring such a position.
+
+### 6.1.2
+
+On a "restore" or "undo" (which restores a game saved into internal memory), the entire state of play is written back except that 'Flags 2' in the header is preserved. (This information includes whether the game is being transcribed to printer and whether a fixed-pitch font is being used.)
+
+#### 6.1.2.1
+
+Before a "restore", an interpreter should check that the file to be used has been saved from the same game currently being played. (See remark below.)
+
+#### 6.1.2.2
+
+After a "restore" or "undo", an interpreter should reset the header values marked **Rst** in the [header table](./11-header.md#111) of [**S**11](./11-header.md). (It should not be assumed that the game was saved by the same interpreter.)
+
+### 6.1.3
+
+A "restart" is similar: the entire state is restored from the original story file, and the stack is emptied; but 'Flags 2' is preserved; and the interpreter should reset the **Rst** parts of [the header](./11-header.md#111).
+
+### 6.1.4
+
+In Versions 5 and later, an interpreter unable to save the game state into internal memory (for "undo" purposes) must clear bit 4 of 'Flags 2' in the header.
+
+## 6.2
+
+Global variables (variable numbers **`$10`** to **`$ff`**) are stored in a table in the Z-machine's dynamic memory, at a byte address given in word 6 of the header. The table consists of 240 2-byte words and the initial values of the global variables are the values initially contained in the table. (It is legal for a program to alter the table's contents directly in play, though not for it to change the table's address.)
+
+## 6.3
+
+Writing to the stack pointer (variable number **`$00`**) pushes a value onto the stack; reading from it pulls a value off. Stack entries are 2-byte words as usual.
+
+### 6.3.1
+
+The stack is considered as empty at the start of each routine: it is illegal to pull values from it unless values have first been pushed on.
+
+### 6.3.2
+
+The stack is left empty at the end of each routine: when a return occurs, any values pushed during the routine are thrown away.
+
+### 6.3.3
+
+The absolute minimum standard for stack size is defined as:
+
+> Let the 'usage' of a routine call be 4 plus the number of local variables it has. During a game the total of the usages for each routine in the recursive chain of routines being called, plus the game's own stack usage, can be assumed to never reach 1024.
+
+However, more recent games have required a much larger stack size than this allows for. It is advised that interpreters allow for these games by having a larger stack size if at all possible.
+
+Two examples of modern interpreters with increased stack size are **Windows Frotz**, with 32768, and **nfrotz** with 61440.
+
+### 6.3.4
+
+In the seven opcodes that take indirect variable references (**`inc`**, **`dec`**, **`inc_chk`**, **`dec_chk`**, **`load`**, **`store`**, **`pull`**), an indirect reference to the stack pointer does not push or pull the top item of the stack --- it is read or written in place.
+
+## 6.4
+
+Routine calls occur in the following circumstances: when one of the **`call`**... opcodes is executed; in Versions 4 and later, when timed keyboard input is being monitored; in Versions 5 and later, when a sound effect finishes; in Version 6, when the game begins (to call the "main" routine); in Version 6, when a "newline interrupt" occurs.
+
+### 6.4.1
+
+A routine call may have any number of arguments, from 0 to 3 (in Versions 1 to 3) or 0 to 7 (Versions 4 and later). All routines return a value (though sometimes this value is thrown away afterward: for example by opcodes in the form **`call_vn*`**).
+
+### 6.4.2
+
+Routine calls preserve local variables and the stack (except when the return value is stored in a local variable or onto the top of the stack).
+
+### 6.4.3
+
+A routine call to packed address 0 is legal: it does nothing and returns false (0). Otherwise it is illegal to call a packed address where no routine is present.
+
+### 6.4.4
+
+When a routine is called, its local variables are created with initial values taken from the routine header (Versions 1 to 4) or with initial value 0 (Versions 5 and later). Next, the arguments are written into the local variables (argument 1 into local 1 and so on).
+
+#### 6.4.4.1
+
+It is legal for there to be more arguments than local variables (any spare arguments are thrown away) or for there to be fewer.
+
+### 6.4.5
+
+The return value of a routine can be any Z-machine number. Returning 'false' means returning 0; returning 'true' means returning 1.
+
+## 6.5
+
+A "stack frame" is an index to the routine call state (that is, the call-stack of return addresses from routines currently running, and values of local variables within them). This index is a Z-machine number. The interpreter must be able to produce the current value and to set a value further down the call-stack than the current one, effectively throwing away its recent history (see **`catch`** and **`throw`**).
+
+## 6.6
+
+In Version 6, the Z-machine understands a third kind of stack: a "user stack", which is a table of words in dynamic memory. The first word in this table always holds the number of spare slots on the stack (so the initial value is the capacity of the stack). The Z-machine makes no check on stack under-flow (i.e., pulling more values than were pushed) which would over-run the length of the table if the program allowed it to happen.
+
+---
+
+## Remarks
+
+Some interpreters store the whole of dynamic memory to disc as part of their saved game files, which can make them as much as 45K or so long. A player making a serious attack on a game may end up wasting a whole megabyte, more than convenient without a hard disc. A technique invented by Bryan Scattergood, taken up by most modern interpreters, greatly reduces file size by only saving bytes of dynamic memory which differ from the initial state of the game.
+
+It is unspecified how an interpreter should decide whether a saved game file belongs to the game currently being played. It is normal to insist that the release numbers, serial codes and checksums all match. The **Pinfocom** interpreter deliberately checks only the release number, so that saved games can be exchanged between different editions of _Seastalker_ (presumably compiled to handle the sonarscope differently).
+
+These issues are taken up in great detail in Martin Frost's **Quetzal** standard for saved game files, created to allow different interpreters to exchange saved games. This Standard doesn't require compliance with **Quetzal**, but interpreter writers are urged to consider it: it can only help authors if players can send them saved games where bugs seem to have appeared.
+
+The stack is stored in the interpreter's own memory, not anywhere in the Z-machine. The game program has no direct access to the stack memory or stack pointer; on some implementations the game's main stack is also used to store the routine call state (i.e. the game stack and the call-stack are the same) but this need not be true.
+
+The stack size specification guarantees in particular that if the game itself never uses more than 32 stack entries at once then it can have a recursive depth of at least 90 routine calls. The author believes that old Infocom games will all run with a stack size of 512 words.
+
+Note that the "state of play" does not include numerous input/output settings (the current window, cursor position, splitness or otherwise, which streams are selected, etc.): neither does it include the state of the random-number generator. (Games with elaborate status lines must redraw them after a restore has taken place.)
+
+**Zip** provides "undo" but most versions of the **ITF** interpreter do not (and **`save_undo`** returns 0, unfortunately). This is probably its greatest failing. Some Infocom-written interpreters will only provide "undo" to a game which has bit 4 of 'Flags 2' set: but Inform 5.5 doesn't set this bit, so modern interpreters should be more generous.
+
+Given the existence of **Quetzal**, a portable saved file format, it is quite possible that after loading, the game may be running on a different interpreter to that on which the game started. As a result, it is strongly advisable for games to recheck any interpreter capabilities (eg Standard version, unicode support, etc) after loading.

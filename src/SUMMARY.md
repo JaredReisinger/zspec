@@ -1,6 +1,7 @@
 # Summary
 
-[Foreword](./000-foreword.md)
+[Foreword](./0001-foreword.md)
+[Conventions used in this document](./0002-conventions.md)
 
 ---
 

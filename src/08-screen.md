@@ -1,0 +1,624 @@
+# 8. The screen model
+
+![](./images/icon08.gif)
+
+## 8.1 Fonts
+
+Text may be printed in any font of the interpreter's choice, variable- or fixed-pitch: except that when bit 1 of 'Flags 2' in the header is set, font 4 has been selected, or when the text style has been set to Fixed Pitch, then a fixed-pitch font must be used. The fixed pitch-bit is deprecated in Version 5 and later, and interpreter support in Version 6 is optional.
+
+### 8.1.1
+
+In Version 5, the height and width of the current font (in units (see below)) should be written to bytes **`$27`** and **`$26`** of the header, respectively. In Version 6, these bytes are the other way round (height in **`$27`**, width in **`$26`**). The width of a font is defined as the width of its `0` character.
+
+### 8.1.2
+
+An interpreter should ideally provide 4 fonts, with ID numbers as follows:
+
+| ID  | Font                                  |
+| :-: | :------------------------------------ |
+|  1  | the normal font                       |
+|  2  | a picture font                        |
+|  3  | a character graphics font             |
+|  4  | a Courier-style font with fixed pitch |
+
+(Selecting font ID 0 is legal, and does not change the current font.) Ideally all text styles should be available for each font (for instance, Courier bold should be obtainable) except that font 3 need only be available in Roman and Reverse Video. Each font should provide characters for character codes 32 to 126 (plus character codes for any accented characters with codes greater than 127 which are being implemented as single accented letters on-screen).
+
+### 8.1.3
+
+**[1.0]** A game must not use fonts other than 1 unless allowed to by the interpreter: see the **`set_font`** opcode for how to give or refuse permission. (This paragraph is marked **[1.0]** because existing Infocom games determined the availability of font 3 for _Beyond Zork_ in a complicated and unsatisfactory way: see [**S**16](./16-font3.md).)
+
+#### 8.1.3.1
+
+**[1.0]** It is legal for a game to change font at any time, including halfway through the printing of a word. (This might be needed to introduce exotic foreign accents in the future.)
+
+### 8.1.4
+
+The specification of the "picture font" is unknown (conjecturally, it was intended to provide pictures before Version 6 was properly developed). Interpreters should not implement it, and should refuse permission to any game requesting it.
+
+### 8.1.5
+
+The specification of the character graphics font is given in [**S**16](./16-font3.md).
+
+#### 8.1.5.1
+
+In Version 5 (only), an interpreter which cannot provide the character graphics font should clear bit 3 of 'Flags 2' in the header.
+
+### 8.1.6
+
+Any new fonts will have numbers higher than 4. Fonts 5-1023 are reserved for future Standards to specify. Local use may be made of higher font numbers.
+
+## 8.2 Status line
+
+In Versions 1 to 3, a status line should be printed by the interpreter, as follows. In Version 3, it must set bit 4 of 'Flags 1' in the header if it is unable to produce a status line.
+
+### 8.2.1
+
+In Versions 1 and 2, all games are "score games". In Version 3, if bit 1 of 'Flags 1' is clear then the game is a "score game"; if it is set, then the game is a "time game".
+
+### 8.2.2
+
+The short name of the object whose number is in the first global variable should be printed on the left hand side of the line.
+
+#### 8.2.2.1
+
+Whenever the status line is being printed the first global must contain a valid object number. (It would be useful if interpreters could protect themselves in case the game accidentally violates this requirement.)
+
+#### 8.2.2.2
+
+If the object's short name exceeds the available room on the status line, the author suggests that an interpreter should break it at the last space and append an ellipsis `...`. There is no guaranteed maximum length for location names but an interpreter should expect names of length up to at least 49 characters.
+
+### 8.2.3
+
+If there is room, the right hand side of the status line should display:
+
+#### 8.2.3.1
+
+For "score games": the score and number of turns, held in the values of the second and third global variables respectively. The score may be assumed to be in the range -99 to 999 inclusive, and the turn number in the range 0 to 9999.
+
+#### 8.2.3.2
+
+For "time games": the time, in the form **_`hours`_`:`_`minutes`_** (held in the second and third globals). The time may be given on a 24-hour clock or the number of hours may be reduced modulo 12 (but if so, `AM` or `PM` should be appended). Either way the player should be able to see the difference between 4am and 4pm, for example. The hours global may be assumed to be in the range 0 to 23 and the minutes global in the range 0 to 59.
+
+### 8.2.4
+
+The status line is updated in exactly two circumstances: when a **`show_status`** opcode is executed, and just before the keyboard is read by **`read`**. (It is not displayed when the game begins.)
+
+## 8.3 Text colours
+
+Under Versions 5 and later, text printing has a current foreground and background colour. In Version 6, each window has its own pair. (Note that a Version 6 interpreter going under the Amiga interpreter number must use the same pair of colours for all windows when running Infocom's games. If either is changed, then the interpreter must change the colour of all text on the screen to match. This simulates the Amiga hardware, which used two logical colours for text and switched palette to change their physical colour. This behaviour should not occur when running non-Infocom games, and modern games should never expect it. An interpreter that does not wish to handle this behaviour at all should avoid using the Amiga interpreter number when running Infocom's Version 6 games.)
+
+### 8.3.1
+
+The following codes are used to refer to colours:
+
+| Code | Color                                             | "True" color                   |
+| :--: | :------------------------------------------------ | :----------------------------- |
+|  -1  | the colour of the pixel under the cursor (if any) | -3 _(V6 only)_                 |
+|  0   | current                                           | -2                             |
+|  1   | default                                           | -1                             |
+|  2   | black                                             | `$0000` (`$$0000000000000000`) |
+|  3   | red                                               | `$001D` (`$$0000000000011101`) |
+|  4   | green                                             | `$0340` (`$$0000001101000000`) |
+|  5   | yellow                                            | `$03BD` (`$$0000001110111101`) |
+|  6   | blue                                              | `$59A0` (`$$0101100110100000`) |
+|  7   | magenta                                           | `$7C1F` (`$$0111110000011111`) |
+|  8   | cyan                                              | `$77A0` (`$$0111011110100000`) |
+|  9   | white                                             | `$7FFF` (`$$0111111111111111`) |
+|  10  | light grey                                        | `$5AD6` (`$$0101101011010110`) |
+|  11  | medium grey                                       | `$4631` (`$$0100011000110001`) |
+|  12  | dark grey                                         | `$2D6B` (`$$0010110101101011`) |
+|  13  | _reserved_                                        |                                |
+|  14  | _reserved_                                        |                                |
+|  15  | transparent                                       | -4 _(V6 only)_                 |
+
+Colours 10, 11, 12, 15 and -1 are available only in Version 6.
+
+#### 8.3.1.1
+
+**[1.1]** The equivalences between the colour numbers and true colours are recommended. The interpreter may allow the user to change the mapping, but the given values should be the default. If necessary, the game can check what true colour is being used for a given colour number using window properties 17 and 18.
+
+Interpreters may provide different colours (eg making colour 10 dark grey), but if and only if they can detect they are running an original Infocom story file.
+
+### 8.3.2
+
+If the interpreter cannot produce colours, it should clear bit 0 of 'Flags 1' in the header. In Version 6 it should write colours 2 and 9 (black and white), either way round, into the default background and foreground colours in bytes **`$2c`** and **`$2d`** of the header.
+
+### 8.3.3
+
+If the interpreter can produce colours, it should set bit 0 of 'Flags 1' in the header, and write its default background and foreground colours into bytes **`$2c`** and **`$2d`** of the header.
+
+### 8.3.4
+
+If a game wishes to use colours, it should have bit 6 in 'Flags 2' set in its story file. (However, an interpreter should not rule out the use of colours just because this has not been done.)
+
+### 8.3.5
+
+If a true colour, or an "under the cursor" colour has been requested by the game, then the foreground or background colour shown in window property 11 is implementation defined, with two exceptions:
+
+#### 8.3.5.1
+
+If the colour selected was one of the standard set (2-15), then that colour is indicated in property 11.
+
+#### 8.3.5.2
+
+If the colour selected was not one of the standard set (this can happen when using graphics, which may use many more colours), the colour shown in property 11 will be &geq; 16.
+
+### 8.3.6
+
+**[1.1]** In Version 6 only, colour 15 is defined as transparent. This is only valid as a background colour; an attempt to select it for the foreground should produce a diagnostic. Interpreters not supporting transparency must ignore any attempt to select colour 15.
+
+If the current background colour is transparent, then printed text is superimposed on the current window contents, without filling the background behind the text. **`erase_window`**, **`erase_line`** and **`erase_picture`** become null operations. The intent is to make it possible to superimpose text on non-uniform images. Up until now, only uniform images could be satisfactorily written on by sampling the background colour --- that in itself would be problematical if the interpreter used dithering.
+
+Scrolling with the background set to transparent is not permitted, so transparent should only be requested in a non-scrolling window. It is not valid to use Reverse Video style with the background set to transparent. Instructions that prompt for user input, such as read and save, should beavoided when the background is set to transparent, as it will not generally be possible for text entry to take place satisfactorily in the absence of a defined background colour. Printing text multiple times on top itself with the background set to transparent should be avoided, as the interpreter may use anti-aliasing, resulting in the text getting progressively heavier.
+
+### 8.3.7
+
+**[1.1]** Standard 1.1 adds the ability for games to select many more colours with **`set_true_colour`**, which uses 15-bit RBG colour values, with the following special values:
+
+| Value | Meaning                         |
+| :---: | :------------------------------ |
+|  -1   | default setting                 |
+|  -2   | current setting                 |
+|  -3   | colour under cursor _(V6 only)_ |
+|  -4   | transparent _(V6 only)_         |
+
+#### 8.3.7.1
+
+**[1.1]** The interpreter selects the closest approximations available to the requested colours. In V6, the interpreter may store the approximations in window properties 16 and 17, so the program can tell how close it got (although it is acceptable for the interpreter to just store the requested value).
+
+In the minimal implementation, interpreters just need to match to the closest of the standard colours and internally call **`set_colour`** (although that would have to ensure window properties 16 and 17 were updated). In a full implementation this would be turned around and **`set_colour`** would internally call **`set_true_colour`**.
+
+True colour specifications are in the sRGB colour space, **`$0000`** being black and **`$7FFF`** being white. Colours should be gamma adjusted if necessary. See the **PNG** specification for a good introduction to colour spaces and gamma correction.
+
+## 8.4 Screen dimensions
+
+The screen should ideally be at least 60 characters wide by 14 lines deep. (Old Apple II interpreters had a 40 character width and some modern laptop ones have a 9 line height, but implementors should seek to avoid these extremes if possible.) The interpreter may change the exact dimensions whenever it likes but must write the current height (in lines) and width (in characters) into bytes **`$20`** and **`$21`** in the header.
+
+### 8.4.1
+
+The interpreter should use the screen height for calculating when to pause and print `[MORE]`. A screen height of 255 lines means "infinite height", in which case the interpreter should never stop printing for a `[MORE]` prompt. (In case, say, the screen is actually a teletype printer, or has very good "scrollback".)
+
+### 8.4.2
+
+Screen dimensions are measured in notional "units". In Versions 1 to 4, one unit is simply the height or width of one character. In Version 5 and later, the interpreter is free to implement units as anything from character sizes down to individual pixels.
+
+### 8.4.3
+
+In Version 5 and later, the screen's width and height in units should be written to the words at **`$22`** and **`$24`**.
+
+## 8.5 Screen model (V1, V2)
+
+The screen model for Versions 1 and 2 is as follows:
+
+### 8.5.1
+
+The screen can only be printed to (like a teletype) and there is no control of the cursor.
+
+### 8.5.2
+
+At the start of a game, the screen should be cleared and the text cursor placed at the bottom left (so that text scrolls upwards as the game gets under way).
+
+## 8.6 Screen model (V3)
+
+The screen model for Version 3 is as follows:
+
+### 8.6.1
+
+The screen is divided into a lower and an upper window and at any given time one of these is selected. (Initially it is the lower window.) The game uses the **`set_window`** opcode to select one of the two. Each window has its own cursor position at which text is printed. Operations in the upper window do not move the cursor of the lower. Whenever the upper window is selected, its cursor position is reset to the top left. Selecting, or re-sizing, the upper window does not change the screen's appearance.
+
+#### 8.6.1.1
+
+The upper window has variable height (of _n_ lines) and the same width as the screen. This should be displayed on the _n_ lines of the screen below the top one (which continues to hold the status line). Initially the upper window has height 0. When the lower window is selected, the game can split off an upper window of any chosen size by using the **`split_window`** opcode.
+
+##### 8.6.1.1.1
+
+Printing onto the upper window overlays whatever text is already there.
+
+##### 8.6.1.1.2
+
+When a screen split takes place in Version 3, the upper window is cleared.
+
+#### 8.6.1.2
+
+An interpreter need not provide the upper window at all. If it is going to do so, it should set bit 5 of 'Flags 1' in the header to signal this to the game. It is only legal for a game to use **`set_window`** or **`split_window`** if this bit has been set.
+
+#### 8.6.1.3
+
+Following a "restore" of the game, the interpreter should automatically collapse the upper window to size 0.
+
+### 8.6.2
+
+When text reaches the bottom right of the lower window, it should be scrolled upwards. The upper window should never be scrolled: it is legal for a character to be printed on the bottom right position of the upper window (but the position of the cursor after this operation is undefined: the author suggests that it stay put).
+
+### 8.6.3
+
+At the start of a game, the screen should be cleared and the text cursor placed at the bottom left (so that text scrolls upwards as the game gets under way).
+
+## 8.7 Screen model (V4, V5)
+
+The screen model for Versions 4 and later, except Version 6, is as follows:
+
+### 8.7.1
+
+Text can be printed in five different styles (modelled on the VT100 design of terminal). These are: Roman (the default), Bold, Italic, Reverse Video (usually printed with foreground and background colours reversed) and Fixed Pitch. The specification does not require the interpreter to be able to display more than one of these at once (e.g. to combine italic and bold), and most interpreters can't. If the interpreter is going to allow certain combinations, then note that changing back to Roman should turn off all the text styles currently active.
+
+#### 8.7.1.1
+
+An interpreter need not provide Bold or Italic (even for font 1) and is free to interpret them broadly. (For example, rendering bold-face by changing the colour, or rendering italic with underlining.)
+
+#### 8.7.1.2
+
+It is legal to change text style at any point, including in the middle of a word being printed.
+
+#### 8.7.1.3
+
+**[1.1]** Although a story file can determine which individual styles are available by inspecting the header, this gives no indication of which styles can be combined. To improve this situation, at least for Version 6, Standard 1.1 requires window property 10 to show the actual style combination currently in use; with this a story file can probe for the availability of particular combinations.
+
+### 8.7.2
+
+There are two "windows", called "upper" and "lower": at any given time one of these two is selected. (Initially it is the lower window.) The game uses the **`set_window`** opcode to select one of the two. Each window has its own cursor position at which text is printed. Operations in the upper window do not move the cursor of the lower. Whenever the upper window is selected, its cursor position is reset to the top left.
+
+#### 8.7.2.1
+
+The upper window has variable height (of _n_ lines) and the same width as the screen. (It is usual for interpreters to print the upper window on the top _n_ lines of the screen, overlaying any text which is already there, having been printed in the lower window some time ago.) Initially the upper window has height 0. When the lower window is selected, the game can split off an upper window of any chosen size by using the **`split_window`** opcode.
+
+##### 8.7.2.1.1
+
+It is unclear exactly what **`split_window`** should do if the upper window is currently selected. The author suggests that it should work as usual, leaving the cursor where it is if the cursor is still inside the new upper window, and otherwise moving the cursor back to the top left. (This is analogous to the Version 6 practice.)
+
+#### 8.7.2.2
+
+In Version 4, the lower window's cursor is always on the bottom screen line. In Version 5 it can be at any line which is not underneath the upper window. If a split takes place which would cause the upper window to swallow the lower window's cursor position, the interpreter should move the lower window's cursor down to the line just below the upper window's new size.
+
+#### 8.7.2.3
+
+When the upper window is selected, its cursor position can be moved with **`set_cursor`**. This position is given in characters in the form (_row_, _column_), with (1,1) at the top left. The opcode has no effect when the lower window is selected. It is illegal to move the cursor outside the current size of the upper window.
+
+#### 8.7.2.4
+
+An interpreter should use a fixed-pitch font when printing on the upper window.
+
+#### 8.7.2.5
+
+In Versions 3 to 5, text buffering is never active in the upper window (even if a game begins printing there without having turned it off).
+
+### 8.7.3
+
+Clearing regions of the screen:
+
+#### 8.7.3.1
+
+When text reaches the bottom right of the lower window, it should be scrolled upwards. (When the text style is Reverse Video the new blank line should _not_ have reversed colours.) The upper window should never be scrolled: it is legal for a character to be printed on the bottom right position of the upper window (but the position of the cursor after this operation is undefined: the author suggests that it stay put).
+
+#### 8.7.3.2
+
+Using the opcode **`erase_window`**, the specified window can be cleared to background colour. (Even if the text style is Reverse Video the new blank space should not have reversed colours.)
+
+##### 8.7.3.2.1
+
+In Versions 5 and later, the cursor for the window being erased should be moved to the top left. In Version 4, the lower window's cursor moves to its bottom left, while the upper window's cursor moves to top left.
+
+#### 8.7.3.3
+
+Erasing window -1 clears the whole screen to the background colour of the lower screen, collapses the upper window to height 0, moves the cursor of the lower screen to bottom left (in Version 4) or top left (in Versions 5 and later) and selects the lower screen. The same operation should happen at the start of a game.
+
+#### 8.7.3.4
+
+Using **`erase_line`** in the upper window should erase the current line from the cursor position to the right-hand edge, clearing it to background colour. (Even if the text style is Reverse Video the new blank space should not have reversed colours.)
+
+## 8.8 Screen model (V6)
+
+The screen model for Version 6 is as follows:
+
+### 8.8.1
+
+The display is an array of pixels. Coordinates are usually given (in units) in the form (_y_,_x_), with (1,1) in the top left.
+
+### 8.8.2
+
+If the interpreter thinks the screen should be redrawn (e.g. because a menu window has been clicked over it), it may set bit 2 of 'Flags 2'. The game is expected to notice, take action and clear the bit. (However, a more efficient interpreter would handle redraws itself.)
+
+### 8.8.3
+
+There are eight "windows", numbered 0 to 7. The code -3 is used as a window number to mean "the currently selected window". This selection can be changed with the **`set_window`** opcode. Windows are invisible and usually lie on top of each other. All text and graphics plotting is always clipped to the current window, and anything showing through is plotted onto the screen. Subsequent movements of the window do not move what was printed and there is no sense in which characters or graphics 'belong' to any particular window once printed. Each window has a position (in units), a size (in units), a cursor position within it (in units, relative to its own origin), a number of flags called "attributes" and a number of variables called "properties".
+
+#### 8.8.3.1
+
+There are four attributes, numbered as follows:
+
+| Attribute | Meaning                                                      |
+| :-------: | :----------------------------------------------------------- |
+|     0     | wrapping                                                     |
+|     1     | scrolling                                                    |
+|     2     | text copied to output stream 2 (the transcript, if selected) |
+|     3     | buffered printing                                            |
+
+Each can be turned on or off, using the **`window_style`** opcode.
+
+##### 8.8.3.1.1
+
+"Wrapping" is the continuation of printed text from one line to the next. Text running up to the right margin will continue from the left margin of the following line. If "wrapping" is off then characters will be printed until no more can be fitted in without hitting the right margin, at which point the cursor will move to the right margin and stay there, so that any further text will be ignored.
+
+##### 8.8.3.1.2
+
+"Buffered printing" means that text to be printed in the window is temporarily stored in a buffer and only flushed onto the screen at intervals convenient for the interpreter.
+
+###### 8.8.3.1.2.1
+
+"Buffered printing" has two practical effects: firstly it causes a delay before printed text actually appears.
+
+###### 8.8.3.1.2.2
+
+Secondly it affects the way "wrapping" is done. If "buffered printing" is on, then text is wrapped after the last word which could fit on a line. If not, then text is wrapped after the last character that could fit.
+
+Example: suppose the text "Here is an abacus" is printed in a narrow window. The appearance (after the buffer has been flushed, if there is buffered printing) might be:
+
+| Wrapping | Buffering | Example                     |
+| :------: | :-------: | :-------------------------- |
+|          |           | `<...margins...>`           |
+|    on    |    on     | `Here is an`<br/>`abacus^`  |
+|   off    |    on     | `Here is an aba^`           |
+|    on    |    off    | `Here is an aba`<br/>`cus^` |
+|   off    |    off    | `Here is an aba^`           |
+
+where the caret denotes the final position of the cursor. (Games often alter "wrapping": it would normally be on for a window holding running text but off for a status-line window, which is why window 0 has "wrapping" on by default but all other windows have "wrapping" off by default. On the other hand all windows have "buffered printing" on by default and games only alter this in rare circumstances to avoid delays in the appearance of individual printed characters.)
+
+#### 8.8.3.2
+
+There are 16 properties, numbered as follows:
+
+| Property | Meaning                   |
+| :------: | :------------------------ |
+|    0     | y coordinate              |
+|    1     | x coordinate              |
+|    2     | y size                    |
+|    3     | x size                    |
+|    4     | y cursor                  |
+|    5     | x cursor                  |
+|    6     | left margin size          |
+|    7     | right margin size         |
+|    8     | newline interrupt routine |
+|    9     | interrupt countdown       |
+|    10    | text style                |
+|    11    | colour data               |
+|    12    | font number               |
+|    13    | font size                 |
+|    14    | attributes                |
+|    15    | line count                |
+|    16    | true foreground colour    |
+|    17    | true background colour    |
+
+Each property is a standard Z-machine number and is readable with **`get_wind_prop`**. Properties 0 through 15 are writeable with **`put_wind_prop`**. However, a game should only use **`put_wind_prop`** to set the newline interrupt routine, the interrupt countdown and the line count: everything else is either set by the interpreter or by specialised opcodes (such as **`set_font`**). The true foreground and true background properties must not be written by **`put_wind_prop`**.
+
+##### 8.8.3.2.1
+
+If a window has character wrapping, then text is clipped to stay inside the left and right margins. After a new-line, the cursor moves to the left margin on the next line. Margins can be set with **`set_margins`** but this should only be done just after a newline or just after the window has been selected. (These values are margin sizes in pixels, and are by default 0.)
+
+##### 8.8.3.2.2
+
+If the interrupt countdown is set to a non-zero value (which by default it is not), then the line count is decremented on each new-line, and when it hits zero the routine whose packed address is stored in the "newline interrupt routine" property is called before text printing resumes. (This routine may, for example, meddle with margins to roll text around a crinkly-shaped picture.) The interrupt routine should not attempt to print anything.
+
+###### 8.8.3.2.2.1
+
+Because of an Infocom bug, if the interpreter number is 6 (for MSDOS) and the story file is _Zork Zero_ release 393.890714, but in no other case, the interpreter must do the following instead: (1) move to the new line, (2) put the cursor at the current left margin, (3) call the interrupt routine (if it's time to do so). This is the least bad way to get around a basic inconsistency in existing Infocom story files and interpreters.
+
+###### 8.8.3.2.2.2
+
+Note that the **`set_margins`** opcode, which is often used by newline interrupt routines (to adjust the shape of a margin as it flows past a picture), automatically moves the cursor if the change in margins would leave the cursor outside them. The effect will depend, unfortunately, on which sequence of events above takes place.
+
+###### 8.8.3.2.2.3
+
+A line count is never decremented below -999.
+
+##### 8.8.3.2.3
+
+The text style is set just as in Version 4, using **`set_text_style`** (which sets that for the current window). The property holds the operand of that instruction (e.g. 4 for italic).
+
+##### 8.8.3.2.4
+
+The foreground colour is stored in the lower byte of the colour data property, the background colour in the upper byte.
+
+##### 8.8.3.2.5
+
+The font height (in pixels) is stored in the upper byte of the font size property, the font width (in pixels) in the lower byte.
+
+##### 8.8.3.2.6
+
+The interpreter should use the line count to see when it should print `[MORE]`. A line count of -999 means "never print `[MORE]`". (Version 6 games often set line counts to manipulate when `[MORE]` is printed.)
+
+##### 8.8.3.2.7
+
+If an attempt is made by the game to read the cursor position at a time when text is held unprinted in a buffer, then this text should be flushed first, to ensure that the cursor position is accurate before being read.
+
+##### 8.8.3.2.8
+
+**[1.1]** The true foreground and background colours show the actual colour being used for the foreground and background, whether it was set using **`set_colour`** or **`set_true_colour`**. Transparent is indicated as -4. If the colour was sampled from a picture then the value shown may be a 15-bit rounding of a more precise colour, leading to a slight inaccuracy if the colour is read and then written back.
+
+#### 8.8.3.3
+
+All eight windows begin at (1,1). Window 0 occupies the whole screen and is initially selected. Window 1 is as wide as the screen but has zero height. Windows 2 to 7 have zero width and height. Window 0 initially has attribute 1 off and 2, 3 and 4 on (scrolling, copy to printer transcript, buffering). Windows 1 to 7 initially have attribute 4 (buffering) on, and the other attributes off.
+
+#### 8.8.3.4
+
+A window can be moved with **`move_window`** and resized with **`window_size`**. If the window size is reduced so that its cursor lies outside it, the cursor should be reset to the left margin on the top line.
+
+#### 8.8.3.5
+
+Each window remembers its own cursor position (relative to its own coordinates, so that the position (1,1) is at its top left). These can be changed using **`set_cursor`** (and it is legal to move the cursor for an unselected window). It is illegal to move the cursor outside the current window.
+
+#### 8.8.3.6
+
+Each window can be scrolled vertically (up or down) any number of pixels, using the **`scroll_window`** opcode.
+
+### 8.8.4
+
+To some extent windows 0 and 1 mimic the behaviour of the lower and upper windows in the Version 4 screen model:
+
+#### 8.8.4.1
+
+The **`split_screen`** opcode tiles windows 0 and 1 together to fill the screen, so that window 1 has the given height and is placed at the top left, while window 0 is placed just below it (with its height suitably shortened, possibly making it disappear altogether if window 1 occupies the whole screen).
+
+#### 8.8.4.2
+
+An "unsplit" (that is, a **`split_screen 0`**) takes place when the entire screen is cleared with **`erase_window -1`**, if a "split" has previously occurred (meaning that windows 0 and 1 have been set up as above).
+
+### 8.8.5
+
+Screen clearing operations:
+
+#### 8.8.5.1
+
+Erasing a picture is like drawing it (see below), except that the space where it would appear is painted over with background colour instead.
+
+#### 8.8.5.2
+
+The current line can be erased using **`erase_line`**, either all the way to the right margin or by any positive number of pixels in that direction. The space is painted over with background colour (even if the current text style is Reverse Video).
+
+#### 8.8.5.3
+
+Each window can be erased using **`erase_window`**, erasing to background colour (even if the current text style is Reverse Video).
+
+##### 8.8.5.3.1
+
+Erasing window number -1 erases the entire screen to the background colour of window 0, unsplits windows 0 and 1 (see [**S**8.7.3.3 above](#8733)) and selects window 0.
+
+##### 8.8.5.3.2
+
+Erasing window -2 erases the entire screen to the current background colour. (It doesn't perform **`erase_window`** for all the individual windows, and it doesn't change any window attributes or cursor positions.)
+
+### 8.8.6
+
+Pictures may accompany the game. They are not stored in the story file (or the Z-machine) itself, and the interpreter is simply expected to know where to find them.
+
+#### 8.8.6.1
+
+Pictures are numbered from 1 upwards (not necessarily contiguously). They can be "drawn" or "erased" (using **`draw_picture`** and **`erase_picture`**). Before attempting to do so, a game may ask the interpreter about the picture (using **`picture_data`**): this allows the interpreter to signal that the picture in question is unavailable, or to specify its height and width.
+
+#### 8.8.6.2
+
+The game may, if it wishes, use the **`picture_table`** opcode to give the interpreter advance warning that a group of pictures will soon be needed (for instance, a collection of icons making up a control panel). The interpreter may want to load these pictures off disc and into a memory cache.
+
+### 8.8.7
+
+**[1.1]** Interpreters may use a backing store to store the Z-machine screen state, rather than plotting directly to the screen. This would normally be the case in a windowed operating system environment. If a backing store is in use, display changes executed by the Z-machine may not be immediately made visible to the user. Standard 1.1 adds the new opcode **`buffer_screen`** to Version 6 to control screen updates. An interpreter is free to ignore the opcode if it doesn't fit its display model (in which case it must act as if **`buffer_screen`** is always set to 0).
+
+#### 8.8.7.1
+
+**[1.1]** When **`buffer_screen`** is set to 0 (the default), all display changes are expected to become visible to the user either immediately, or within a short period of time, at the interpreter's discretion. At a minimum, all updates become visible before waiting for input. Any intermediate display states between input requests may not be seen; for example when printing a large amount of new text into a scrolling window, all the intermediate scroll positions may or may not be shown.
+
+When **`buffer_screen`** is set to 1, the interpreter need not change the visible display at all. Any display changes can be done purely in the backing store. A program may set **`buffer_screen`** to 1 before carrying out a complex layered graphical composition, to indicate that the intermediate states are not worth showing. It would be extremely ill-advised to prompt for input with **`buffer_screen`** set to 1.
+
+When **`buffer_screen`** is set back to 0, the display is not necessarily updated immediately. If this is required, the game must request it seperately (see [**S**8.8.7.2 below](#8872)).
+
+#### 8.8.7.2
+
+**[1.1]** With **`buffer_screen`** in either state, an update of the visible display can be forced immediately by issuing **`buffer_screen -1`**, without altering the current buffering state. Note that **`buffer_screen -1`** does not flush the text buffer.
+
+---
+
+## Remarks
+
+See [**S**16](./16-font3.md) for comment on how _Beyond Zork_ uses fonts.
+
+Some interpreters print the status line when they begin running a Version 3 game, but this is incorrect. (It means that a small game printing text and then quitting cannot be run unless it includes an object.) The author's preferred status line formats are:
+
+```
+Hall of Mists                                 80/733
+Lincoln Memorial                              12:03 PM
+```
+
+Thus the score/turns block always fits in 3+1+4=8 characters and the time in 2+1+2+1+2=8 characters. (Games needing more exotic time lines, for example, should not be written in Version 3.)
+
+The only existing Version 3 game to use an upper window is _Seastalker_ (for its sonarscope display).
+
+Some ports of **ITF** apply buffering (i.e. word-wrapping) and scrolling to the upper window, with unfortunate consequences. This is why the standard Inform status line is one character short of the width of the screen.
+
+The original Infocom files seldom use **`erase_window`**, except with window -1 (for instance _Trinity_ only uses it in this form). **ITF** does not implement it in any other case.
+
+The Version 5 re-releases of older games make use of consecutive **`set_text_style`** instructions to attempt to combine boldface reverse video (in the hints system).
+
+None of Infocom's Version 4 or 5 files use **`erase_line`** at all, and **ITF** implements it badly (with unpredictable behaviour in Reverse Video text style). (It's interesting to note that the Version 5 edition of _Zork I_ --- one of the earliest Version 5 files --- blanks out lines by looking up the screen width and printing that many spaces.)
+
+It's recommended that a Version 5 interpreter always use units to correspond to characters: that is, characters occupy 1x1 units. _Beyond Zork_ was written in the expectation that it could be using either 1x1 or 8x8, and contains correct code to calculate screen positions whatever units are used. (Infocom's Version 5 interpreter for MSDOS could either run in a text mode, 1x1, or a graphics mode, 8x8.) However, the German translation of _Zork I_ contains incorrect code to calculate screen positions unless 1x1 units are used.
+
+Note that a minor bug in **Zip** writes bytes **`$22`** to **`$25`** in the header as four values, giving the screen dimensions in the form _left_, _right_, _top_, _bottom_: provided units are characters (i.e. provided the font width and height are both 1) then since "left" and "top" are both 0, this bug has no effect.
+
+Some details of the known IBM graphics files are given in Paul David Doherty's _Infocom Fact Sheet_. See also Mark Howell's program `pix2gif`, which extracts pictures to GIF files. (This is one of his **Ztools** programs.)
+
+Although Version 6 graphics files are not specified here, and were released in several different formats by Infocom for different computers, a consensus seems to have emerged that the MCGA pictures are the ones to adopt (files with filenames `*.MG1`). These are visually identical to Amiga pictures (whose format has been deciphered by Mark Knibbs). However, some Version 6 story files were tailored to the interpreters they would run on, and use the pictures differently according to what they expect the pictures to be. (For instance, an Amiga-intended story file will use one big Amiga-format picture where an MSDOS-intended story file will use several smaller MCGA ones.)
+
+The easiest option is to interpret only DOS-intended Version 6 story files and only MCGA pictures. But it may be helpful to examine the **Frotz** source code, as **Frotz** implements **`draw_picture`** and **`picture_data`** so that Amiga and Macintosh forms of Version 6 story files can also be used.
+
+It is generally felt that newly-written graphical games should not imitate the old Infocom graphics formats, which are very awkward to construct and have been overtaken by technology. Instead, the **Blorb** proposal for packaging up resources with Z-machine games calls for PNG format graphics glued together in a fairly simple way. The graphics for Infocom's Version 6 games have been made available in **Blorb** format, so that understanding Infocom's picture-sets is no longer very useful.
+
+The line count of -999 preventing `[MORE]` is a device used by the demonstration mode of _Zork Zero_.
+
+Interpreter authors are advised that all 8 windows in Version 6 must be treated identically. The only ways in which they are distinguished are:
+
+- Different default positions + sizes
+- Different default attributes
+- **`split_window`** manipulates windows 0 and 1 specifically
+- Window 1 is the default mouse window
+
+Differences in interpreter behaviour must only arise from differences in window attributes and properties.
+
+In V6, it is legal to position the cursor up against the right or bottom of a window --- eg at (1,1) in a zero-sized window or at (641,401) in 640x400 window. Indeed, this is the default state of windows 1 to 7, and the cursor may be left at the right-hand side of a window when wrapping is off.
+
+Attempting to print text (including new-lines) when the cursor is fewer than font_height units from the bottom of the window results in undefined behaviour - this precludes any printing in windows less than font_height units high.
+
+It is legal for interpreters to always show the same value in property 11 if a true or sampled colour is in use. As a result, story files cannot assume that setting a value that was read from property 11 will give the same colour, if **`set_colour -1`** has been used in that window.
+
+The same rules apply if an interpreter offers non-standard default colours although in this case it would be ill-advised to show the same colour numbers for foreground and background --- unless they can be distinguished, non-standard default colours should probably not be offered.
+
+If the interpreter offers a limited palette, then there is no problem, as it can be arranged for there to be fewer than 240 distinct non-standard colours. In an interpreter with a higher colour-depth, a good implementation would be to use colours 16-255 to represent the last 240 distinct non-standard colours used, re-using numbers after 240 colours have been used. This will minimize potential problems caused by non-standard colours, particularly when set as defaults.
+
+Regardless of the limitations on colour numbers, in Version 6 each window must remember accurately the colour pair selected, so it is preserved across window switches.
+
+---
+
+[**S**8.7.2.3](#8723) states that it is illegal to move the cursor outside the current size of the upper window. [**S**8.8.3.5](#8835) gives the equivalent rule for Version 6.
+
+Many modern games have been lax in obeying this rule; in particular some of the standard Inform menu libraries have violated it. Infocom's _Sherlock_ also miscalculated the size of the upper window to use for box quotes.
+
+It is recommended that if the cursor is moved below the split position in V4/V5, interpreters should execute an implicit **`split_window`** to contain the requested cursor position, if possible. Diagnostics should be produced, but should be suppressable.
+
+---
+
+Some modern Z-Machine interpeters (mainly those using Andrew Plotkin's **Glk** interface standard) use a seperate text windows for the status line. While this is not Standard behaviour, it largely causes no problems. However _Trinity_, and many more recent Inform games, print quote boxes using a technique that is not compatible with this implementation.
+
+Andrew Plotkin has written up some [notes](http://eblong.com/zarf/glk/quote-box.html) on the issue, including a workaround.
+
+---
+
+Infocom's Version 6 interpreters and story files disagree on the meaning of window attributes 0 and 3 and the opcode **`buffer_mode`**, in such a way that the original specification is hard to deduce from the final behaviour. If we call the three possible ways that text can appear "word wrap", "char wrap" and "char clip":
+
+| Way       | Example                     |
+| :-------- | :-------------------------- |
+|           | `<...margins...>`           |
+| word wrap | `Here is an`<br/>`abacus^`  |
+| char wrap | `Here is an aba`<br/>`cus^` |
+| char clip | `Here is an aba^`           |
+
+then Infocom's interpreters behave as follows:
+
+| Mode                  | Apple II      | MSDOS         | Macintosh | Amiga        |
+| :-------------------- | :------------ | :------------ | :-------- | :----------- |
+| A0 off, A3 off        | char clip(LR) | char clip()   | ---       | ---          |
+| A0 off, A3 on         | char clip(LR) | char clip(LR) | ---       | ---          |
+| A0 on, A3 off         | word wrap     | char wrap     | ---       | ---          |
+| A0 on, A3 on          | word wrap     | word wrap     | ---       | ---          |
+| **`buffer_mode off`** | ---           | ---           | char wrap | char clip(L) |
+| **`buffer_mode on`**  | ---           | ---           | word wrap | word wrap    |
+
+Here "---" means that the interpreter ignores the given state, and the presence of L, R or both after "char clip" indicates which of the left and right margins are respected. The Amiga behaviour may be due to a bug and two bugs have also been found in the MSDOS implementation. Under this standard, the appearance is as follows:
+
+| Mode                  | Standard      |
+| :-------------------- | :------------ |
+| A0 off, A3 off        | char clip(LR) |
+| A0 off, A3 on         | char clip(LR) |
+| A0 on, A3 off         | char wrap     |
+| A0 on, A3 on          | word wrap     |
+| **`buffer_mode off`** | ---           |
+| **`buffer_mode on`**  | ---           |
+
+Due to a bug or an oversight, the V6 story files for all interpreters use **`buffer_mode`** once: to remove buffering while printing `Please wait...` with a row of full stops trickling out during a slow operation. Buffering would frustrate this, but fortunately on modern computers the operation is no longer slow and so the bug does not cause trouble.

@@ -1,0 +1,106 @@
+# 9. Sound effects
+
+![](./images/icon09.gif)
+
+## 9.1 Sound effects
+
+Some games, from Version 3 onward, have sound effects attached. These are not stored in the story files (or the Z-machine) itself, and the interpreter is simply expected to know where to find them. Other games have only one sound effect, usable in a much more restricted way: a beep or bell sound, which we shall call a "bleep".
+
+### 9.1.1
+
+In Version 6, the interpreter should set bit 5 of 'Flags 1' if it can provide sound effects beyond a bleep.
+
+### 9.1.2
+
+In Version 5 and later, a game should have bit 7 of 'Flags 2' set in its story file if it wants to use sound effects beyond a bleep. The interpreter should then clear this bit if it cannot oblige.
+
+## 9.2 Numbering of
+
+Sound effects are numbered upwards from 1. Number 1 is a high-pitched bleep, number 2 a low-pitched one and effects from 3 upward are supplied by the interpreter somehow for the particular game in question.
+
+### 9.2.1
+
+**[1.1]** Aside from bleeps, there are two types of sound effect, samples and music. The game has no way of telling the type of a given sound effect.
+
+## 9.3 Volume
+
+Sound effects (other than bleeps) can be played at any volume level from 1 to 8 (8 being loudest of these). The volume level -1 should be implemented as "loudest possible".
+
+## 9.4 Sound playing autonymously
+
+Bleeps are immediate and brief. Other sound effects take place in the background, while normal operation of the Z-machine is going on. Control is via the **`sound_effect`** opcode, allowing the game to prepare, start, stop or finish with an effect.
+
+### 9.4.1
+
+The game may (but need not) "prepare" a sound effect before use. This would indicate to the interpreter that the game intends to use the effect soon: an interpreter might act on this information by loading the sampled sound off disc and into a memory cache.
+
+### 9.4.2
+
+**[1.1]** A sound effect (other than a bleep) can then be "stopped" or "started". Only one sound effect of each type can play at any given time, so that starting a new music sound effect stops any current music playing, and starting any new sample sound effect stops any current sample sound playing. Samples and music do not interrupt each other.
+
+### 9.4.3
+
+In Versions 5 and later, a sound effect may repeat any specified number of times, or repeat forever (until stopped).
+
+### 9.4.4
+
+Eventually, though, if it has not been stopped, it may end by itself. A routine (specified at start time) can then be called. The intention is that this routine may implement effects such as fading in and out, by replaying the sound effect at a different volume. (A game should not place any important code in such a routine.) The routine is only called when the sound has played the requested number of times. If manually stopped or interrupted by another sound, the routine is not called.
+
+### 9.4.5
+
+The game may, but need not, explicitly "finish with" any sound effect which is not likely to occur again for a while: the interpreter can then throw it out of memory.
+
+----
+
+## Remarks
+
+The safest way an Inform program can try to produce a bleep is by executing **`@sound_effect 1`**. Some ports of **Zip** believe that the first operand of this is the number of bleeps to make (so that **`@sound_effect 2`** bleeps twice), but this is incorrect.
+
+Several Infocom games bleep (using **`sound_effect`** with only one operand, always equal to 1 or 2). Two provided sampled sound effects but did not bleep: _The Lurking Horror_ and _Sherlock_. Their story files contain the following usages of **`sound_effect`**:
+
+<dl>
+<dt>in <cite>TLH</cite></dt>
+<dd>
+
+```
+sound_effect number 2 volume
+```
+
+</dd>
+<dt>in <cite>Sherlock</cite></dt>
+<dd>
+
+```
+sound_effect number 2 volume/repeats function
+sound_effect 0 3
+sound_effect number 3
+sound_effect 0 4
+```
+
+</dd>
+</dl>
+
+except that, probably due to a bug in its own code, _TLH_ can also generate
+
+```
+sound_effect 4 8
+sound_effect 4095 2 15
+```
+
+A further difficulty with _TLH_ is that it assumes the interpreter is as slow as Infocom's Amiga interpreter was: it fires off several sound effects in one game round, assuming there will be time for it to play most of each one. To simulate this, **`sound_effect`** must be rewritten to pause sometimes:
+
+- if a new sample sound effect is begun while there is still one playing which was started since the last keyboard input, then wait until that earlier one finishes one cycle before replacing it with the new sound effect. Music sound effects are not affected by this. New music should interrupt old music immediately at all times.
+
+Infocom's MS-DOS interpreters for V4 to V6 set bit 5 of 'Flags 1' in all circumstances (i.e., whether or not sound effects are available). This would be incorrect behaviour for a standard interpreter.
+
+Infocom implemented sound effects differently on different machines. The format of Infocom's shipped sound effects files has been documented by Stefan Jokisch and his notes are available from [www.ifarchive.org](http://www.ifarchive.org).
+
+However, modern interpreters are strong encouraged to support Andrew Plotkin's **Blorb** format, which is a more modern way to make sound effects available to newer games. Blorb files have been made available for the Infocom sound effects, so that modern interpreters need no longer support the Infocom format.
+
+----
+
+When using Blorb resources, the default interpreter behaviour (unless over- ridden by the player) should be for samples played at maximum volume (64), in one channel of a SONG or MOD played at volume 8, to be of equal volume to samples played at maximum volume (8) as an effect. This will be the natural behaviour if effects use one physical channel and MODs/SONGs use four physical channels.
+
+Ideally, a sound played at volume _n_ in a SONG played at volume _m_ should sound the same as when played as an effect at volume _n_*_m_/64. This mandates that the volume scale for effects be equivalent to the scale defined for samples in the MOD specification.
+
+If multi-channel effects are used, the overall volume should be independent of the number of channels used in the sound. Thus a stereo AIFF containing the same samples for left and right should sound as loud as a mono AIFF containing the same data. This will need adjustment of volume if stereo AIFFs use two physical channels and mono AIFFs use one. No adjustment would be required if an interpreter reduced all AIFFs to mono.

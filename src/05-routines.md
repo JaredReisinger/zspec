@@ -1,0 +1,35 @@
+# 5. How routines are encoded
+
+![](./images/icon05.gif)
+
+## 5.1
+
+A routine is required to begin at an address in memory which can be represented by a packed address (for instance, in Version 5 it must occur at a byte address which is divisible by 4).
+
+## 5.2
+
+A routine begins with one byte indicating the number of local variables it has (between 0 and 15 inclusive).
+
+### 5.2.1
+
+In Versions 1 to 4, that number of 2-byte words follows, giving initial values for these local variables. In Versions 5 and later, the initial values are all zero.
+
+## 5.3
+
+Execution of instructions begins from the byte after this header information. There is no formal 'end-marker' for a routine (it is simply assumed that execution eventually results in a return taking place).
+
+## 5.4
+
+In Version 6, there is a "main" routine (whose packed address is stored in the word at **`$06`** in the header) called when the game starts up. It is illegal to return from this routine.
+
+## 5.5
+
+In all other Versions, the word at **`$06`** contains the byte address of the first instruction to execute. The Z-machine starts in an environment with no local variables from which, again, a return is illegal.
+
+----
+
+## Remarks
+
+Note that it is permissible for a routine to be in dynamic memory. Marnix Klooster suggests this might be used for compiling code at run time!
+
+In Versions 3 and 4, Inform always stores 0 as the initial values for local variables.

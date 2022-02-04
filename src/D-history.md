@@ -1,0 +1,62 @@
+# Appendix D. A short history of the Z-machine
+
+![](./images/iconad.gif)
+
+Infocom made six main Versions of the Z-machine and several minor variant forms. These are recognisably similar but with labyrinthine differences, like different archaic dialects of the same language. (The archaeological record stops sharply in 1989 when the civilisation in question collapsed.)
+
+Broadly, these fall into two groups: early (Versions 1 to 3) and late (4 to 6). More fully:
+
+| Version | Description                                                                                                                                                                             |
+| :-----: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|    1    | Early Apple II and TRS-80 Model I games                                                                                                                                                 |
+|    2    | Early Apple II and TRS-80 Model I games                                                                                                                                                 |
+|    3    | "Standard" series games                                                                                                                                                                 |
+|    4    | "Plus" series games                                                                                                                                                                     |
+|    5    | "Advanced" series games, or, as the marketing division would have it, "Solid Gold Interactive Fiction" --- a reference to the colour (though not composition) of the boxes they came in |
+|    6    | Later games with graphics, mouse support, etc.                                                                                                                                          |
+
+Infocom called their own interpreters **ZIP** (versions 1 to 3), **EZIP**/**LZIP** (V4), **XZIP** (V5) and **YZIP** (V6). They speculated on the possibility of an interpreter capable of running all Versions, but never published one.
+
+The original purpose of the Z-machine was simply to implement as much as possible of the mainframe game _Zork_ on the first popular wave of home computers.
+
+(Apparently "zork" was a nonsense word used at MIT for the current uninstalled program in progress, and stuck. Just as this document uses the term "Z-machine" for both the machine and its loaded program (which is also sometimes called the "story file"), so ZIP (Zork Implementation Program) was used to mean either the interpreter or the object code it interpreted. Code was written in ZIL (Zork Implementation Language), which was derived from MDL (informally called "muddle"), a particularly unhelpful form of LISP. It was then compiled by ZILCH to assembly code which was passed to ZAP to make the ZIP.)
+
+The Z-machine as originally constructed was surprisingly similar to that in use today. Version 1 (by Joel Berez and Marc Blank, in Autumn 1979) contained essentially all of the main architecture: the header, the memory divided into three, the variables and stack, the object tree, the dictionary, the instruction format. It used "shift lock" characters (a text compression trick which did not survive, though it was more efficient on long sequences of capital letters or punctuation characters than the technique which replaced it). The first micro interpreters were for the TRS-80 Model I (by Scott Cutler) and the Apple II (by Bruce K. Daniels). (A TRS-80 Model II interpreter was written but never actually shipped.)
+
+Version 2 was only a minor enhancement. Abbreviations (used to help text compression) appeared, but only in one 32-word bank, and the six-digit serial number appeared in the header, though it wasn't always the date in those days: Release 7 of _Zork II_, for instance, is numbered **`UG3AU5`**. (Other bizarre serial numbers, such as **`000000`**, appear on fakes or beta-test releases.)
+
+In Version 3, the text encoding alphabets changed again, and the old "shift lock" codes were dropped in favour of expanding the abbreviations bank to 96 entries. The "verify" opcode and checksums appeared; and a new opcode to reprint the status line at the top of the screen was introduced. (Previously, this had been updated only when input was taken from the keyboard.) The earliest Version 3 releases (_Deadline_, then reissues of _Zork I_ and _II_) were in March and April 1982; the last (the _Minizork_, a cassette-based Commodore-64 sample of _Zork_) was in November 1987.
+
+The idea of widespread portability finally came of age as (between 1982 and 1985) interpreters were developed for the Atari 400/800, CP/M, the IBM PC, the TRS-80 Model III, the NEC APC, the DEC Rainbow, the Commodore 64, the TI Professional, the DECmate, the Tandy-2000, the Kaypro II, the Osborne 1, MS-DOS, the TI 99/4a, the Apple Macintosh, the Epson QX-10, the Apricot, the Atari ST and the Amiga. Infocom's middle period coincided with the bubble in home computers, before the market collapsed to its present apparently stable state (in which IBM and Apple share almost the entire market), and the Z-machine's portability gave Infocom a unique advantage over its competitors. Also, it was an expertly marketed quality brand at a time when standards of workmanship were very variable; and text-only games did not seem so dull at a time when graphics were on the whole crude and slow. These factors combined to give Infocom considerable (though never enormous) commercial success.
+
+By 1982, then, the Z-machine had stabilised to a clean design which was to remain in use for six years. It was very portable, contained everything reasonably necessary and most of its complications were badly-needed space optimisations. (Although Version 3 can fit 128K of story file, the practical limit in 1982-4 was about 110K, that being the typical disc capacity on target machines.) The ZAP assembler was cleverly written to exploit these optimisations, though the Zilch compiler's code generator was much less efficient. (Interestingly, Infocom did not develop any generic central library, and Infocom's authors worked fairly independently of each other: each new game would inherit a small core of code from a previous one, but this would make up only about 10K of code (about a third of the size of the Inform library) and would end up being hacked about to suit the new game. Without a central library, Infocom games waste a fair amount of space in duplicating code for routine operations many times over. For this reason, Inform games tend to squash appreciably more design into the format.)
+
+"Verify" and checksum data were quickly introduced. However, the first serious variant on Version 3 was made in 1984 when a primitive form of screen-splitting was invented to give _Seastalker_ a sonar display. This design (perhaps accidentally) became the foundation for the graphics systems of later versions.
+
+Much later (in 1987) sound effects were added to Version 3 for _The Lurking Horror_, though by that time it was really a Version 5 feature being passed down to the old model (and only to the Amiga interpreter in any case). (_TLH_ is contemporaneous with _Sherlock_ (in Version 5), the only other game to actually use the sound effects features.)
+
+During 1983-5, Infocom poured resources into an ambitious pet project of its founders: _Cornerstone_, a database which used some of the same portable virtual machine ideas as the Z-machine. The business market, however, was not nearly as diverse as the home computer market: _Cornerstone_ probably was the best database available on the Atari ST, but it made no impression on the IBM PC market. The result was a commercial failure which compounded the company's over-expansion problems (driving it into a merger with Activision), though it certainly did not destroy Infocom's viability.
+
+By 1985, Infocom had begun to write interpreters in C for the sake of portability (previously, a different assembly-language program had to be maintained for every model of computer). The main motivation to keep the format stable was therefore largely removed: it became possible to upgrade the Z-machine for every new game, if need be.
+
+There were two basic pressures for change. One was that home computers were larger, and several fundamental restrictions (the game size being only 128K, the number of objects only 255, the attributes only 32, the properties only 31) were beginning to bite. The other was the drive for more gimmicks --- character graphics, flashier status lines, sound effects, different typefaces, and so on. The former led to logical, easy to understand structural changes in the machine (designed by Marc Blank). The latter, in contrast, made a mess of the system of opcodes (designed by committee).
+
+More does not mean better (halving the price of paper does not double the quality of the novel). The relieving of size restrictions only increased design time -- or endangered the quality of the designs being produced. The Version 3 games have a spare, concise literary style which is absent from the later games. (But Inform authors have certainly found Version 3 slightly too small for comfort, and it's useful to be able to spill over its boundaries.)
+
+In August the first Version 4 game (_A Mind Forever Voyaging_) reached production. Opinions vary as to whether it was brilliant or awful, but it was certainly a departure (and could not have been written under Version 3). In retrospect there is no doubt about _Trinity_, now generally considered the finest game written: it had previously been shelved as too ambitious for the Version 3 format. Still, most of the new 1985/6 games remained in Version 3: there were still plenty of 8-bit home computers around which were too small for Version 4 games. Despite critical acclaim, the new games consequently did not sell as well. (Brian Moriarty commented that _Trinity_ "sold tolerably well. Better than we'd hoped." But his previous game, the more modest _Wishbringer_, had sold rather better.)
+
+Version 5 games began to appear in September 1987 with _Beyond Zork_ and _Border Zone_. Both of these games needed new features -- character graphics run wild in the case of the former, and real-time keyboard interaction in the latter. The number of opcodes grew ever faster as a result.
+
+Although five old games were re-released in Version 5 editions (with an in-game hints system added, and benefiting from 9-letter word dictionaries, but otherwise as written), the direction was all too clearly away from the old text game into graphics: _Beyond Zork_ can look like a parody of an early mainframe maze game, for instance. Version 6 completed the process during something of a hiatus in 1988, after which the last few increasingly-unrecognisable Infocom games appeared: _Zork Zero_, _Shogun_, _Journey_ and _Arthur_.
+
+It would be wrong, though, to suggest that Infocom regarded text and graphics as incompatible opposites. Infocom had never been puritanically opposed to graphics ---
+
+> We have nothing against graphics per se. However, given the quality of graphics currently available on home computers, we would rather use that disk space for additional puzzles and richer descriptions.
+>
+> _**The New Zork Times** (Spring 1984)_
+
+(and, after all, the same author wrote both _Trinity_ and _Beyond Zork_). Although the old Infocom parser was considered to have passed its sell-by date, Version 6 did not drop textual input in favour of some inane point-and-click interface. Instead, an entirely new parser was devised from scratch ("using the theory of computational linguistics", according to a puff by Stu Galley: broadly an LALR(1) parser).
+
+Infocom gradually ceased to exist during 1987-9 as its financial problems grew. But its products were increasingly regarded as anachronistic and most of its staff had left since the middle years: if Infocom had not finally been wound up, whether it would have continued to release text games of the classical style is arguable.
+
+Two new formats, versions 7 and 8, have recently been devised to cope with large Inform games.

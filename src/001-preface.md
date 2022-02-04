@@ -65,7 +65,7 @@ to identify particular story files: for example the first production copy of ‘
 
 ## Where are all the grammar tables?
 
-The Z-machine has some lexical acuity but it doesn't contain a full parser: it's like a computer without an operating system. A game program has to contain its own parser and the tables this uses are not part of the formal Z-machine specification. (Many Infocom games have similar parsing table formats simply because, until Version 6, they used an evolving version of the 'Zork I' parser. A quite different parser was used in Version 6.) Inform's parsing table formats are documented in the _Inform Technical Manual_. For the usual format of Infocom's parsing tables, see the **Ztools** utility `Infodump`.
+The Z-machine has some lexical acuity but it doesn't contain a full parser: it's like a computer without an operating system. A game program has to contain its own parser and the tables this uses are not part of the formal Z-machine specification. (Many Infocom games have similar parsing table formats simply because, until Version 6, they used an evolving version of the _Zork I_ parser. A quite different parser was used in Version 6.) Inform's parsing table formats are documented in the _Inform Technical Manual_. For the usual format of Infocom's parsing tables, see the **Ztools** utility `Infodump`.
 
 ## Acknowledgements
 

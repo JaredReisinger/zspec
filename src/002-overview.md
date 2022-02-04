@@ -1,5 +1,7 @@
 # Overview of Z-machine architecture
 
+![architecture diagram](./images/diagram.gif)
+
 The Z-machine is a design for an imaginary computer: Z is for ‘Zork', the adventure game it was originally designed to play. Like any computer, it stores its information (mostly) in an array of variables numbered from 0 up to some large number: this is called its **memory**. A stock of some 240 memory locations are set aside for easy and quick access, and these are called **global variables** (since they are available to any part of the program which is running, at any time).
 
 The two important pieces of information not stored in memory are the **program counter** (**PC**) and the **stack**. The Z-machine continuously runs a program by getting the instruction stored at position PC in memory, acting on the instruction and then moving the PC forward to the next. The **instruction set** of the Z-machine (the range of possible actions and how they are encoded as numbers in memory) occupies much of this document.
@@ -22,7 +24,7 @@ This simple architecture is overlaid by a number of special structures which the
 
 - the [**object tree**](./12-objects.md), an arrangement of chunks of memory called **objects**.
 
-The Z-machine is primarily used for adventure games, where the dictionary holds names of items and verbs that the player might type, and the objects tend to be the places and artifacts which make up the game. Each object in the tree may have a parent, a sibling and a child. For instance, in the start position of 'Zork I':
+The Z-machine is primarily used for adventure games, where the dictionary holds names of items and verbs that the player might type, and the objects tend to be the places and artifacts which make up the game. Each object in the tree may have a parent, a sibling and a child. For instance, in the start position of _Zork I_:
 
 > **West of House**
 >
@@ -61,7 +63,7 @@ Objects are bundled-up collections of variables, which come in two kinds: **attr
 
 So the only set attributes are 30 and 34: all others are unset. Values are given for properties 44, 45, 46 and 49. The Z-machine itself does not know or care what this information means: that is for the program to sort out.
 
-As a final example, here is part of one of the routines in 'Zork I':
+As a final example, here is part of one of the routines in _Zork I_:
 
 ```
 l0006: print_ret       "Suicide is not the answer".
