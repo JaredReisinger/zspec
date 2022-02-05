@@ -13,4 +13,4 @@ _3 February 2022_
 
 ----
 
-[^toc]: Technically, there _is_ a brief table of contents of sorts at the bottom of every page, but the sections and appendices are _only_ numbers and letters; unless you've memorized which section is which, it's only useable for manually navigating the numbered cross-section links!
+[^toc]: Technically, there _is_ a brief table of contents of sorts at the bottom of every page, but the sections and appendices listed therein are _only_ given numbers and letters; unless you've memorized which section is which, it's only useable for manually navigating the numbered cross-section links!
