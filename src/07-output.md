@@ -12,7 +12,7 @@ Two output streams are common to all Versions: number 1 (the screen) and 2 (the 
 
 #### 7.1.1.1
 
-In Versions 1 to 5, the player's input to the **`read`** opcode should be echoed to output streams 1 and 2 (if stream 2 is active), so that text typed in appears in any transcript. In Version 6 input should be sent only to stream 1 and it is the game's responsibility to write to the transcript.
+In Versions 1 to 5, the player's input to the  [**`read`**](./15-opcodes-dictionary.md#read) opcode should be echoed to output streams 1 and 2 (if stream 2 is active), so that text typed in appears in any transcript. In Version 6 input should be sent only to stream 1 and it is the game's responsibility to write to the transcript.
 
 #### 7.1.1.2
 
@@ -20,7 +20,7 @@ In Infocom's Version 4 game _A Mind Forever Voyaging_, which anticipated a print
 
 ### 7.1.2
 
-Versions 3 and later supply these and two other output streams, numbered 3 (Z-machine memory) and 4 (a script file of the player's whole commands and of individual keypresses as read by **`read_char`**).
+Versions 3 and later supply these and two other output streams, numbered 3 (Z-machine memory) and 4 (a script file of the player's whole commands and of individual keypresses as read by  [**`read_char`**](./15-opcodes-dictionary.md#read_char)).
 
 #### 7.1.2.1
 
@@ -36,11 +36,11 @@ Output stream 3 is unusual in that, while it is selected, no text is sent to any
 
 ##### 7.1.2.2.1
 
-Newlines are written to output stream 3 as ZSCII 13. (A game should never **`print_char`** the value 10, or any other value which is undefined as a ZSCII output code.)
+Newlines are written to output stream 3 as ZSCII 13. (A game should never  [**`print_char`**](./15-opcodes-dictionary.md#print_char) the value 10, or any other value which is undefined as a ZSCII output code.)
 
 #### 7.1.2.3
 
-Output stream 4 is unusual in that, when it is selected, the only text printed to it is that of the player's commands and keypresses (as read by **`read_char`**). (Each command is written, in one go, when it has been finished. Time delays and mouse-clicks should ideally be recorded. For suggestions on how this might be achieved, see [the remarks section below](#remarks). Mistypes and uses of 'delete' are not written.)
+Output stream 4 is unusual in that, when it is selected, the only text printed to it is that of the player's commands and keypresses (as read by [**`read_char`**](./15-opcodes-dictionary.md#read_char)). (Each command is written, in one go, when it has been finished. Time delays and mouse-clicks should ideally be recorded. For suggestions on how this might be achieved, see [the remarks section below](#remarks). Mistypes and uses of 'delete' are not written.)
 
 ## 7.2 Buffering
 
@@ -48,11 +48,11 @@ On output streams 1 and 2 (only), text printing may be "buffered" in that new-li
 
 ### 7.2.1
 
-In Versions 1 to 3, buffering is always on. In Versions 4 and later it is on by default (at the start of a game) and a game can switch it on or off using the **`buffer_mode`** opcode.
+In Versions 1 to 3, buffering is always on. In Versions 4 and later it is on by default (at the start of a game) and a game can switch it on or off using the  [**`buffer_mode`**](./15-opcodes-dictionary.md#buffer_mode) opcode.
 
 ### 7.2.2
 
-In Version 6, each of the eight windows has its own "buffering flag". In Versions 3 to 5, the **`buffer_mode`** applies only to the lower window, and buffering never happens in the upper window.
+In Version 6, each of the eight windows has its own "buffering flag". In Versions 3 to 5, the [**`buffer_mode`**](./15-opcodes-dictionary.md#buffer_mode) applies only to the lower window, and buffering never happens in the upper window.
 
 ## 7.3 Selection (V1 and V2)
 
@@ -60,11 +60,11 @@ In Versions 1 and 2, output stream 1 is always selected and stream 2 can be sele
 
 ## 7.4 Selection (later versions)
 
-In Versions 3 and later, all four output streams can be selected or deselected using the **`output_stream`** opcode. In addition, stream 2 can be selected or deselected by setting or clearing bit 0 of 'Flags 2'. Whichever method is used, the interpreter must ensure that this flag holds the current status of stream 2. (_A Mind Forever Voyaging_ requires this.)
+In Versions 3 and later, all four output streams can be selected or deselected using the [**`output_stream`**](./15-opcodes-dictionary.md#output_stream) opcode. In addition, stream 2 can be selected or deselected by setting or clearing bit 0 of 'Flags 2'. Whichever method is used, the interpreter must ensure that this flag holds the current status of stream 2. (_A Mind Forever Voyaging_ requires this.)
 
 ## 7.5 Dealing with Unicode or invalid characters
 
-**[1.0]** Because of the **`print_unicode`** opcode, it is possible for arbitrary Unicode characters to be sent to the output streams: that is, for characters which are not in the ZSCII set at all, even in the "extra characters" range.
+**[1.0]** Because of the  [**`print_unicode`**](./15-opcodes-dictionary.md#print_unicode) opcode, it is possible for arbitrary Unicode characters to be sent to the output streams: that is, for characters which are not in the ZSCII set at all, even in the "extra characters" range.
 
 ### 7.5.1
 
@@ -84,7 +84,7 @@ Non-ZSCII characters never need to be printed to stream 4.
 
 ## 7.6 File handling
 
-**[1.0]** In Versions 5 and later, the Z-machine has the ability to load and save files (using optional operands with the **`save`** and **`restore`** opcodes: these operands were not used in Infocom's Version 5 games, but I wish to specify them as in Version 5 anyway).
+**[1.0]** In Versions 5 and later, the Z-machine has the ability to load and save files (using optional operands with the  [**`save`**](./15-opcodes-dictionary.md#save) and  [**`restore`**](./15-opcodes-dictionary.md#restore) opcodes: these operands were not used in Infocom's Version 5 games, but I wish to specify them as in Version 5 anyway).
 
 ### 7.6.1
 
@@ -112,7 +112,7 @@ Games should avoid the extensions `.INF`, `.H`, `.Z` followed by a number or `.S
 
 ### 7.6.4
 
-File-handling errors such as "disc corrupt" and "disc full" should be reported directly to the player by the interpreter. The error "file not found" should only cause a failure return code from **`restore`**.
+File-handling errors such as "disc corrupt" and "disc full" should be reported directly to the player by the interpreter. The error "file not found" should only cause a failure return code from  [**`restore`**](./15-opcodes-dictionary.md#restore).
 
 ### 7.6.5
 

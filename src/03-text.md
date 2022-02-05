@@ -6,11 +6,11 @@
 >
 > Marc S. Blank and S. W. Galley, _**How to Fit a Large Program Into a Small Machine**_
 
-## 3.1
+## 3.1 Text
 
 Z-machine text is a sequence of ZSCII character codes (ZSCII is a system similar to ASCII: see [**S**3.8](#38) below). These ZSCII values are encoded into memory using a string of Z-characters. The process of converting between Z-characters and ZSCII values is given in [**SS**3.2](#32) to [3.7](#37) below.
 
-## 3.2
+## 3.2 Alphabets
 
 Text in memory consists of a sequence of 2-byte words. Each word is divided into three 5-bit 'Z-characters', plus 1 bit left over, arranged as
 
@@ -45,7 +45,7 @@ In Versions 3 and later, the current alphabet is always A0 unless changed for 1 
 
 An indefinite sequence of shift or shift lock characters is legal (but prints nothing).
 
-## 3.3
+## 3.3 Abbreviations
 
 In Versions 3 and later, Z-characters 1, 2 and 3 represent abbreviations, sometimes also called 'synonyms' (for traditional reasons): the next Z-character indicates which abbreviation string to print. If _z_ is the first Z-character (1, 2 or 3) and _x_ the subsequent one, then the interpreter must look up entry 32(_z_-1)+_x_ in the abbreviations table and print the string at that word address. In Version 2, Z-character 1 has this effect (but 2 and 3 do not, so there are only 32 abbreviations).
 
@@ -53,11 +53,11 @@ In Versions 3 and later, Z-characters 1, 2 and 3 represent abbreviations, someti
 
 Abbreviation string-printing follows all the rules of this section except that an abbreviation string must not itself use abbreviations and must not end with an incomplete multi-Z-character construction (see [**S**3.6.1](#361) below).
 
-## 3.4
+## 3.4 ZSCII escape
 
 Z-character 6 from A2 means that the two subsequent Z-characters specify a ten-bit ZSCII character code: the next Z-character gives the top 5 bits and the one after the bottom 5.
 
-## 3.5
+## 3.5 Alphabet table
 
 The remaining Z-characters are translated into ZSCII character codes using the "alphabet table".
 
@@ -97,7 +97,7 @@ In Versions 5 and later, the interpreter should look at the word at **$34** in t
 
 Such an alphabet table consists of 78 bytes arranged as 3 blocks of 26 ZSCII values, translating Z-characters 6 to 31 for alphabets A0, A1 and A2. Z-characters 6 and 7 of A2, however, are still translated as escape and newline codes (as above).
 
-## 3.6
+## 3.6 Padding and incompleteness
 
 Since the end-bit only comes up once every three Z-characters, a string may have to be 'padded out' with null values. This is conventionally achieved with a sequence of 5's, though a sequence of (for example) 4's would work equally well.
 
@@ -105,7 +105,7 @@ Since the end-bit only comes up once every three Z-characters, a string may have
 
 It is legal for the string to end while a multi-Z-character construction is incomplete: for instance, after only the top half of an ASCII value has been given. The partial construction is simply ignored. (This can happen in printing dictionary words which have been guillotined to the dictionary resolution of 6 or 9 Z-characters.)
 
-## 3.7
+## 3.7 Dictionary truncation
 
 When an interpreter is encrypting typed-in text to match against dictionary words, the following restrictions apply. Text should be converted to lower case (as a result A1 will not be needed unless the game provides its own alphabet table). Abbreviations may not be used. The pad character, if needed, must be 5. The total string length must be 6 Z-characters (in Versions 1 to 3) or 9 (Versions 4 and later): any multi-Z-character constructions should be left incomplete (rather than omitted) if there's no room to finish them. For example, "i" is encrypted as:
 
@@ -118,7 +118,7 @@ $48a5 $14a5 $94a5
 
 In Versions 1 and 2 only, when encoding text for dictionary words, shift-lock Z-characters 4 and 5 are used instead of the single-shift Z-characters 2 and 3 when the next two characters come from the same alphabet.
 
-## 3.8
+## 3.8 Definition of ZSCII and Unicode
 
 The character set of the Z-machine is called ZSCII (Zork Standard Code for Information Interchange; pronounced to rhyme with "xyzzy"). ZSCII codes are 10-bit unsigned values between 0 and 1023. Story files may only legally use the values which are defined below. Note that some values are defined only for input and some only for output.
 

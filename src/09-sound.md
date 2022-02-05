@@ -28,7 +28,7 @@ Sound effects (other than bleeps) can be played at any volume level from 1 to 8 
 
 ## 9.4 Sound playing autonymously
 
-Bleeps are immediate and brief. Other sound effects take place in the background, while normal operation of the Z-machine is going on. Control is via the **`sound_effect`** opcode, allowing the game to prepare, start, stop or finish with an effect.
+Bleeps are immediate and brief. Other sound effects take place in the background, while normal operation of the Z-machine is going on. Control is via the  [**`sound_effect`**](./15-opcodes-dictionary.md#sound_effect) opcode, allowing the game to prepare, start, stop or finish with an effect.
 
 ### 9.4.1
 
@@ -56,7 +56,7 @@ The game may, but need not, explicitly "finish with" any sound effect which is n
 
 The safest way an Inform program can try to produce a bleep is by executing **`@sound_effect 1`**. Some ports of **Zip** believe that the first operand of this is the number of bleeps to make (so that **`@sound_effect 2`** bleeps twice), but this is incorrect.
 
-Several Infocom games bleep (using **`sound_effect`** with only one operand, always equal to 1 or 2). Two provided sampled sound effects but did not bleep: _The Lurking Horror_ and _Sherlock_. Their story files contain the following usages of **`sound_effect`**:
+Several Infocom games bleep (using  [**`sound_effect`**](./15-opcodes-dictionary.md#sound_effect) with only one operand, always equal to 1 or 2). Two provided sampled sound effects but did not bleep: _The Lurking Horror_ and _Sherlock_. Their story files contain the following usages of  [**`sound_effect`**](./15-opcodes-dictionary.md#sound_effect):
 
 <dl>
 <dt>in <cite>TLH</cite></dt>
@@ -87,7 +87,7 @@ sound_effect 4 8
 sound_effect 4095 2 15
 ```
 
-A further difficulty with _TLH_ is that it assumes the interpreter is as slow as Infocom's Amiga interpreter was: it fires off several sound effects in one game round, assuming there will be time for it to play most of each one. To simulate this, **`sound_effect`** must be rewritten to pause sometimes:
+A further difficulty with _TLH_ is that it assumes the interpreter is as slow as Infocom's Amiga interpreter was: it fires off several sound effects in one game round, assuming there will be time for it to play most of each one. To simulate this,  [**`sound_effect`**](./15-opcodes-dictionary.md#sound_effect) must be rewritten to pause sometimes:
 
 - if a new sample sound effect is begun while there is still one playing which was started since the last keyboard input, then wait until that earlier one finishes one cycle before replacing it with the new sound effect. Music sound effects are not affected by this. New music should interrupt old music immediately at all times.
 

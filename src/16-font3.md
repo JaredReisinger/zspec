@@ -289,7 +289,7 @@ The font behaviour of _Beyond Zork_, which does have bit 3 of 'Flags 2' set, is 
 
 1. (Tandy) _BZ_ crashes on the public interpreters.
 
-A similarly tangled process is used in _Journey_. It is obviously highly unsatisfactory to have to make the decision in the above way, which is why [**`set_font`**](#set_font) is now required to return 0 indicating non-availability of a font.
+A similarly tangled process is used in _Journey_. It is obviously highly unsatisfactory to have to make the decision in the above way, which is why [**`set_font`**](./15-opcodes-dictionary.md#set_font) is now required to return 0 indicating non-availability of a font.
 
 Stefan Jokisch suggests that Infocom originally intended the graphics bit as a way to develop Version 5 to allow a graphical version in parallel with the normal text one. For instance, when the Infocom MSDOS interpreter starts up, it looks at the graphics flag and:
 

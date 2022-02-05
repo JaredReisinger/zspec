@@ -2,7 +2,7 @@
 
 ![](./images/icon06.gif)
 
-## 6.1
+## 6.1 Saved states
 
 The "state of play" is defined as the following: the contents of dynamic memory; the contents of the stack; the value of the program counter (PC), and the "routine call state" (that is, the chain of routines which have called each other in sequence, and the values of their local variables). Note that the routine call state, the stack and the PC must be stored outside the Z-machine memory map, in the interpreter's private memory.
 
@@ -20,7 +20,7 @@ An internal saved game for "undo" purposes (if there is one) is not part of the 
 
 #### 6.1.1.3
 
-It is illegal to save the game (either with **`save`** or **`save_undo`**) during an "interrupt routine" (one coming about through timed input, sound effect termination or newline interrupts). Therefore saved games need not store information capable of restoring such a position.
+It is illegal to save the game (either with  [**`save`**](./15-opcodes-dictionary.md#save) or  [**`save_undo`**](./15-opcodes-dictionary.md#save_undo)) during an "interrupt routine" (one coming about through timed input, sound effect termination or newline interrupts). Therefore saved games need not store information capable of restoring such a position.
 
 ### 6.1.2
 
@@ -42,11 +42,11 @@ A "restart" is similar: the entire state is restored from the original story fil
 
 In Versions 5 and later, an interpreter unable to save the game state into internal memory (for "undo" purposes) must clear bit 4 of 'Flags 2' in the header.
 
-## 6.2
+## 6.2 Storage of global variables
 
 Global variables (variable numbers **`$10`** to **`$ff`**) are stored in a table in the Z-machine's dynamic memory, at a byte address given in word 6 of the header. The table consists of 240 2-byte words and the initial values of the global variables are the values initially contained in the table. (It is legal for a program to alter the table's contents directly in play, though not for it to change the table's address.)
 
-## 6.3
+## 6.3 The stack
 
 Writing to the stack pointer (variable number **`$00`**) pushes a value onto the stack; reading from it pulls a value off. Stack entries are 2-byte words as usual.
 
@@ -70,15 +70,15 @@ Two examples of modern interpreters with increased stack size are **Windows Frot
 
 ### 6.3.4
 
-In the seven opcodes that take indirect variable references (**`inc`**, **`dec`**, **`inc_chk`**, **`dec_chk`**, **`load`**, **`store`**, **`pull`**), an indirect reference to the stack pointer does not push or pull the top item of the stack --- it is read or written in place.
+In the seven opcodes that take indirect variable references ([**`inc`**](./15-opcodes-dictionary.md#inc), [**`dec`**](./15-opcodes-dictionary.md#dec), [**`inc_chk`**](./15-opcodes-dictionary.md#inc_chk), [**`dec_chk`**](./15-opcodes-dictionary.md#dec_chk), [**`load`**](./15-opcodes-dictionary.md#load), [**`store`**](./15-opcodes-dictionary.md#store), [**`pull`**](./15-opcodes-dictionary.md#pull)), an indirect reference to the stack pointer does not push or pull the top item of the stack --- it is read or written in place.
 
-## 6.4
+## 6.4 Routine calls
 
-Routine calls occur in the following circumstances: when one of the **`call`**... opcodes is executed; in Versions 4 and later, when timed keyboard input is being monitored; in Versions 5 and later, when a sound effect finishes; in Version 6, when the game begins (to call the "main" routine); in Version 6, when a "newline interrupt" occurs.
+Routine calls occur in the following circumstances: when one of the [**`call`**](./15-opcodes-dictionary.md#call)... opcodes is executed; in Versions 4 and later, when timed keyboard input is being monitored; in Versions 5 and later, when a sound effect finishes; in Version 6, when the game begins (to call the "main" routine); in Version 6, when a "newline interrupt" occurs.
 
 ### 6.4.1
 
-A routine call may have any number of arguments, from 0 to 3 (in Versions 1 to 3) or 0 to 7 (Versions 4 and later). All routines return a value (though sometimes this value is thrown away afterward: for example by opcodes in the form **`call_vn*`**).
+A routine call may have any number of arguments, from 0 to 3 (in Versions 1 to 3) or 0 to 7 (Versions 4 and later). All routines return a value (though sometimes this value is thrown away afterward: for example by opcodes in the form [**`call_vn*`**](./15-opcodes-dictionary.md#call_vn)).
 
 ### 6.4.2
 
@@ -100,11 +100,11 @@ It is legal for there to be more arguments than local variables (any spare argum
 
 The return value of a routine can be any Z-machine number. Returning 'false' means returning 0; returning 'true' means returning 1.
 
-## 6.5
+## 6.5 Stack frames
 
-A "stack frame" is an index to the routine call state (that is, the call-stack of return addresses from routines currently running, and values of local variables within them). This index is a Z-machine number. The interpreter must be able to produce the current value and to set a value further down the call-stack than the current one, effectively throwing away its recent history (see **`catch`** and **`throw`**).
+A "stack frame" is an index to the routine call state (that is, the call-stack of return addresses from routines currently running, and values of local variables within them). This index is a Z-machine number. The interpreter must be able to produce the current value and to set a value further down the call-stack than the current one, effectively throwing away its recent history (see [**`catch`**](./15-opcodes-dictionary.md#catch) and [**`throw`**](./15-opcodes-dictionary.md#throw)).
 
-## 6.6
+## 6.6 User stacks (V6)
 
 In Version 6, the Z-machine understands a third kind of stack: a "user stack", which is a table of words in dynamic memory. The first word in this table always holds the number of spare slots on the stack (so the initial value is the capacity of the stack). The Z-machine makes no check on stack under-flow (i.e., pulling more values than were pushed) which would over-run the length of the table if the program allowed it to happen.
 
@@ -124,6 +124,6 @@ The stack size specification guarantees in particular that if the game itself ne
 
 Note that the "state of play" does not include numerous input/output settings (the current window, cursor position, splitness or otherwise, which streams are selected, etc.): neither does it include the state of the random-number generator. (Games with elaborate status lines must redraw them after a restore has taken place.)
 
-**Zip** provides "undo" but most versions of the **ITF** interpreter do not (and **`save_undo`** returns 0, unfortunately). This is probably its greatest failing. Some Infocom-written interpreters will only provide "undo" to a game which has bit 4 of 'Flags 2' set: but Inform 5.5 doesn't set this bit, so modern interpreters should be more generous.
+**Zip** provides "undo" but most versions of the **ITF** interpreter do not (and  [**`save_undo`**](./15-opcodes-dictionary.md#save_undo) returns 0, unfortunately). This is probably its greatest failing. Some Infocom-written interpreters will only provide "undo" to a game which has bit 4 of 'Flags 2' set: but Inform 5.5 doesn't set this bit, so modern interpreters should be more generous.
 
 Given the existence of **Quetzal**, a portable saved file format, it is quite possible that after loading, the game may be running on a different interpreter to that on which the game started. As a result, it is strongly advisable for games to recheck any interpreter capabilities (eg Standard version, unicode support, etc) after loading.

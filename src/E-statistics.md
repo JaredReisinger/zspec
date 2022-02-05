@@ -32,7 +32,7 @@ Early games such as _Zork I_ know about 600 words, but again this rises steeply 
 
 ## Opcodes
 
-(a) Of the 1426854 opcodes in the shipped Infocom story files in Paul David Doherty's collection, here are the top and bottom ten most popular. (Leaving out those which never occur and so score 0: **`nop`**, **`art_shift`**, **`piracy`** and the two post-Infocom opcodes, **`print_unicode`** and **`check_unicode`**.)
+(a) Of the 1426854 opcodes in the shipped Infocom story files in Paul David Doherty's collection, here are the top and bottom ten most popular. (Leaving out those which never occur and so score 0: [**`nop`**](./15-opcodes-dictionary.md#nop), [**`art_shift`**](./15-opcodes-dictionary.md#art_shift), [**`piracy`**](./15-opcodes-dictionary.md#piracy) and the two post-Infocom opcodes, [**`print_unicode`**](./15-opcodes-dictionary.md#print_unicode) and [**`check_unicode`**](./15-opcodes-dictionary.md#check_unicode).)
 
 **Top Ten Opcodes Chart**
 

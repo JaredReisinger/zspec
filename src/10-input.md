@@ -16,7 +16,7 @@ The format of a file containing commands must be the same as that written in out
 
 ### 10.2.2
 
-The game can change the current input stream itself, using the opcode **`input_stream`**. It has no way of finding out which input stream is currently in use. An interpreter is free to change the input stream whenever it likes (e.g. at the player's request) or, indeed, to run the entire game under input stream 1 (for testing purposes).
+The game can change the current input stream itself, using the opcode  [**`input_stream`**](./15-opcodes-dictionary.md#input_stream). It has no way of finding out which input stream is currently in use. An interpreter is free to change the input stream whenever it likes (e.g. at the player's request) or, indeed, to run the entire game under input stream 1 (for testing purposes).
 
 ### 10.2.3
 
@@ -49,7 +49,7 @@ Whenever a mouse click takes place (and provided the header extension table exis
 
 ### 10.3.3
 
-The mouse is presumed to have between 0 and 16 buttons. The state of these buttons can be read by the **`read_mouse`** opcode in Version 6. Otherwise, mouse clicks are treated as keyboard input codes (see below).
+The mouse is presumed to have between 0 and 16 buttons. The state of these buttons can be read by the  [**`read_mouse`**](./15-opcodes-dictionary.md#read_mouse) opcode in Version 6. Otherwise, mouse clicks are treated as keyboard input codes (see below).
 
 ### 10.3.4
 
@@ -69,15 +69,15 @@ If the interpreter cannot offer menu support, then it should clear bit 8 of 'Fla
 
 ### 10.4.2
 
-Menus are numbered from 0 upwards. 0, 1 and 2 are reserved for the interpreter to manage (this system has only been implemented on the Macintosh, wherein 0 is the Apple menu, 1 the File menu and 2 the Edit menu). Menus numbered 3 and upwards can be created or removed with the **`make_menu`** opcode.
+Menus are numbered from 0 upwards. 0, 1 and 2 are reserved for the interpreter to manage (this system has only been implemented on the Macintosh, wherein 0 is the Apple menu, 1 the File menu and 2 the Edit menu). Menus numbered 3 and upwards can be created or removed with the  [**`make_menu`**](./15-opcodes-dictionary.md#make_menu) opcode.
 
 ### 10.4.3
 
-Menu selection is reported to the game as a keypress (see below). Details of what selection has been made are read with **`read_mouse`**.
+Menu selection is reported to the game as a keypress (see below). Details of what selection has been made are read with  [**`read_mouse`**](./15-opcodes-dictionary.md#read_mouse).
 
 ## 10.5 Terminating characters and timed input
 
-Whole commands are read from the input stream using the **`read`** opcode. (Note that this has two different internal names in Inform, **`sread`** for Versions 1 to 4 and **`aread`** subsequently.)
+Whole commands are read from the input stream using the  [**`read`**](./15-opcodes-dictionary.md#read) opcode. (Note that this has two different internal names in Inform,  [**`sread`**](./15-opcodes-dictionary.md#sread) for Versions 1 to 4 and  [**`aread`**](./15-opcodes-dictionary.md#aread) subsequently.)
 
 ### 10.5.1
 
@@ -89,15 +89,15 @@ Commands are normally terminated by a new-line (a carriage return or a line feed
 
 #### 10.5.2.1
 
-In Versions 5 and later, the game may provide a "terminating characters table" by giving its byte address in the word at **`$2e`** in the header. This table is a zero-terminated list of input character codes which cause **`aread`** to finish the command (in addition to new-line). Only function key codes are permitted: these are defined as those between 129 and 154 inclusive, together with 252, 253 and 254. The special value 255 means "any function key code is terminating".
+In Versions 5 and later, the game may provide a "terminating characters table" by giving its byte address in the word at **`$2e`** in the header. This table is a zero-terminated list of input character codes which cause  [**`aread`**](./15-opcodes-dictionary.md#aread) to finish the command (in addition to new-line). Only function key codes are permitted: these are defined as those between 129 and 154 inclusive, together with 252, 253 and 254. The special value 255 means "any function key code is terminating".
 
 ### 10.5.3
 
-**[1.0]** In Versions 4 and later, an interpreter should ideally be able to time input and to call a (game) routine at periodic intervals: see the **`read`** opcode. If it is able to do this, it should set bit 7 of 'Flags 1' in the header.
+**[1.0]** In Versions 4 and later, an interpreter should ideally be able to time input and to call a (game) routine at periodic intervals: see the  [**`read`**](./15-opcodes-dictionary.md#read) opcode. If it is able to do this, it should set bit 7 of 'Flags 1' in the header.
 
 ## 10.6 Single keypresses
 
-In Versions 4 and later, individual characters can be read from the current input stream, using **`read_char`**. Again, the interpreter should ideally be able to time input and to call a (game) routine at periodic intervals. If it is able to do this, it should set bit 7 of 'Flags 1' in the header.
+In Versions 4 and later, individual characters can be read from the current input stream, using  [**`read_char`**](./15-opcodes-dictionary.md#read_char). Again, the interpreter should ideally be able to time input and to call a (game) routine at periodic intervals. If it is able to do this, it should set bit 7 of 'Flags 1' in the header.
 
 ## 10.7 Reading ZSCII from the keyboard
 
@@ -105,25 +105,25 @@ The only characters which can be read from the keyboard are ZSCII characters def
 
 ### 10.7.1
 
-Every ZSCII character defined for input can be returned by **`read_char`**.
+Every ZSCII character defined for input can be returned by  [**`read_char`**](./15-opcodes-dictionary.md#read_char).
 
 ### 10.7.2
 
-Only ZSCII characters defined for both input and output can be stored in the text buffer supplied to the **`read`** opcode.
+Only ZSCII characters defined for both input and output can be stored in the text buffer supplied to the  [**`read`**](./15-opcodes-dictionary.md#read) opcode.
 
 ### 10.7.3
 
-The "escape" code is optional: that is, an interpreter need not provide an escape key. (The Inform library clears and quits menus if this code is returned to **`read_char`**.)
+The "escape" code is optional: that is, an interpreter need not provide an escape key. (The Inform library clears and quits menus if this code is returned to  [**`read_char`**](./15-opcodes-dictionary.md#read_char).)
 
 ---
 
 ## Remarks
 
-Menus in _Beyond Zork_ define cursor up and cursor down as terminating characters, and make use of **`read`** in the upper window.
+Menus in _Beyond Zork_ define cursor up and cursor down as terminating characters, and make use of  [**`read`**](./15-opcodes-dictionary.md#read) in the upper window.
 
-Mouse co-ordinates, whether returned by **`read_mouse`** or written into the header during input, are always relative to the top of the display at (1,1), regardless of the position of the current mouse window.
+Mouse co-ordinates, whether returned by  [**`read_mouse`**](./15-opcodes-dictionary.md#read_mouse) or written into the header during input, are always relative to the top of the display at (1,1), regardless of the position of the current mouse window.
 
-**`read_mouse`** is realtime. When called it must read the current mouse location, whether or not the mouse is inside the current mouse window. Interpreters are allowed to show positions and button states outside the Z-machine screen if the pointer is outside the interpreter's own user interface (using negative values if needed).
+ [**`read_mouse`**](./15-opcodes-dictionary.md#read_mouse) is realtime. When called it must read the current mouse location, whether or not the mouse is inside the current mouse window. Interpreters are allowed to show positions and button states outside the Z-machine screen if the pointer is outside the interpreter's own user interface (using negative values if needed).
 
 Programs must be prepared to cope with this. For example in a painting program you might want to ignore all buttons down outside the screen. When dragging something you might want to keep trying to follow the pointer, even outside the screen, until the buttons are released.
 

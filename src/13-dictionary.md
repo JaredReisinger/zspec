@@ -42,7 +42,7 @@ The word entries follow immediately after the dictionary header and must be give
 
 ## 13.6 Lexical analysis
 
-Lexical analysis takes place in two circumstances: on request of a **`tokenise`** opcode (in which case it can use any dictionary table it likes, in the format above) and during acceptance of a game command (in which case the standard dictionary is used).
+Lexical analysis takes place in two circumstances: on request of a  [**`tokenise`**](./15-opcodes-dictionary.md#tokenise) opcode (in which case it can use any dictionary table it likes, in the format above) and during acceptance of a game command (in which case the standard dictionary is used).
 
 ### 13.6.1
 
@@ -58,7 +58,7 @@ Each word is then encoded as a Z-machine string in dictionary form, and searched
 
 ### 13.6.3
 
-A "parse table" is then written, recording the number of words, the length and position of each word and the dictionary address of each word which is recognised. For the format, see the **`read`** opcode.
+A "parse table" is then written, recording the number of words, the length and position of each word and the dictionary address of each word which is recognised. For the format, see the  [**`read`**](./15-opcodes-dictionary.md#read) opcode.
 
 ---
 

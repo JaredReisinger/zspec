@@ -2,16 +2,19 @@
 
 ![](./images/icon02.gif)
 
-## 2.1
+## 2.1 Numbers
 
-In the Z-machine, numbers are usually stored in 2 bytes (in the form most-significant-byte first, then least-significant) and hold any v08;k,m 
+In the Z-machine, numbers are usually stored in 2 bytes (in the form most-significant-byte first, then least-significant) and hold any value in the range **`$0000`** to **`$ffff`** (0 to 65535 decimal).
+
+## 2.2 Signed operations
+
 These values are sometimes regarded as signed, in the range -32768 to 32767. In effect _-n_ is stored as 65536-_n_ and so the top bit is the sign bit.
 
 ### 2.2.1
 
-The operations of numerical comparison, multiplication, addition, subtraction, division, remainder-after-division and printing of numbers are signed; bitwise operations are unsigned. (In particular, since comparison is signed, it is unsafe to compare two addresses using simply **`jl`** and **`jg`**.)
+The operations of numerical comparison, multiplication, addition, subtraction, division, remainder-after-division and printing of numbers are signed; bitwise operations are unsigned. (In particular, since comparison is signed, it is unsafe to compare two addresses using simply [**`jl`**](./15-opcodes-dictionary.md#jl) and [**`jg`**](./15-opcodes-dictionary.md#jg).)
 
-## 2.3
+## 2.3 Arithmetic errors
 
 Arithmetic errors:
 
@@ -23,7 +26,7 @@ It is illegal to divide by 0 (or to ask for remainder after division by 0) and a
 
 Formally it has never been specified what the result of an out-of-range calculation should be. The author suggests that the result should be reduced modulo **`$10000`**.
 
-## 2.4
+## 2.4 Random number generator
 
 The Z-machine needs a random number generator which at any time has one of two states, "random" and "predictable". When the game starts or restarts the state becomes "random". Ideally the generator should not produce identical sequences after each restart.
 
@@ -39,11 +42,11 @@ The generator is switched into "predictable" state with a seed value. On any two
 
 The interpreter is permitted to switch between these states on request of the player. (This is useful for testing purposes.)
 
-----
+---
 
 ## Remarks
 
-It is dangerous to rely on the older ANSI C random number routines (rand() and srand()), as some implementations of these are very poor. This has made some games (in particular, 'Balances') unwinnable on some Unix ports of **Zip**.
+It is dangerous to rely on the older ANSI C random number routines (rand() and srand()), as some implementations of these are very poor. This has made some games (in particular, _Balances_) unwinnable on some Unix ports of **Zip**.
 
 The author suggests the following algorithm:
 
@@ -57,9 +60,13 @@ The author suggests the following algorithm:
 
 (The rising sequence is useful for testing, since it will produce all possible values in sequence. On the other hand, a seeded but fairly random generator is useful for testing entire scripts.)
 
-Note that version 0.2 of this standard mistakenly asserted that division and remainder are unsigned, a myth deriving from a bug in **Zip**. Infocom's interpreters do sign division (this is relied on when calculating pizza cooking times for the microwave oven in 'The Lurking Horror'). Here are some correct Z-machine calculations:
+Note that version 0.2 of this standard mistakenly asserted that division and remainder are unsigned, a myth deriving from a bug in **Zip**. Infocom's interpreters do sign division (this is relied on when calculating pizza cooking times for the microwave oven in _The Lurking Horror_). Here are some correct Z-machine calculations:
 
-```
--11 / 2 = -5       -11 / -2 = 5        11 / -2 = -5
--13 % 5 = -3        13 % -5 = 3       -13 % -5 = -3
-```
+| Calculation | Result |
+| :---------: | -----: |
+|   -11 / 2   |     -5 |
+|  -11 / -2   |      5 |
+|   11 / -2   |     -5 |
+|   -13 % 5   |     -3 |
+|   13 % -5   |      3 |
+|  -13 % -5   |     -3 |

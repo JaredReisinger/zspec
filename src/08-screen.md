@@ -25,7 +25,7 @@ An interpreter should ideally provide 4 fonts, with ID numbers as follows:
 
 ### 8.1.3
 
-**[1.0]** A game must not use fonts other than 1 unless allowed to by the interpreter: see the **`set_font`** opcode for how to give or refuse permission. (This paragraph is marked **[1.0]** because existing Infocom games determined the availability of font 3 for _Beyond Zork_ in a complicated and unsatisfactory way: see [**S**16](./16-font3.md).)
+**[1.0]** A game must not use fonts other than 1 unless allowed to by the interpreter: see the [**`set_font`**](./15-opcodes-dictionary.md#set_font) opcode for how to give or refuse permission. (This paragraph is marked **[1.0]** because existing Infocom games determined the availability of font 3 for _Beyond Zork_ in a complicated and unsatisfactory way: see [**S**16](./16-font3.md).)
 
 #### 8.1.3.1
 
@@ -81,7 +81,7 @@ For "time games": the time, in the form **_`hours`_`:`_`minutes`_** (held in the
 
 ### 8.2.4
 
-The status line is updated in exactly two circumstances: when a **`show_status`** opcode is executed, and just before the keyboard is read by **`read`**. (It is not displayed when the game begins.)
+The status line is updated in exactly two circumstances: when a [**`show_status`**](./15-opcodes-dictionary.md#show_status) opcode is executed, and just before the keyboard is read by [**`read`**](./15-opcodes-dictionary.md#read). (It is not displayed when the game begins.)
 
 ## 8.3 Text colours
 
@@ -147,13 +147,13 @@ If the colour selected was not one of the standard set (this can happen when usi
 
 **[1.1]** In Version 6 only, colour 15 is defined as transparent. This is only valid as a background colour; an attempt to select it for the foreground should produce a diagnostic. Interpreters not supporting transparency must ignore any attempt to select colour 15.
 
-If the current background colour is transparent, then printed text is superimposed on the current window contents, without filling the background behind the text. **`erase_window`**, **`erase_line`** and **`erase_picture`** become null operations. The intent is to make it possible to superimpose text on non-uniform images. Up until now, only uniform images could be satisfactorily written on by sampling the background colour --- that in itself would be problematical if the interpreter used dithering.
+If the current background colour is transparent, then printed text is superimposed on the current window contents, without filling the background behind the text. [**`erase_window`**](./15-opcodes-dictionary.md#erase_window), [**`erase_line`**](./15-opcodes-dictionary.md#erase_line) and [**`erase_picture`**](./15-opcodes-dictionary.md#erase_picture) become null operations. The intent is to make it possible to superimpose text on non-uniform images. Up until now, only uniform images could be satisfactorily written on by sampling the background colour --- that in itself would be problematical if the interpreter used dithering.
 
 Scrolling with the background set to transparent is not permitted, so transparent should only be requested in a non-scrolling window. It is not valid to use Reverse Video style with the background set to transparent. Instructions that prompt for user input, such as read and save, should beavoided when the background is set to transparent, as it will not generally be possible for text entry to take place satisfactorily in the absence of a defined background colour. Printing text multiple times on top itself with the background set to transparent should be avoided, as the interpreter may use anti-aliasing, resulting in the text getting progressively heavier.
 
 ### 8.3.7
 
-**[1.1]** Standard 1.1 adds the ability for games to select many more colours with **`set_true_colour`**, which uses 15-bit RBG colour values, with the following special values:
+**[1.1]** Standard 1.1 adds the ability for games to select many more colours with [**`set_true_colour`**](./15-opcodes-dictionary.md#set_true_colour), which uses 15-bit RBG colour values, with the following special values:
 
 | Value | Meaning                         |
 | :---: | :------------------------------ |
@@ -166,7 +166,7 @@ Scrolling with the background set to transparent is not permitted, so transparen
 
 **[1.1]** The interpreter selects the closest approximations available to the requested colours. In V6, the interpreter may store the approximations in window properties 16 and 17, so the program can tell how close it got (although it is acceptable for the interpreter to just store the requested value).
 
-In the minimal implementation, interpreters just need to match to the closest of the standard colours and internally call **`set_colour`** (although that would have to ensure window properties 16 and 17 were updated). In a full implementation this would be turned around and **`set_colour`** would internally call **`set_true_colour`**.
+In the minimal implementation, interpreters just need to match to the closest of the standard colours and internally call [**`set_colour`**](./15-opcodes-dictionary.md#set_colour) (although that would have to ensure window properties 16 and 17 were updated). In a full implementation this would be turned around and [**`set_colour`**](./15-opcodes-dictionary.md#set_colour) would internally call [**`set_true_colour`**](./15-opcodes-dictionary.md#set_true_colour).
 
 True colour specifications are in the sRGB colour space, **`$0000`** being black and **`$7FFF`** being white. Colours should be gamma adjusted if necessary. See the **PNG** specification for a good introduction to colour spaces and gamma correction.
 
@@ -204,11 +204,11 @@ The screen model for Version 3 is as follows:
 
 ### 8.6.1
 
-The screen is divided into a lower and an upper window and at any given time one of these is selected. (Initially it is the lower window.) The game uses the **`set_window`** opcode to select one of the two. Each window has its own cursor position at which text is printed. Operations in the upper window do not move the cursor of the lower. Whenever the upper window is selected, its cursor position is reset to the top left. Selecting, or re-sizing, the upper window does not change the screen's appearance.
+The screen is divided into a lower and an upper window and at any given time one of these is selected. (Initially it is the lower window.) The game uses the [**`set_window`**](./15-opcodes-dictionary.md#set_window) opcode to select one of the two. Each window has its own cursor position at which text is printed. Operations in the upper window do not move the cursor of the lower. Whenever the upper window is selected, its cursor position is reset to the top left. Selecting, or re-sizing, the upper window does not change the screen's appearance.
 
 #### 8.6.1.1
 
-The upper window has variable height (of _n_ lines) and the same width as the screen. This should be displayed on the _n_ lines of the screen below the top one (which continues to hold the status line). Initially the upper window has height 0. When the lower window is selected, the game can split off an upper window of any chosen size by using the **`split_window`** opcode.
+The upper window has variable height (of _n_ lines) and the same width as the screen. This should be displayed on the _n_ lines of the screen below the top one (which continues to hold the status line). Initially the upper window has height 0. When the lower window is selected, the game can split off an upper window of any chosen size by using the [**`split_window`**](./15-opcodes-dictionary.md#split_window) opcode.
 
 ##### 8.6.1.1.1
 
@@ -220,7 +220,7 @@ When a screen split takes place in Version 3, the upper window is cleared.
 
 #### 8.6.1.2
 
-An interpreter need not provide the upper window at all. If it is going to do so, it should set bit 5 of 'Flags 1' in the header to signal this to the game. It is only legal for a game to use **`set_window`** or **`split_window`** if this bit has been set.
+An interpreter need not provide the upper window at all. If it is going to do so, it should set bit 5 of 'Flags 1' in the header to signal this to the game. It is only legal for a game to use [**`set_window`**](./15-opcodes-dictionary.md#set_window) or [**`split_window`**](./15-opcodes-dictionary.md#split_window) if this bit has been set.
 
 #### 8.6.1.3
 
@@ -260,11 +260,11 @@ There are two "windows", called "upper" and "lower": at any given time one of th
 
 #### 8.7.2.1
 
-The upper window has variable height (of _n_ lines) and the same width as the screen. (It is usual for interpreters to print the upper window on the top _n_ lines of the screen, overlaying any text which is already there, having been printed in the lower window some time ago.) Initially the upper window has height 0. When the lower window is selected, the game can split off an upper window of any chosen size by using the **`split_window`** opcode.
+The upper window has variable height (of _n_ lines) and the same width as the screen. (It is usual for interpreters to print the upper window on the top _n_ lines of the screen, overlaying any text which is already there, having been printed in the lower window some time ago.) Initially the upper window has height 0. When the lower window is selected, the game can split off an upper window of any chosen size by using the [**`split_window`**](./15-opcodes-dictionary.md#split_window) opcode.
 
 ##### 8.7.2.1.1
 
-It is unclear exactly what **`split_window`** should do if the upper window is currently selected. The author suggests that it should work as usual, leaving the cursor where it is if the cursor is still inside the new upper window, and otherwise moving the cursor back to the top left. (This is analogous to the Version 6 practice.)
+It is unclear exactly what [**`split_window`**](./15-opcodes-dictionary.md#split_window) should do if the upper window is currently selected. The author suggests that it should work as usual, leaving the cursor where it is if the cursor is still inside the new upper window, and otherwise moving the cursor back to the top left. (This is analogous to the Version 6 practice.)
 
 #### 8.7.2.2
 
@@ -272,7 +272,7 @@ In Version 4, the lower window's cursor is always on the bottom screen line. In 
 
 #### 8.7.2.3
 
-When the upper window is selected, its cursor position can be moved with **`set_cursor`**. This position is given in characters in the form (_row_, _column_), with (1,1) at the top left. The opcode has no effect when the lower window is selected. It is illegal to move the cursor outside the current size of the upper window.
+When the upper window is selected, its cursor position can be moved with [**`set_cursor`**](./15-opcodes-dictionary.md#set_cursor). This position is given in characters in the form (_row_, _column_), with (1,1) at the top left. The opcode has no effect when the lower window is selected. It is illegal to move the cursor outside the current size of the upper window.
 
 #### 8.7.2.4
 
@@ -292,7 +292,7 @@ When text reaches the bottom right of the lower window, it should be scrolled up
 
 #### 8.7.3.2
 
-Using the opcode **`erase_window`**, the specified window can be cleared to background colour. (Even if the text style is Reverse Video the new blank space should not have reversed colours.)
+Using the opcode [**`erase_window`**](./15-opcodes-dictionary.md#erase_window), the specified window can be cleared to background colour. (Even if the text style is Reverse Video the new blank space should not have reversed colours.)
 
 ##### 8.7.3.2.1
 
@@ -304,7 +304,7 @@ Erasing window -1 clears the whole screen to the background colour of the lower 
 
 #### 8.7.3.4
 
-Using **`erase_line`** in the upper window should erase the current line from the cursor position to the right-hand edge, clearing it to background colour. (Even if the text style is Reverse Video the new blank space should not have reversed colours.)
+Using [**`erase_line`**](./15-opcodes-dictionary.md#erase_line) in the upper window should erase the current line from the cursor position to the right-hand edge, clearing it to background colour. (Even if the text style is Reverse Video the new blank space should not have reversed colours.)
 
 ## 8.8 Screen model (V6)
 
@@ -320,7 +320,7 @@ If the interpreter thinks the screen should be redrawn (e.g. because a menu wind
 
 ### 8.8.3
 
-There are eight "windows", numbered 0 to 7. The code -3 is used as a window number to mean "the currently selected window". This selection can be changed with the **`set_window`** opcode. Windows are invisible and usually lie on top of each other. All text and graphics plotting is always clipped to the current window, and anything showing through is plotted onto the screen. Subsequent movements of the window do not move what was printed and there is no sense in which characters or graphics 'belong' to any particular window once printed. Each window has a position (in units), a size (in units), a cursor position within it (in units, relative to its own origin), a number of flags called "attributes" and a number of variables called "properties".
+There are eight "windows", numbered 0 to 7. The code -3 is used as a window number to mean "the currently selected window". This selection can be changed with the  [**`set_window`**](./15-opcodes-dictionary.md#set_window) opcode. Windows are invisible and usually lie on top of each other. All text and graphics plotting is always clipped to the current window, and anything showing through is plotted onto the screen. Subsequent movements of the window do not move what was printed and there is no sense in which characters or graphics 'belong' to any particular window once printed. Each window has a position (in units), a size (in units), a cursor position within it (in units, relative to its own origin), a number of flags called "attributes" and a number of variables called "properties".
 
 #### 8.8.3.1
 
@@ -333,7 +333,7 @@ There are four attributes, numbered as follows:
 |     2     | text copied to output stream 2 (the transcript, if selected) |
 |     3     | buffered printing                                            |
 
-Each can be turned on or off, using the **`window_style`** opcode.
+Each can be turned on or off, using the  [**`window_style`**](./15-opcodes-dictionary.md#window_style) opcode.
 
 ##### 8.8.3.1.1
 
@@ -388,11 +388,11 @@ There are 16 properties, numbered as follows:
 |    16    | true foreground colour    |
 |    17    | true background colour    |
 
-Each property is a standard Z-machine number and is readable with **`get_wind_prop`**. Properties 0 through 15 are writeable with **`put_wind_prop`**. However, a game should only use **`put_wind_prop`** to set the newline interrupt routine, the interrupt countdown and the line count: everything else is either set by the interpreter or by specialised opcodes (such as **`set_font`**). The true foreground and true background properties must not be written by **`put_wind_prop`**.
+Each property is a standard Z-machine number and is readable with [**`get_wind_prop`**](./15-opcodes-dictionary.md#get_wind_prop). Properties 0 through 15 are writeable with [**`put_wind_prop`**](./15-opcodes-dictionary.md#put_wind_prop). However, a game should only use [**`put_wind_prop`**](./15-opcodes-dictionary.md#put_wind_prop) to set the newline interrupt routine, the interrupt countdown and the line count: everything else is either set by the interpreter or by specialised opcodes (such as [**`set_font`**](./15-opcodes-dictionary.md#set_font)). The true foreground and true background properties must not be written by [**`put_wind_prop`**](./15-opcodes-dictionary.md#put_wind_prop).
 
 ##### 8.8.3.2.1
 
-If a window has character wrapping, then text is clipped to stay inside the left and right margins. After a new-line, the cursor moves to the left margin on the next line. Margins can be set with **`set_margins`** but this should only be done just after a newline or just after the window has been selected. (These values are margin sizes in pixels, and are by default 0.)
+If a window has character wrapping, then text is clipped to stay inside the left and right margins. After a new-line, the cursor moves to the left margin on the next line. Margins can be set with [**`set_margins`**](./15-opcodes-dictionary.md#set_margins) but this should only be done just after a newline or just after the window has been selected. (These values are margin sizes in pixels, and are by default 0.)
 
 ##### 8.8.3.2.2
 
@@ -404,7 +404,7 @@ Because of an Infocom bug, if the interpreter number is 6 (for MSDOS) and the st
 
 ###### 8.8.3.2.2.2
 
-Note that the **`set_margins`** opcode, which is often used by newline interrupt routines (to adjust the shape of a margin as it flows past a picture), automatically moves the cursor if the change in margins would leave the cursor outside them. The effect will depend, unfortunately, on which sequence of events above takes place.
+Note that the  [**`set_margins`**](./15-opcodes-dictionary.md#set_margins) opcode, which is often used by newline interrupt routines (to adjust the shape of a margin as it flows past a picture), automatically moves the cursor if the change in margins would leave the cursor outside them. The effect will depend, unfortunately, on which sequence of events above takes place.
 
 ###### 8.8.3.2.2.3
 
@@ -412,7 +412,7 @@ A line count is never decremented below -999.
 
 ##### 8.8.3.2.3
 
-The text style is set just as in Version 4, using **`set_text_style`** (which sets that for the current window). The property holds the operand of that instruction (e.g. 4 for italic).
+The text style is set just as in Version 4, using [**`set_text_style`**](./15-opcodes-dictionary.md#set_text_style) (which sets that for the current window). The property holds the operand of that instruction (e.g. 4 for italic).
 
 ##### 8.8.3.2.4
 
@@ -432,7 +432,7 @@ If an attempt is made by the game to read the cursor position at a time when tex
 
 ##### 8.8.3.2.8
 
-**[1.1]** The true foreground and background colours show the actual colour being used for the foreground and background, whether it was set using **`set_colour`** or **`set_true_colour`**. Transparent is indicated as -4. If the colour was sampled from a picture then the value shown may be a 15-bit rounding of a more precise colour, leading to a slight inaccuracy if the colour is read and then written back.
+**[1.1]** The true foreground and background colours show the actual colour being used for the foreground and background, whether it was set using  [**`set_colour`**](./15-opcodes-dictionary.md#set_colour) or  [**`set_true_colour`**](./15-opcodes-dictionary.md#set_true_colour). Transparent is indicated as -4. If the colour was sampled from a picture then the value shown may be a 15-bit rounding of a more precise colour, leading to a slight inaccuracy if the colour is read and then written back.
 
 #### 8.8.3.3
 
@@ -440,15 +440,15 @@ All eight windows begin at (1,1). Window 0 occupies the whole screen and is init
 
 #### 8.8.3.4
 
-A window can be moved with **`move_window`** and resized with **`window_size`**. If the window size is reduced so that its cursor lies outside it, the cursor should be reset to the left margin on the top line.
+A window can be moved with  [**`move_window`**](./15-opcodes-dictionary.md#move_window) and resized with  [**`window_size`**](./15-opcodes-dictionary.md#window_size). If the window size is reduced so that its cursor lies outside it, the cursor should be reset to the left margin on the top line.
 
 #### 8.8.3.5
 
-Each window remembers its own cursor position (relative to its own coordinates, so that the position (1,1) is at its top left). These can be changed using **`set_cursor`** (and it is legal to move the cursor for an unselected window). It is illegal to move the cursor outside the current window.
+Each window remembers its own cursor position (relative to its own coordinates, so that the position (1,1) is at its top left). These can be changed using  [**`set_cursor`**](./15-opcodes-dictionary.md#set_cursor) (and it is legal to move the cursor for an unselected window). It is illegal to move the cursor outside the current window.
 
 #### 8.8.3.6
 
-Each window can be scrolled vertically (up or down) any number of pixels, using the **`scroll_window`** opcode.
+Each window can be scrolled vertically (up or down) any number of pixels, using the  [**`scroll_window`**](./15-opcodes-dictionary.md#scroll_window) opcode.
 
 ### 8.8.4
 
@@ -456,7 +456,7 @@ To some extent windows 0 and 1 mimic the behaviour of the lower and upper window
 
 #### 8.8.4.1
 
-The **`split_screen`** opcode tiles windows 0 and 1 together to fill the screen, so that window 1 has the given height and is placed at the top left, while window 0 is placed just below it (with its height suitably shortened, possibly making it disappear altogether if window 1 occupies the whole screen).
+The  [**`split_screen`**](./15-opcodes-dictionary.md#split_screen) opcode tiles windows 0 and 1 together to fill the screen, so that window 1 has the given height and is placed at the top left, while window 0 is placed just below it (with its height suitably shortened, possibly making it disappear altogether if window 1 occupies the whole screen).
 
 #### 8.8.4.2
 
@@ -472,11 +472,11 @@ Erasing a picture is like drawing it (see below), except that the space where it
 
 #### 8.8.5.2
 
-The current line can be erased using **`erase_line`**, either all the way to the right margin or by any positive number of pixels in that direction. The space is painted over with background colour (even if the current text style is Reverse Video).
+The current line can be erased using  [**`erase_line`**](./15-opcodes-dictionary.md#erase_line), either all the way to the right margin or by any positive number of pixels in that direction. The space is painted over with background colour (even if the current text style is Reverse Video).
 
 #### 8.8.5.3
 
-Each window can be erased using **`erase_window`**, erasing to background colour (even if the current text style is Reverse Video).
+Each window can be erased using  [**`erase_window`**](./15-opcodes-dictionary.md#erase_window), erasing to background colour (even if the current text style is Reverse Video).
 
 ##### 8.8.5.3.1
 
@@ -484,7 +484,7 @@ Erasing window number -1 erases the entire screen to the background colour of wi
 
 ##### 8.8.5.3.2
 
-Erasing window -2 erases the entire screen to the current background colour. (It doesn't perform **`erase_window`** for all the individual windows, and it doesn't change any window attributes or cursor positions.)
+Erasing window -2 erases the entire screen to the current background colour. (It doesn't perform  [**`erase_window`**](./15-opcodes-dictionary.md#erase_window) for all the individual windows, and it doesn't change any window attributes or cursor positions.)
 
 ### 8.8.6
 
@@ -492,27 +492,27 @@ Pictures may accompany the game. They are not stored in the story file (or the Z
 
 #### 8.8.6.1
 
-Pictures are numbered from 1 upwards (not necessarily contiguously). They can be "drawn" or "erased" (using **`draw_picture`** and **`erase_picture`**). Before attempting to do so, a game may ask the interpreter about the picture (using **`picture_data`**): this allows the interpreter to signal that the picture in question is unavailable, or to specify its height and width.
+Pictures are numbered from 1 upwards (not necessarily contiguously). They can be "drawn" or "erased" (using  [**`draw_picture`**](./15-opcodes-dictionary.md#draw_picture) and  [**`erase_picture`**](./15-opcodes-dictionary.md#erase_picture)). Before attempting to do so, a game may ask the interpreter about the picture (using  [**`picture_data`**](./15-opcodes-dictionary.md#picture_data)): this allows the interpreter to signal that the picture in question is unavailable, or to specify its height and width.
 
 #### 8.8.6.2
 
-The game may, if it wishes, use the **`picture_table`** opcode to give the interpreter advance warning that a group of pictures will soon be needed (for instance, a collection of icons making up a control panel). The interpreter may want to load these pictures off disc and into a memory cache.
+The game may, if it wishes, use the  [**`picture_table`**](./15-opcodes-dictionary.md#picture_table) opcode to give the interpreter advance warning that a group of pictures will soon be needed (for instance, a collection of icons making up a control panel). The interpreter may want to load these pictures off disc and into a memory cache.
 
 ### 8.8.7
 
-**[1.1]** Interpreters may use a backing store to store the Z-machine screen state, rather than plotting directly to the screen. This would normally be the case in a windowed operating system environment. If a backing store is in use, display changes executed by the Z-machine may not be immediately made visible to the user. Standard 1.1 adds the new opcode **`buffer_screen`** to Version 6 to control screen updates. An interpreter is free to ignore the opcode if it doesn't fit its display model (in which case it must act as if **`buffer_screen`** is always set to 0).
+**[1.1]** Interpreters may use a backing store to store the Z-machine screen state, rather than plotting directly to the screen. This would normally be the case in a windowed operating system environment. If a backing store is in use, display changes executed by the Z-machine may not be immediately made visible to the user. Standard 1.1 adds the new opcode  [**`buffer_screen`**](./15-opcodes-dictionary.md#buffer_screen) to Version 6 to control screen updates. An interpreter is free to ignore the opcode if it doesn't fit its display model (in which case it must act as if  [**`buffer_screen`**](./15-opcodes-dictionary.md#buffer_screen) is always set to 0).
 
 #### 8.8.7.1
 
-**[1.1]** When **`buffer_screen`** is set to 0 (the default), all display changes are expected to become visible to the user either immediately, or within a short period of time, at the interpreter's discretion. At a minimum, all updates become visible before waiting for input. Any intermediate display states between input requests may not be seen; for example when printing a large amount of new text into a scrolling window, all the intermediate scroll positions may or may not be shown.
+**[1.1]** When  [**`buffer_screen`**](./15-opcodes-dictionary.md#buffer_screen) is set to 0 (the default), all display changes are expected to become visible to the user either immediately, or within a short period of time, at the interpreter's discretion. At a minimum, all updates become visible before waiting for input. Any intermediate display states between input requests may not be seen; for example when printing a large amount of new text into a scrolling window, all the intermediate scroll positions may or may not be shown.
 
-When **`buffer_screen`** is set to 1, the interpreter need not change the visible display at all. Any display changes can be done purely in the backing store. A program may set **`buffer_screen`** to 1 before carrying out a complex layered graphical composition, to indicate that the intermediate states are not worth showing. It would be extremely ill-advised to prompt for input with **`buffer_screen`** set to 1.
+When  [**`buffer_screen`**](./15-opcodes-dictionary.md#buffer_screen) is set to 1, the interpreter need not change the visible display at all. Any display changes can be done purely in the backing store. A program may set  [**`buffer_screen`**](./15-opcodes-dictionary.md#buffer_screen) to 1 before carrying out a complex layered graphical composition, to indicate that the intermediate states are not worth showing. It would be extremely ill-advised to prompt for input with  [**`buffer_screen`**](./15-opcodes-dictionary.md#buffer_screen) set to 1.
 
-When **`buffer_screen`** is set back to 0, the display is not necessarily updated immediately. If this is required, the game must request it seperately (see [**S**8.8.7.2 below](#8872)).
+When  [**`buffer_screen`**](./15-opcodes-dictionary.md#buffer_screen) is set back to 0, the display is not necessarily updated immediately. If this is required, the game must request it seperately (see [**S**8.8.7.2 below](#8872)).
 
 #### 8.8.7.2
 
-**[1.1]** With **`buffer_screen`** in either state, an update of the visible display can be forced immediately by issuing **`buffer_screen -1`**, without altering the current buffering state. Note that **`buffer_screen -1`** does not flush the text buffer.
+**[1.1]** With  [**`buffer_screen`**](./15-opcodes-dictionary.md#buffer_screen) in either state, an update of the visible display can be forced immediately by issuing **`buffer_screen -1`**, without altering the current buffering state. Note that **`buffer_screen -1`** does not flush the text buffer.
 
 ---
 
@@ -533,11 +533,11 @@ The only existing Version 3 game to use an upper window is _Seastalker_ (for its
 
 Some ports of **ITF** apply buffering (i.e. word-wrapping) and scrolling to the upper window, with unfortunate consequences. This is why the standard Inform status line is one character short of the width of the screen.
 
-The original Infocom files seldom use **`erase_window`**, except with window -1 (for instance _Trinity_ only uses it in this form). **ITF** does not implement it in any other case.
+The original Infocom files seldom use  [**`erase_window`**](./15-opcodes-dictionary.md#erase_window), except with window -1 (for instance _Trinity_ only uses it in this form). **ITF** does not implement it in any other case.
 
-The Version 5 re-releases of older games make use of consecutive **`set_text_style`** instructions to attempt to combine boldface reverse video (in the hints system).
+The Version 5 re-releases of older games make use of consecutive  [**`set_text_style`**](./15-opcodes-dictionary.md#set_text_style) instructions to attempt to combine boldface reverse video (in the hints system).
 
-None of Infocom's Version 4 or 5 files use **`erase_line`** at all, and **ITF** implements it badly (with unpredictable behaviour in Reverse Video text style). (It's interesting to note that the Version 5 edition of _Zork I_ --- one of the earliest Version 5 files --- blanks out lines by looking up the screen width and printing that many spaces.)
+None of Infocom's Version 4 or 5 files use  [**`erase_line`**](./15-opcodes-dictionary.md#erase_line) at all, and **ITF** implements it badly (with unpredictable behaviour in Reverse Video text style). (It's interesting to note that the Version 5 edition of _Zork I_ --- one of the earliest Version 5 files --- blanks out lines by looking up the screen width and printing that many spaces.)
 
 It's recommended that a Version 5 interpreter always use units to correspond to characters: that is, characters occupy 1x1 units. _Beyond Zork_ was written in the expectation that it could be using either 1x1 or 8x8, and contains correct code to calculate screen positions whatever units are used. (Infocom's Version 5 interpreter for MSDOS could either run in a text mode, 1x1, or a graphics mode, 8x8.) However, the German translation of _Zork I_ contains incorrect code to calculate screen positions unless 1x1 units are used.
 
@@ -547,7 +547,7 @@ Some details of the known IBM graphics files are given in Paul David Doherty's _
 
 Although Version 6 graphics files are not specified here, and were released in several different formats by Infocom for different computers, a consensus seems to have emerged that the MCGA pictures are the ones to adopt (files with filenames `*.MG1`). These are visually identical to Amiga pictures (whose format has been deciphered by Mark Knibbs). However, some Version 6 story files were tailored to the interpreters they would run on, and use the pictures differently according to what they expect the pictures to be. (For instance, an Amiga-intended story file will use one big Amiga-format picture where an MSDOS-intended story file will use several smaller MCGA ones.)
 
-The easiest option is to interpret only DOS-intended Version 6 story files and only MCGA pictures. But it may be helpful to examine the **Frotz** source code, as **Frotz** implements **`draw_picture`** and **`picture_data`** so that Amiga and Macintosh forms of Version 6 story files can also be used.
+The easiest option is to interpret only DOS-intended Version 6 story files and only MCGA pictures. But it may be helpful to examine the **Frotz** source code, as **Frotz** implements  [**`draw_picture`**](./15-opcodes-dictionary.md#draw_picture) and  [**`picture_data`**](./15-opcodes-dictionary.md#picture_data) so that Amiga and Macintosh forms of Version 6 story files can also be used.
 
 It is generally felt that newly-written graphical games should not imitate the old Infocom graphics formats, which are very awkward to construct and have been overtaken by technology. Instead, the **Blorb** proposal for packaging up resources with Z-machine games calls for PNG format graphics glued together in a fairly simple way. The graphics for Infocom's Version 6 games have been made available in **Blorb** format, so that understanding Infocom's picture-sets is no longer very useful.
 
@@ -557,7 +557,7 @@ Interpreter authors are advised that all 8 windows in Version 6 must be treated 
 
 - Different default positions + sizes
 - Different default attributes
-- **`split_window`** manipulates windows 0 and 1 specifically
+-  [**`split_window`**](./15-opcodes-dictionary.md#split_window) manipulates windows 0 and 1 specifically
 - Window 1 is the default mouse window
 
 Differences in interpreter behaviour must only arise from differences in window attributes and properties.
@@ -580,7 +580,7 @@ Regardless of the limitations on colour numbers, in Version 6 each window must r
 
 Many modern games have been lax in obeying this rule; in particular some of the standard Inform menu libraries have violated it. Infocom's _Sherlock_ also miscalculated the size of the upper window to use for box quotes.
 
-It is recommended that if the cursor is moved below the split position in V4/V5, interpreters should execute an implicit **`split_window`** to contain the requested cursor position, if possible. Diagnostics should be produced, but should be suppressable.
+It is recommended that if the cursor is moved below the split position in V4/V5, interpreters should execute an implicit  [**`split_window`**](./15-opcodes-dictionary.md#split_window) to contain the requested cursor position, if possible. Diagnostics should be produced, but should be suppressable.
 
 ---
 
@@ -590,7 +590,7 @@ Andrew Plotkin has written up some [notes](http://eblong.com/zarf/glk/quote-box.
 
 ---
 
-Infocom's Version 6 interpreters and story files disagree on the meaning of window attributes 0 and 3 and the opcode **`buffer_mode`**, in such a way that the original specification is hard to deduce from the final behaviour. If we call the three possible ways that text can appear "word wrap", "char wrap" and "char clip":
+Infocom's Version 6 interpreters and story files disagree on the meaning of window attributes 0 and 3 and the opcode  [**`buffer_mode`**](./15-opcodes-dictionary.md#buffer_mode), in such a way that the original specification is hard to deduce from the final behaviour. If we call the three possible ways that text can appear "word wrap", "char wrap" and "char clip":
 
 | Way       | Example                     |
 | :-------- | :-------------------------- |
@@ -621,4 +621,4 @@ Here "---" means that the interpreter ignores the given state, and the presence 
 | **`buffer_mode off`** | ---           |
 | **`buffer_mode on`**  | ---           |
 
-Due to a bug or an oversight, the V6 story files for all interpreters use **`buffer_mode`** once: to remove buffering while printing `Please wait...` with a row of full stops trickling out during a slow operation. Buffering would frustrate this, but fortunately on modern computers the operation is no longer slow and so the bug does not cause trouble.
+Due to a bug or an oversight, the V6 story files for all interpreters use  [**`buffer_mode`**](./15-opcodes-dictionary.md#buffer_mode) once: to remove buffering while printing `Please wait...` with a row of full stops trickling out during a slow operation. Buffering would frustrate this, but fortunately on modern computers the operation is no longer slow and so the bug does not cause trouble.

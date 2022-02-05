@@ -8,7 +8,7 @@
 >
 > Shakespeare, _**Macbeth**_
 
-## 4.1
+## 4.1 Instructions
 
 A single Z-machine instruction consists of the following sections (and in the order shown):
 
@@ -23,7 +23,7 @@ A single Z-machine instruction consists of the following sections (and in the or
 
 Bracketed sections are not present in all opcodes. (A few opcodes take both "store" and "branch".)
 
-## 4.2
+## 4.2 Operand types
 
 There are four 'types' of operand. These are often specified by a number stored in 2 binary digits:
 
@@ -44,9 +44,9 @@ Variable number **`$00`** refers to the top of the stack, **`$01`** to **`$0f`**
 
 ### 4.2.3
 
-The type 'Variable' really means "variable by value". Some instructions take as an operand a "variable by reference": for instance, **`inc`** has one operand, the reference number of a variable to increment. This operand usually has type 'Small constant' (and Inform automatically assembles a line like **`@inc`&nbsp;_`turns`_** by writing the operand _**`turns`**_ as a small constant with value the reference number of the variable _**`turns`**_ ).
+The type 'Variable' really means "variable by value". Some instructions take as an operand a "variable by reference": for instance,  [**`inc`**](./15-opcodes-dictionary.md#inc) has one operand, the reference number of a variable to increment. This operand usually has type 'Small constant' (and Inform automatically assembles a line like **`@inc`&nbsp;_`turns`_** by writing the operand _**`turns`**_ as a small constant with value the reference number of the variable _**`turns`**_ ).
 
-## 4.3
+## 4.3 Form and operand count
 
 Each instruction has a form (long, short, extended or variable) and an operand count (0OP, 1OP, 2OP or VAR). If the top two bits of the opcode are **`$$11`** the form is variable; if **`$$10`**, the form is short. If the opcode is 190 (**`$BE`** in hexadecimal) and the version is 5 or later, the form is "extended". Otherwise, the form is "long".
 
@@ -66,7 +66,7 @@ In variable form, if bit 5 is 0 then the count is 2OP; if it is 1, then the coun
 
 In extended form, the operand count is VAR. The opcode number is given in a second opcode byte.
 
-## 4.4
+## 4.4 Specifying operand types
 
 Next, the types of the operands are specified.
 
@@ -86,7 +86,7 @@ In variable or extended forms, a byte of 4 operand types is given next. This con
 
 In the special case of the "double variable" VAR opcodes **`call_vs2`** and **`call_vn2`** (opcode numbers 12 and 26), a second byte of types is given, containing the types for the next four operands.
 
-## 4.5
+## 4.5 Operands
 
 The operands are given next. Operand counts of 0OP, 1OP or 2OP require 0, 1 or 2 operands to be given, respectively. If the count is VAR, there must be as many operands as there were types other than 'omitted'.
 
@@ -104,11 +104,11 @@ Opcode operands are always evaluated from first to last --- this order is import
 
 subtracts the second-from-top stack item from the topmost stack item.
 
-## 4.6
+## 4.6 Stores
 
-"Store" instructions return a value: e.g., **`mul`** multiplies its two operands together. Such instructions must be followed by a single byte giving the variable number of where to put the result.
+"Store" instructions return a value: e.g.,  [**`mul`**](./15-opcodes-dictionary.md#mul) multiplies its two operands together. Such instructions must be followed by a single byte giving the variable number of where to put the result.
 
-## 4.7
+## 4.7 Branches
 
 Instructions which test a condition are called "branch" instructions. The branch information is stored in one or two bytes, indicating what to do with the result of the test. If bit 7 of the first byte is 0, a branch occurs when the condition was false; if 1, then branch is on true. If bit 6 is set, then the branch occupies 1 byte only, and the "offset" is in the range 0 to 63, given in the bottom 6 bits. If bit 6 is clear, then the offset is a signed 14-bit number given in bits 0 to 5 of the first byte followed by all 8 of the second.
 
@@ -124,15 +124,15 @@ Otherwise, a branch moves execution to the instruction at address
 Address after branch data + Offset - 2.
 ```
 
-## 4.8
+## 4.8 Text opcodes
 
-Two opcodes, **`print`** and **`print_ret`**, are followed by a text string. This is stored according to the usual rules: in particular execution continues after the last 2-byte word of text (the one with top bit set).
+Two opcodes,  [**`print`**](./15-opcodes-dictionary.md#print) and  [**`print_ret`**](./15-opcodes-dictionary.md#print_ret), are followed by a text string. This is stored according to the usual rules: in particular execution continues after the last 2-byte word of text (the one with top bit set).
 
 ---
 
 ## Remarks
 
-Some opcodes have type VAR only because the available codes for the other types had run out; **`print_char`**, for instance. Others, especially **`call`**, need the flexibility to have between 1 and 4 operands.
+Some opcodes have type VAR only because the available codes for the other types had run out;  [**`print_char`**](./15-opcodes-dictionary.md#print_char), for instance. Others, especially  [**`call`**](./15-opcodes-dictionary.md#call), need the flexibility to have between 1 and 4 operands.
 
 The Inform assembler can assemble branches in either form, though the programmer should always use long form unless there's a good reason. Inform automatically optimises branch statements so as to force as many of them as possible into short form. (This optimisation will happen to branches written by hand in assembler as well as to branches compiled by Inform.)
 
