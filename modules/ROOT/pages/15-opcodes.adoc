@@ -1,0 +1,947 @@
+= 15. Dictionary of opcodes
+:idprefix:
+
+image::icon15.gif[]
+
+[quote, Philip Vellacott]
+____
+The highest ideal of a translation… is achieved when the reader flings it impatiently into the fire, and begins patiently to learn the language for himself.
+____
+
+== 15.1
+
+The dictionary below is alphabetical and includes entries on every opcode listed in the table above, as well as brief notes on a few opcodes once thought to exist but now disproved.
+
+== 15.2
+
+The Z-machine has the same concept of “table” (as an internal data structure) as Inform. Specifically, a table is an array of words (in dynamic or static memory) of which the initial entry is the number of subsequent words in the table. For example, a table with three entries occupies 8 bytes, arranged as the words 3, _x_, _y_, _z_.
+
+== 15.3
+
+In all cases below where one operand is supposed to be in a particular range, behaviour is undefined if it is not. For instance an interpreter complies with the Standard even if it crashes when an illegal object number (including 0) is given for an object operand. However, see xref:A-errors.adoc[**S**A] for guidelines on detecting and dealing with errors.
+
+== `add`
+
+2OP:20 14 *add* _a_ _b_ -> _(result)_
+
+Signed 16-bit addition.
+
+== `and`
+
+2OP:9 9 *and* _a_ _b_ -> _(result)_
+
+Bitwise AND.
+
+== `aread`
+
+This is the Inform name for the keyboard-reading opcode under Version 5 and later. (Inform calls the same opcode `*sread*` under Versions 3 and 4.) See xref:15-opcodes.adoc#read[`*read*`] for the specification.
+
+== `art_shift`
+
+EXT:3 3 5/- *art_shift* _number_ _places_ -> _(result)_
+
+Does an arithmetic shift of _number_ by the given number of _places_, shifting left (i.e. increasing) if _places_ is positive, right if negative. In a right shift, the sign bit is preserved as well as being shifted on down. (The alternative behaviour is xref:15-opcodes.adoc#log_shift[`*log_shift*`].)
+
+The _places_ operand must be in the range -15 to +15, otherwise behaviour is undefined.
+
+== `buffer_mode`
+
+VAR:242 12 4 *buffer_mode* _flag_
+
+If set to 1, text output on the lower window in stream 1 is buffered up so that it can be word-wrapped properly. If set to 0, it isn’t.
+
+In Version 6, this opcode is redundant (the “buffering” window attribute can be set instead). It is used twice in each of Infocom’s Version 6 story files, in the `*$verify*` routine. *Frotz* responds by setting the current window’s “buffering” attribute, while Infocom’s own interpreters respond by doing nothing. This standard leaves the result of `*buffer_mode*` undefined in Version 6.
+
+== `buffer_screen`
+
+EXT:29 1D 6/* *buffer_screen* _mode_ -> _(result)_
+
+Tells the interpreter how to handle display buffering. If _mode_ is 0, updates must be made as soon as possible. If _mode_ is 1, the interpreter may make changes to a backing store, and need not update the screen. The interpreter is free to ignore the advice, but if so must always act as though the _mode_ is 0 (update the screen as soon as possible).
+
+With `*buffer_screen*` in either state, an update of the visible display can be forced immediately by issuing `*buffer_screen -1*`, without altering the current buffering state. Note that `*buffer_screen -1*` does not flush the text buffer.
+
+The return value is the old `buffer_screen` state.
+
+See xref:08-screen.adoc[**S**8] for more details.
+
+*[1.1]* This opcode will only be present in interpreters obeying Standard 1.1 or later, so story files should check the standard number of the interpreter before executing this opcode.
+
+== `call`
+
+VAR:224 0 1 *call* _routine_ _…up to 3 args…_ -> _(result)_
+
+The only call instruction in Version 3, Inform reads this as xref:15-opcodes.adoc#call_vs[`*call_vs*`] in higher versions: it calls the routine with 0, 1, 2 or 3 arguments as supplied and stores the resulting return value. (When the address 0 is called as a routine, nothing happens and the return value is false.)
+
+== `call_1n`
+
+1OP:143 F 5 *call_1n* _routine_
+
+Executes _routine()_ and throws away result.
+
+== `call_1s`
+
+1OP:136 8 4 *call_1s* _routine_ -> _(result)_
+
+Stores _routine()_.
+
+== `call_2n`
+
+2OP:26 1A 5 *call_2n* _routine_ _arg1_
+
+Executes _routine (arg1)_ and throws away result.
+
+== `call_2s`
+
+2OP:25 19 4 *call_2s* _routine_ _arg1_ -> _(result)_
+
+Stores _routine (arg1)_.
+
+== `call_vn`
+
+VAR:249 19 5 *call_vn* _routine_ _…up to 3 args…_
+
+Like xref:15-opcodes.adoc#call[`*call*`], but throws away result.
+
+== `call_vs`
+
+VAR:224 0 4 *call_vs* _routine_ _…up to 3 args…_ -> _(result)_
+
+See xref:15-opcodes.adoc#call[`*call*`].
+
+== `call_vn2`
+
+VAR:250 1A 5 *call_vn2* _routine_ _…up to 7 args…_
+
+Call with a variable number (from 0 to 7) of arguments, then throw away the result. This (and xref:15-opcodes.adoc#call_vs2[`*call_vs2*`]) uniquely have an extra byte of opcode types to specify the types of arguments 4 to 7. Note that it is legal to use these opcodes with fewer than 4 arguments (in which case the second byte of type information will just be `*$ff*`).
+
+== `call_vs2`
+
+VAR:236 C 4 *call_vs2* _routine_ _…up to 7 args…_ -> _(result)_
+
+See xref:15-opcodes.adoc#call_vn2[`*call_vn2*`].
+
+== `catch`
+
+0OP:185 9 5/6 *catch* -> _(result)_
+
+Opposite to xref:15-opcodes.adoc#throw[`*throw*`] (and occupying the same opcode that xref:15-opcodes.adoc#pop[`*pop*`] used in Versions 3 and 4). `*catch*` returns the current “stack frame”.
+
+== `check_arg_count`
+
+VAR:255 1F 5 *check_arg_count* _argument-number_
+
+Branches if the given _argument-number_ (counting from 1) has been provided by the routine call to the current routine. (This allows routines in Versions 5 and later to distinguish between the calls _routine_(1) and _routine_(1,0), which would otherwise be impossible to tell apart.)
+
+== `check_unicode`
+
+EXT:12 C 5/* *check_unicode* _char-number_ -> _(result)_
+
+Determines whether or not the interpreter can print, or receive from the keyboard, the given Unicode character. Bit 0 of the result should be set if and only if the interpreter can print the character; bit 1 if and only if the interpreter can receive it from the keyboard. Bits 2 to 15 are undefined.
+
+*[1.0]* This opcode will only be present in interpreters obeying Standard 1.0 or later, so story files should check the standard number of the interpreter before executing this opcode.
+
+== `clear_attr`
+
+2OP:12 C *clear_attr* _object_ _attribute_
+
+Make _object_ not have the attribute numbered _attribute_.
+
+== `copy_table`
+
+VAR:253 1D 5 *copy_table* _first_ _second_ _size_
+
+If _second_ is zero, then _size_ bytes of _first_ are zeroed.
+
+Otherwise _first_ is copied into _second_, its length in bytes being the absolute value of _size_ (i.e., _size_ if _size_ is positive, -_size_ if _size_ is negative).
+
+The tables are allowed to overlap. If _size_ is positive, the interpreter must copy either forwards or backwards so as to avoid corrupting _first_ in the copying process. If _size_ is negative, the interpreter must copy forwards even if this corrupts _first_. (_Beyond Zork_ uses this to fill an array with spaces.)
+
+(Version 0.2 of this document wrongly specified that if _size_ is positive then copying should always run backward. This results in the player being unable to cross the river near the start of _Journey_, as the game uses `*copy_table*` to shuffle menu options, and the menu “Downstream, Upstream, Cross, Return” is changed to “Return, Return, Return”.)
+
+== `dec`
+
+1OP:134 6 *dec* _(variable)_
+
+Decrement _variable_ by 1. This is signed, so 0 decrements to -1.
+
+== `dec_chk`
+
+2OP:4 4 *dec_chk* _(variable)_ _value_?_(label)_
+
+Decrement _variable_, and branch if it is now less than the given _value_.
+
+== `div`
+
+2OP:23 17 *div* _a_ _b_ -> _(result)_
+
+Signed 16-bit division. Division by zero should halt the interpreter with a suitable error message.
+
+== `draw_picture`
+
+EXT:5 5 6 *draw_picture* _picture-number_ _y_ _x_
+
+Displays the picture with the given number. (_y_,_x_) coordinates (of the top left of the picture) are each optional, in that a value of zero for _y_ or _x_ means the cursor y or × coordinate in the current window. It is illegal to call this with an invalid picture number.
+
+== `encode_text`
+
+VAR:252 1C 5 *encode_text* _zscii-text_ _length_ _from_ _coded-text_
+
+Translates a ZSCII word to Z-encoded text format (stored at _coded-text_), as if it were an entry in the dictionary. The text begins at _from_ in the _zscii-text_ buffer and is _length_ characters long. (Some interpreters ignore this and keep translating until they hit a 0 character anyway, or have already filled up the 6-byte Z-encoded string.)
+
+== `erase_line`
+
+VAR:238 E 4/6 *erase_line* _value_
+
+Versions 4 and 5: if the _value_ is 1, erase from the current cursor position to the end of its line in the current window. If the _value_ is anything other than 1, do nothing.
+
+Version 6: if the _value_ is 1, erase from the current cursor position to the end of the its line in the current window. If not, erase the given number of pixels minus one across from the cursor (clipped to stay inside the right margin). The cursor does not move.
+
+== `erase_picture`
+
+EXT:7 7 6 *erase_picture* _picture-number_ _y_ _x_
+
+Like xref:15-opcodes.adoc#draw_picture[`*draw_picture*`], but paints the appropriate region to the background colour for the given window. It is illegal to call this with an invalid picture number.
+
+== `erase_window`
+
+VAR:237 D 4 *erase_window* _window_
+
+Erases window with given number (to background colour); or if -1 it unsplits the screen and clears the lot; or if -2 it clears the screen without unsplitting it. In cases -1 and -2, the cursor may move (see S 8 for precise details).
+
+== “extended”
+
+This byte (decimal 190) is not an instruction, but indicates that the opcode is “extended”: the next byte contains the number in the extended set.
+
+== `get_child`
+
+1OP:130 2 *get_child* _object_ -> _(result)_
+?(label)
+
+Get first object contained in given _object_, branching if this exists, i.e. is not nothing (i.e., is not 0).
+
+== `get_cursor`
+
+VAR:240 10 4/6 *get_cursor* _array_
+
+Puts the current cursor row into the word 0 of the given _array_, and the current cursor column into word 1. (The _array_ is not a table and has no size information in its initial entry.)
+
+== `get_next_prop`
+
+2OP:19 13 *get_next_prop* _object_ _property_ -> _(result)_
+
+Gives the number of the next property provided by the quoted _object_. This may be zero, indicating the end of the property list; if called with zero, it gives the first property number present. It is illegal to try to find the next property of a property which does not exist, and an interpreter should halt with an error message (if it can efficiently check this condition).
+
+== `get_parent`
+
+1OP:131 3 *get_parent* _object_ -> _(result)_
+
+Get parent object (note that this has no “branch if exists” clause).
+
+== `get_prop`
+
+2OP:17 11 *get_prop* _object_ _property_ -> _(result)_
+
+Read property from _object_ (resulting in the default value if it had no such declared property). If the property has length 1, the value is only that byte. If it has length 2, the first two bytes of the property are taken as a word value. It is illegal for the opcode to be used if the property has length greater than 2, and the result is unspecified.
+
+== `get_prop_addr`
+
+2OP:18 12 *get_prop_addr* _object_ _property_ -> _(result)_
+
+Get the byte address (in dynamic memory) of the property data for the given _object_’s property. This must return 0 if the object hasn’t got the property.
+
+== `get_prop_len`
+
+1OP:132 4 *get_prop_len* _property-address_ -> _(result)_
+
+Get length of property data (in bytes) for the given object’s property. It is illegal to try to find the property length of a property which does not exist for the given object, and an interpreter should halt with an error message (if it can efficiently check this condition).
+
+`*@get_prop_len 0*` must return 0. This is required by some Infocom games and files generated by old versions of Inform.
+
+== `get_sibling`
+
+1OP:129 1 *get_sibling* _object_ -> _(result)_?_(label)_
+
+Get next object in tree, branching if this exists, i.e. is not 0.
+
+== `get_wind_prop`
+
+EXT:19 13 6 *get_wind_prop* _window_ _property-number_ -> _(result)_
+
+Reads the given property of the given _window_ (see xref:08-screen.adoc[**S**8]).
+
+== `inc`
+
+1OP:133 5 *inc* _(variable)_
+
+Increment _variable_ by 1. (This is signed, so -1 increments to 0.)
+
+== `inc_chk`
+
+2OP:5 5 *inc_chk* _(variable)_ _value_?_(label)_
+
+Increment _variable_, and branch if now greater than _value_.
+
+== `input_stream`
+
+VAR:244 14 3 *input_stream* _number_
+
+Selects the current input stream.
+
+== `insert_obj`
+
+2OP:14 E *insert_obj* _object_ _destination_
+
+Moves _object_ O to become the first child of the _destination_ object D. (Thus, after the operation the child of D is O, and the sibling of O is whatever was previously the child of D.) All children of O move with it. (Initially O can be at any point in the object tree; it may legally have parent zero.)
+
+== `je`
+
+2OP:1 1 *je* _a_ _b_ _c_ _d_?_(label)_
+
+Jump if _a_ is equal to any of the subsequent operands. (Thus `*@je a*` never jumps and `*@je a b*` jumps if a = b.)
+
+`*je*` with just 1 operand is not permitted.
+
+== `jg`
+
+2OP:3 3 *jg* _a_ _b_?_(label)_
+
+Jump if _a_ > _b_ (using a signed 16-bit comparison).
+
+== `jin`
+
+2OP:6 6 *jin* _obj1_ _obj2_?_(label)_
+
+Jump if object _a_ is a direct child of _b_, i.e., if parent of _a_ is _b_.
+
+== `jl`
+
+2OP:2 2 *jl* _a_ _b_?_(label)_
+
+Jump if _a_ < _b_ (using a signed 16-bit comparison).
+
+== `jump`
+
+1OP:140 C *jump*?_(label)_
+
+Jump (unconditionally) to the given _label_. (This is not a branch instruction and the operand is a 2-byte signed offset to apply to the program counter.) It is legal for this to jump into a different routine (which should not change the routine call state), although it is considered bad practice to do so and the *Txd* disassembler is confused by it.
+
+The destination of the jump opcode is:
+
+====
+_Address after instruction_ + _Offset_ - 2
+====
+
+This is analogous to the calculation for branch offsets.
+
+== `jz`
+
+1OP:128 0 *jz* _a_?_(label)_
+
+Jump if _a_ = 0.
+
+== `load`
+
+1OP:142 E *load* _(variable)_ -> _(result)_
+
+The value of the _variable_ referred to by the operand is stored in the result. (Inform doesn’t use this; see the notes to xref:14-opcode-table.adoc[**S**14].)
+
+== `loadb`
+
+2OP:16 10 *loadb* _array_ _byte-index_ -> _(result)_
+
+Stores _array_->_byte-index_ (i.e., the byte at address _array_+_byte-index_, which must lie in static or dynamic memory).
+
+== `loadw`
+
+2OP:15 F *loadw* _array_ _word-index_ -> _(result)_
+
+Stores _array_->_word-index_ (i.e., the word at address _array_+2*_word-index_, which must lie in static or dynamic memory).
+
+== `log_shift`
+
+EXT:2 2 5 *log_shift* _number_ _places_ -> _(result)_
+
+Does a logical shift of _number_ by the given number of _places_, shifting left (i.e. increasing) if _places_ is positive, right if negative. In a right shift, the sign is zeroed instead of being shifted on. (See also xref:15-opcodes.adoc#art_shift[`*art_shift*`].)
+
+The _places_ operand must be in the range -15 to +15, otherwise behaviour is undefined.
+
+== `make_menu`
+
+EXT:27 1B 6 *make_menu* _number_ _table_?_(label)_
+
+Controls menus with numbers greater than 2 (i.e., it doesn’t control the three system menus). If the _table_ supplied is 0, the menu is removed. Otherwise it is a table of tables. Each table is a ZSCII string: the first item being a menu name, subsequent ones the entries.
+
+== `mod`
+
+2OP:24 18 *mod* _a_ _b_ -> _(result)_
+
+Remainder after signed 16-bit division. Division by zero should halt the interpreter with a suitable error message.
+
+== `mouse_window`
+
+EXT:23 17 6 *mouse_window* _window_
+
+Constrain the mouse arrow to sit inside the given _window_. By default it sits in window 1. Setting to -1 takes all restriction away. (The mouse clicks are not reported if the arrow is outside the window and interpreters are presumably supposed to hold the arrow there by hardware means if possible.)
+
+== `move_window`
+
+EXT:16 10 6 *move_window* _window_ _y_ _x_
+
+Moves the given _window_ to pixels (_y_,_x_): (1,1) being the top left. Nothing actually happens (since windows are entirely notional transparencies): but any future plotting happens in the new place.
+
+== `mul`
+
+2OP:22 16 *mul* _a_ _b_ -> _(result)_
+
+Signed 16-bit multiplication.
+
+== `new_line`
+
+0OP:187 B *new_line*
+
+Print carriage return.
+
+== `nop`
+
+0OP:180 4 1/- *nop*
+
+Probably the official “no operation” instruction, which, appropriately, was never operated (in any of the Infocom datafiles): it may once have been a breakpoint.
+
+== `not`
+
+1OP:143 F 1/4 *not* _value_ -> _(result)_ +
+VAR:248 18 5/6 *not* _value_ -> _(result)_
+
+Bitwise NOT (i.e., all 16 bits reversed). Note that in Versions 3 and 4 this is a 1OP instruction, reasonably since it has 1 operand, but in later Versions it was moved into the extended set to make room for xref:15-opcodes.adoc#call_1n[`*call_1n*`].
+
+== `or`
+
+2OP:8 8 *or* _a_ _b_ -> _(result)_
+
+Bitwise OR.
+
+== `output_stream`
+
+VAR:243 13 3 *output_stream* _number_ _table_ +
+6 *output_stream* _number_ _table_ _width_
+
+If stream is 0, nothing happens. If it is positive, then that stream is selected; if negative, deselected. (Recall that several different streams can be selected at once.)
+
+When stream 3 is selected, a _table_ must be given into which text can be printed. The first word always holds the number of characters printed, the actual text being stored at bytes _table_+2 onward. It is not the interpreter’s responsibility to worry about the length of this table being overrun.
+
+In Version 6, a _width_ field may optionally be given: text will then be justified as if it were in the window with that number (if _width_ is zero or positive) or a box -_width_ pixels wide (if negative). Then the table will contain not ordinary text but formatted text: see xref:15-opcodes.adoc#print_form[`*print_form*`].
+
+== `picture_data`
+
+EXT:6 6 6 *picture_data* _picture-number_ _array_?_(label)_
+
+Asks the interpreter for data on the picture with the given number. If the picture number is valid, a branch occurs and information is written to the _array_: the height in word 0, the width in word 1, in pixels. (This is an array, not a “table” with initial size information.)
+
+Otherwise, if the picture number is zero, the interpreter writes the number of available pictures into word 0 of the _array_ and the release number of the picture file into word 1, and branches if any pictures are available. (Infocom’s first Version 6 Amiga interpreter did not handle this case properly, and early releases of _Zork Zero_ did not use it. The feature may have been added on the MSDOS release of _Zork Zero_.)
+
+Otherwise, nothing happens.
+
+== `picture_table`
+
+EXT:28 1C 6 *picture_table* _table_
+
+Given a _table_ of picture numbers, the interpreter may if it wishes load or unpack these pictures from disc into a cache for convenient rapid plotting later. _Zork Zero_ makes frequent use of this, for instance for its peggleboard display. Moreover, it expects rapid plotting only for those images listed in the last call to `*picture_table*`. In other words, any images still in the cache when `*picture_table*` is called can safely be thrown away. (The Amiga interpreter 6.14 uses a cache of size 5K and never caches any individual image larger than 1K.)
+
+== `piracy`
+
+0OP:191 F 5/- *piracy*?_(label)_
+
+Branches if the game disc is believed to be genuine by the interpreter (which is assumed to have some arcane way of finding out). Interpreters are asked to be gullible and to unconditionally branch.
+
+== `pop`
+
+0OP:185 9 1 *pop*
+
+Throws away the top item on the stack. (This was useful to lose unwanted routine call results in early Versions.)
+
+== `pop_stack`
+
+EXT:21 15 6 *pop_stack* _items_ _stack_
+
+The given number of _items_ are thrown away from the top of a _stack_: by default the system stack, otherwise the one given as a second operand.
+
+== `print`
+
+0OP:178 2 *print* _<literal-string>_
+
+Print the quoted (literal) Z-encoded string.
+
+== `print_addr`
+
+1OP:135 7 *print_addr* _byte-address-of-string_
+
+Print (Z-encoded) string at given byte address, in dynamic or static memory.
+
+== `print_char`
+
+VAR:229 5 *print_char* _output-character-code_
+
+Print a ZSCII character. The operand must be a character code defined in ZSCII for output (see xref:03-text.adoc[**S**3]). In particular, it must certainly not be negative or larger than 1023.
+
+== `print_form`
+
+EXT:26 1A 6 *print_form* _formatted-table_
+
+Prints a formatted table of the kind written to output stream 3 when formatting is on. This is an elaborated version of xref:15-opcodes.adoc#print_table[`*print_table*`] to cope with fonts, pixels and other impedimenta. It is a sequence of lines, terminated with a zero word. Each line is a word containing the number of characters, followed by that many bytes which hold the characters concerned.
+
+== `print_num`
+
+VAR:230 6 *print_num* _value_
+
+Print (signed) number in decimal.
+
+== `print_obj`
+
+1OP:138 A *print_obj* _object_
+
+Print short name of _object_ (the Z-encoded string in the object header, not a property). If the object number is invalid, the interpreter should halt with a suitable error message.
+
+== `print_paddr`
+
+1OP:141 D *print_paddr* _packed-address-of-string_
+
+Print the (Z-encoded) string at the given packed address in high memory.
+
+== `print_ret`
+
+0OP:179 3 *print_ret* _<literal-string>_
+
+Print the quoted (literal) Z-encoded string, then print a new-line and then return true (i.e., 1).
+
+== `print_table`
+
+VAR:254 1E 5 *print_table* _zscii-text_ _width_ _height_ _skip_
+
+Print a rectangle of text on screen spreading right and down from the current cursor position, of given _width_ and _height_, from the table of ZSCII text given. (Height is optional and defaults to 1.) If a _skip_ value is given, then that many characters of text are skipped over in between each line and the next. (So one could make this display, for instance, a 2 by 3 window onto a giant 40 by 40 character graphics map.)
+
+== `print_unicode`
+
+EXT:11 B 5/* *print_unicode* _char-number_
+
+Print a Unicode character. See xref:03-text.adoc#3–8–5–4[**S*3.8.5.4] and xref:07-output.adoc#7–5[*S**7.5] for details. The given character code must be defined in Unicode.
+
+*[1.0]* This opcode will only be present in interpreters obeying Standard 1.0 or later, so story files should check the standard number of the interpreter before executing this opcode.
+
+== `pull`
+
+VAR:233 9 1 *pull* _(variable)_ +
+6 *pull* _stack_ -> _(result)_
+
+Pulls value off a stack* (If the stack underflows, the interpreter should halt with a suitable error message.) In Version 6, the \_stack* in question may be specified as a user one: otherwise it is the game stack.
+
+== `push`
+
+VAR:232 8 *push* _value_
+
+Pushes value onto the game stack.
+
+== `push_stack`
+
+EXT:24 18 6 *push_stack* _value_ _stack_?_(label)_
+
+Pushes the _value_ onto the specified user _stack_, and branching if this was successful. If the stack overflows, nothing happens (this is not an error condition).
+
+== `put_prop`
+
+VAR:227 3 *put_prop* _object_ _property_ _value_
+
+Writes the given _value_ to the given _property_ of the given _object_. If the property does not exist for that object, the interpreter should halt with a suitable error message. If the property length is 1, then the interpreter should store only the least significant byte of the value. (For instance, storing -1 into a 1-byte property results in the property value 255.) As with xref:15-opcodes.adoc#get_prop[`*get_prop*`] the property length must not be more than 2: if it is, the behaviour of the opcode is undefined.
+
+== `put_wind_prop`
+
+EXT:25 19 6 *put_wind_prop* _window_ _property-number_ _value_
+
+Writes a window property (see xref:15-opcodes.adoc#get_wind_prop[`*get_wind_prop*`]). This should only be used when there is no direct command (such as xref:15-opcodes.adoc#move_window[`*move_window*`]) to use instead, as some such operations may have side-effects.
+
+== `quit`
+
+0OP:186 A *quit*
+
+Exit the game immediately. (Any “Are you sure?” question must be asked by the game, not the interpreter.) It is not legal to return from the main routine (that is, from where execution first begins) and this must be used instead.
+
+== `random`
+
+VAR:231 7 *random* _range_ -> _(result)_
+
+If _range_ is positive, returns a uniformly random number between 1 and _range_. If _range_ is negative, the random number generator is seeded to that value and the return value is 0. Most interpreters consider giving 0 as range illegal (because they attempt a division with remainder by the range), but correct behaviour is to reseed the generator in as random a way as the interpreter can (e.g. by using the time in milliseconds).
+
+(Some version 3 games, such as _Enchanter_ release 29, had a debugging verb `#random` such that typing, say, `#random 14` caused a call of `*random*` with -14.)
+
+== `read`
+
+VAR:228 4 1 *sread* _text_ _parse_\ +
+4 *sread* _text_ _parse_ _time_ _routine_\ +
+5 *aread* _text_ _parse_ _time_ _routine_ -> _(result)_
+
+(Note that Inform internally names the `*read*` opcode as `*aread*` in Versions 5 and later and `*sread*` in Versions 3 and 4.)
+
+This opcode reads a whole command from the keyboard (no prompt is automatically displayed). It is legal for this to be called with the cursor at any position on any window.
+
+In Versions 1 to 3, the status line is automatically redisplayed first.
+
+A sequence of characters is read in from the current input stream until a carriage return (or, in Versions 5 and later, any terminating character) is found.
+
+In Versions 1 to 4, byte 0 of the _text_-buffer should initially contain the maximum number of letters which can be typed, minus 1 (the interpreter should not accept more than this). The text typed is reduced to lower case (so that it can tidily be printed back by the program if need be) and stored in bytes 1 onward, with a zero terminator (but without any other terminator, such as a carriage return code). (This means that if byte 0 contains _n_ then the buffer must contain _n_+1 bytes, which makes it a string array of length _n_ in Inform terminology.)
+
+In Versions 5 and later, byte 0 of the _text_-buffer should initially contain the maximum number of letters which can be typed (the interpreter should not accept more than this). The interpreter stores the number of characters actually typed in byte 1 (not counting the terminating character), and the characters themselves (reduced to lower case) in bytes 2 onward (not storing the terminating character). (Some interpreters wrongly add a zero byte after the text anyway, so it is wise for the buffer to contain at least _n_+3 bytes.)
+
+Moreover, if byte 1 contains a positive value at the start of the input, then `*read*` assumes that number of characters are left over from an interrupted previous input, and writes the new characters after those already there. Note that the interpreter does not redisplay the characters left over: the game does this, if it wants to. This is unfortunate for any interpreter wanting to give input text a distinctive appearance on-screen, but _Beyond Zork_, _Zork Zero_ and _Shogun_ clearly require it. (“Just a tremendous pain in my butt”—Andrew Plotkin; “the most unfortunate feature of the Z-machine design”—Stefan Jokisch.)
+
+In Version 4 and later, if the operands _time_ and _routine_ are supplied (and non-zero) then the routine call _routine_() is made every _time_/10 seconds during the keyboard-reading process. If this routine returns true, all input is erased (to zero) and the reading process is terminated at once. (The terminating character code is 0.) The _routine_ is permitted to print to the screen even if it returns false to signal “carry on”: the interpreter should notice and redraw the input line so far, before input continues. (*Frotz* notices by looking to see if the cursor position is at the left-hand margin after the interrupt routine has returned.)
+
+If input was terminated in the usual way, by the player typing a carriage return, then a carriage return is printed (so the cursor moves to the next line). If it was interrupted, the cursor is left at the rightmost end of the text typed in so far.
+
+Next, lexical analysis is performed on the text (except that in Versions 5 and later, if _parse_-buffer is zero then this is omitted). Initially, byte 0 of the _parse_-buffer should hold the maximum number of textual words which can be parsed. (If this is _n_, the buffer must be at least 2 + 4*_n_ bytes long to hold the results of the analysis.)
+
+The interpreter divides the text into words and looks them up in the dictionary, as described in xref:13-dictionary.adoc[**S**13]. The number of words is written in byte 1 and one 4-byte block is written for each word, from byte 2 onwards (except that it should stop before going beyond the maximum number of words specified). Each block consists of the byte address of the word in the dictionary, if it is in the dictionary, or 0 if it isn’t; followed by a byte giving the number of letters in the word; and finally a byte giving the position in the _text_-buffer of the first letter of the word.
+
+In Version 5 and later, this is a store instruction: the return value is the terminating character (note that the user pressing his “enter” key may cause either 10 or 13 to be returned; the interpreter must return 13). A timed-out input returns 0.
+
+(Versions 1 and 2 and early Version 3 games mistakenly write the parse buffer length 240 into byte 0 of the _parse_ buffer: later games fix this bug and write 59, because 2+4*59 = 238 so that 59 is the maximum number of textual words which can be parsed into a buffer of length 240 bytes. Old versions of the Inform 5 library commit the same error. Neither mistake has very serious consequences.)
+
+(Interpreters are asked to halt with a suitable error message if the _text_ or _parse_ buffers have length of less than 3 or 6 bytes, respectively: this sometimes occurs due to a previous array being overrun, causing bugs which are very difficult to find.)
+
+== `read_char`
+
+VAR:246 16 4 *read_char* 1 _time_ _routine_ -> _(result)_
+
+Reads a single character from input stream 0 (the keyboard). The first operand must be 1 (presumably it was provided to support multiple input devices, but only the keyboard was ever used). _time_ and _routine_ are optional (in Versions 4 and later only) and dealt with as in xref:15-opcodes.adoc#read[`*read*`] above.
+
+== `read_mouse`
+
+EXT:22 16 6 *read_mouse* _array_
+
+The four words in the _array_ are written with the mouse y coordinate, x coordinate, button bits, and a menu word.
+
+The buttons bits are arranged so that the “primary” button is the lowest bit, the “secondary” (if present) is the next lowest bit, and so on, up to a potential 16 buttons. The ordering of buttons should be that which is most natural for the host system. Here are some suggested assignments:
+
+.Button assignments
+[%autowidth, cols="1,1,1,1,1", frame=none, grid=rows]
+|===
+| Platform | Bit 0 (low)  | Bit 1     | Bit 2    | ...
+
+| RISC OS  | Select       | Adjust    | Menu     | ...
+| MacOS    | Primary/only | Secondary | Tertiary | ...
+| Windows  | Left         | Right     | Middle   | ...
+| X        | Left         | Right     | Middle   | ...
+|===
+
+In the menu word, the upper byte is the menu number and the lower byte is the item number (from 0). (Note that the array isn’t a table and has no initial size information. The data is written to words 0 to 3 in the array.)
+
+== `remove_obj`
+
+1OP:137 9 *remove_obj* _object_
+
+Detach the _object_ from its parent, so that it no longer has any parent. (Its children remain in its possession.)
+
+== `restart`
+
+0OP:183 7 1 *restart*
+
+Restart the game. (Any “Are you sure?” question must be asked by the game, not the interpreter.) The only pieces of information surviving from the previous state are the “transcribing to printer” bit (bit 0 of ’Flags 2′ in the header, at address `*$10*`) and the “use fixed pitch font” bit (bit 1 of ’Flags 2′).
+
+In particular, changing the program start address before a restart will not have the effect of restarting from this new address.
+
+== `restore`
+
+0OP:182 6 1 *restore*?_(label)_ +
+0OP:182 5 4 *restore* -> _(result)_ +
+EXT:1 1 5 *restore* _table_ _bytes_ _name_ _prompt_ -> _(result)_
+
+See xref:15-opcodes.adoc#save[`*save*`]. In Version 3, the branch is never actually made, since either the game has successfully picked up again from where it was saved, or it failed to load the save game file.
+
+As with xref:15-opcodes.adoc#restart[`*restart*`], the transcription and fixed font bits survive. The interpreter gives the game a way of knowing that a restore has just happened (see xref:15-opcodes.adoc#save[`*save*`]).
+
+*[1.0]* From Version 5 it can have optional parameters as xref:15-opcodes.adoc#save[`*save*`] does, and returns the number of bytes loaded if so. (Whether Infocom intended these options as part of Version 5 is doubtful, but it’s too useful a feature to exclude from this Standard.)
+
+If the restore fails, 0 is returned, but once again this necessarily happens since otherwise control is already elsewhere.
+
+== `restore_undo`
+
+EXT:10 A 5 *restore_undo* -> _(result)_
+
+Like xref:15-opcodes.adoc#restore[`*restore*`], but restores the state saved to memory by xref:15-opcodes.adoc#save_undo[`*save_undo*`]. (The optional parameters of xref:15-opcodes.adoc#restore[`*restore*`] may not be supplied.) The behaviour of `*restore_undo*` is unspecified if no xref:15-opcodes.adoc#save_undo[`*save_undo*`] has previously occurred (and a game may not legally use it): an interpreter might simply ignore this.
+
+== `ret`
+
+1OP:139 B *ret* _value_
+
+Returns from the current routine with the _value_ given.
+
+== `ret_popped`
+
+0OP:184 8 *ret_popped*
+
+Pops top of stack and returns that. (This is equivalent to xref:15-opcodes.adoc#ret[`*ret sp*`], but is one byte cheaper.)
+
+== `rfalse`
+
+0OP:177 1 *rfalse*
+
+Return false (i.e., 0) from the current routine.
+
+== `rtrue`
+
+0OP:176 0 *rtrue*
+
+Return true (i.e., 1) from the current routine.
+
+== `save`
+
+0OP:181 5 1 *save*?_(label)_ +
+0OP:181 5 4 *save* -> _(result)_ +
+EXT:0 0 5 *save* _table_ _bytes_ _name_ _prompt_ -> _(result)_
+
+On Versions 3 and 4, attempts to save the game (all questions about filenames are asked by interpreters) and branches if successful. From Version 5 it is a store rather than a branch instruction; the store value is 0 for failure, 1 for “save succeeded” and 2 for “the game is being restored and is resuming execution again from here, the point where it was saved”.
+
+It is illegal to use this opcode within an interrupt routine (one called asynchronously by a sound effect, or keyboard timing, or newline counting).
+
+*[1.0]* The extension also has (optional) parameters, which save a region of the save area, whose address and length are in bytes, and provides a suggested filename: _name_ is a pointer to an array of ASCII characters giving this name (as usual preceded by a byte giving the number of characters). See xref:07-output.adoc#7–6[**S**7.6]. (Whether Infocom intended these options as part of Version 5 is doubtful, but it’s too useful a feature to exclude from this Standard.)
+
+*[1.1]* As of Standard 1.1 an additional optional parameter, _prompt_, is allowed on Version 5 extended save/restore. This allows a game author to tell the interpreter whether it should ask for confirmation of the provided file name (_prompt_ is 1), or just silently save/restore using the provided filename (_prompt_ is 0). If the parameter is not provided, whether to prompt or not is a matter for the interpreter—this might be globally user-configurable. Infocom’s interpreters do prompt for filenames, many modern ones do not.
+
+== `save_undo`
+
+EXT:9 9 5 *save_undo* -> _(result)_
+
+Like xref:15-opcodes.adoc#save[`*save*`], except that the optional parameters may not be specified: it saves the game into a cache of memory held by the interpreter. If the interpreter is unable to provide this feature, it must return -1: otherwise it returns the save return value.
+
+It is illegal to use this opcode within an interrupt routine (one called asynchronously by a sound effect, or keyboard timing, or newline counting).
+
+(This call is typically needed once per turn, in order to implement “UNDO”, so it needs to be quick.)
+
+== `scan_table`
+
+VAR:247 17 4 *scan_table* _x_ _table_ _len_ _form_ -> _(result)_
+
+Is _x_ one of the words in _table_, which is _len_ words long? If so, return the address where it first occurs and branch. If not, return 0 and don’t.
+
+The _form_ is optional (and only used in Version 5?): bit 7 is set for words, clear for bytes: the rest contains the length of each field in the _table_. (The first word or byte in each field being the one looked at.) Thus `*$82*` is the default.
+
+== `scroll_window`
+
+EXT:20 14 6 *scroll_window* _window_ _pixels_
+
+Scrolls the given _window_ by the given number of _pixels_ (a negative value scrolls backwards, i.e., down) writing in blank (background colour) pixels in the new lines. This can be done to any window and is not related to the “scrolling” attribute of a window.
+
+== `set_attr`
+
+2OP:11 B *set_attr* _object_ _attribute_
+
+Make _object_ have the attribute numbered _attribute_.
+
+== `set_colour`
+
+2OP:27 1B 5 *set_colour* _foreground_ _background_ +
+6 *set_colour* _foreground_ _background_ _window_
+
+If coloured text is available, set text to be _foreground_-against-_background_. (Flush any buffered text to screen, in the old colours, first.) In version 6, the _window_ argument is optional and is by default the current window. (This option is supported in Infocom’s Amiga and DOS interpreters.)
+
+(One Version 5 game uses this: _Beyond Zork_ (Paul David Doherty reports it as used “76 times in 870915 and 870917, 58 times in 871221”) and from the structure of the table it clearly logically belongs in version 5.)
+
+== `set_cursor`
+
+VAR:239 F 4 *set_cursor* _line_ _column_ +
+6 *set_cursor* _line_ _column_ _window_
+
+Move cursor in the current window to the position (x,y) (in units) relative to (1,1) in the top left. (In Version 6 the window is supplied and need not be the current one. Also, if the cursor would lie outside the current margin settings, it is moved to the left margin of the current line.)
+
+In Version 6, `*set_cursor -1*` turns the cursor off, and either `*set_cursor -2*` or `*set_cursor -2 0*` turn it back on. It is not known what, if anything, this second argument means: in all known cases it is 0.
+
+== `set_font`
+
+EXT:4 4 5 *set_font* _font_ -> _(result)_ +
+EXT:4 4 6 *set_font* _font_ _window_ -> _(result)_
+
+If the requested _font_ is available, then it is chosen for the current window, and the store value is the font ID of the previous font (which is always positive). If the _font_ is unavailable, nothing will happen and the store value is 0.
+
+If the _font_ ID requested is 0, the font is not changed, and the ID of the current font is returned.
+
+(Infocom’s old interpreters did not store 0 for an unavailable font, but the feature is clearly useful and so was introduced in release 0.2 of this Standard.
+
+*[1.1]* In Version 6, `*set_font*` has an optional _window_ parameter, as for xref:15-opcodes.adoc#set_colour[`*set_colour*`]. This was part of the original Infocom design, but omitted by earlier Standards. It is reinstated here, as it is useful to be able to measure a font that is about to be used in another window, so that window can be sized before attempting to place the cursor in it. A _window_ number of -3 signifies “the currently selected window”
+
+== `set_margins`
+
+EXT:8 8 6 *set_margins* _left_ _right_ _window_
+
+Sets the margin widths (in pixels) on the left and right for the given window (which are by default 0). If the cursor is overtaken and now lies outside the margins altogether, move it back to the left margin of the current line (see xref:08-screen.adoc#8-8-3-2-2–1[**S**8.8.3.2.2.1]).
+
+== `set_text_style`
+
+VAR:241 11 4 *set_text_style* _style_
+
+Sets the text style to: Roman (if 0), Reverse Video (if 1), Bold (if 2), Italic (4), Fixed Pitch (8). In some interpreters (though this is not required) a combination of styles is possible (such as reverse video and bold). In these, changing to Roman should turn off all the other styles currently set.
+
+*[1.1]* As of Standard 1.1, it is legal to request style combinations in a single `*set_text_style*` opcode by adding the values (which are powers of two) together. If the parameter is non-zero, then all the styles given are activated. If the parameter is zero, then all styles are deactivated. If the interpreter is unable to provide the requested style combination, it must give precedence first to the styles requested in the most recent call to `*set_text_style*`, and within that to the highest bit, making the priority Fixed, Italic, Bold, Reverse.
+
+== `set_true_colour`
+
+EXT:13 D 5/_ *set_true_colour* _foreground_ _background_ +
+EXT:13 D 6/_ *set_true_colour* _foreground_ _background_ _window_
+
+The _foreground_ and _background_ are 15-bit colour values:
+
+[%autowidth, cols="1,1", frame=none, grid=rows]
+|===
+| 15    | 0
+| 14-10 | blue
+| 9-5   | green
+| 4-0   | red
+|===
+
+The optional _window_ parameter is only allowed in V6, and operates the same as in xref:15-opcodes.adoc#set_colour[`*set_colour*`].
+
+*[1.1]* This opcode will only be present in interpreters obeying Standard 1.1 or later, so story files should check the standard number of the interpreter before executing this opcode.
+
+== `set_window`
+
+VAR:235 B 3 *set_window* _window_
+
+Selects the given _window_ for text output.
+
+== `show_status`
+
+0OP:188 C 3 *show_status*
+
+(In Version 3 only.) Display and update the status line now (don’t wait until the next keyboard input). (In theory this opcode is illegal in later Versions but an interpreter should treat it as xref:15-opcodes.adoc#nop[`*nop*`], because Version 5 Release 23 of _Wishbringer_ contains this opcode by accident.)
+
+== `sound_effect`
+
+VAR:245 15 5/3 *sound_effect* _number_ _effect_ _volume_ _routine_
+
+The given _effect_ happens to the given sound _number_. The low byte of _volume_ holds the volume level, the high byte the number of repeats. (The value 255 means “loudest possible” and “forever” respectively.) (The “repeats” parameter indicates the total number of times to play the sound, not the number of times to repeat it after the first play.) (In Version 3, repeats are unsupported and the high byte must be 0.)
+
+Note that sound effect numbers 1 and 2 are bleeps (see S 9) and in these cases the other operands must be omitted. Conversely, if any of the other operands are present, the sound effect number must be 3 or higher.
+
+The _effect_ can be: 1 (prepare), 2 (start), 3 (stop), 4 (finish with).
+
+In Versions 5 and later, the _routine_ is called (with no parameters) after the sound has been finished (it has been playing in the background while the Z-machine has been working on other things). (This is used by _Sherlock_ to implement fading in and out, which explains why mysterious numbers like `*$34FB*` were previously thought to be to do with fading.) The _routine_ is not called if the sound is stopped by another sound or by an effect 3 call.
+
+See the remarks to xref:09-sound.adoc#remarks[**S**9] for which forms of this opcode were actually used by Infocom.
+
+In theory, `*@sound_effect;*` (with no operands at all) is illegal. However interpreters are asked to beep (as if the operand were 1) if possible, and in any case not to halt.
+
+Setting repeats to zero in V5 is illegal—it is suggested that interpreters treat this as a request to play the sound once, and maybe issue a warning.
+
+To clarify:
+
+----
+@sound_effect number 3/4
+----
+
+will stop (and optionally unload) sound _number_ if it is currently playing (or loaded). Otherwise it is ignored.
+
+----
+@sound_effect 0 3/4
+----
+
+will stop (and unload) all sounds—music and effects.
+
+== `split_window`
+
+VAR:234 A 3 *split_window* _lines_
+
+Splits the screen so that the upper window has the given number of _lines_: or, if this is zero, unsplits the screen again. In Version 3 (only) the upper window should be cleared after the split.
+
+In Version 6, this is supposed to roughly emulate the earlier Version 5 behaviour (see S 8), though the line count is in units rather than lines. (Existing Version 6 games seem to use this opcode only for bounding cursor movement. _Journey_ creates a status region which is the whole screen and then overlays it with two other windows.)
+
+Windows 0 and 1 are tiled together to fill the screen, so that window 1 has the given height and is placed at the top left, while window 0 is placed just below it (with its height suitably shortened, possibly making it disappear altogether if window 1 occupies the whole screen).
+
+A cursor remains in the same absolute screen position (which means that its y-coordinate will be different relative to the window origin, since this origin will have moved) unless this position is no longer in the window at all, in which case it is moved to the window origin (at the top left of the window).
+
+== `sread`
+
+This is the Inform name for the keyboard-reading opcode under Versions 3 and 4. (Inform calls the same opcode `*aread*` in later Versions.) See xref:15-opcodes.adoc#read[`*read*`] for the specification.
+
+== `store`
+
+2OP:13 D *store* _(variable)_ _value_
+
+Set the _VARiable_ referenced by the operand to _value_.
+
+== `storeb`
+
+VAR:226 2 *storeb* _array_ _byte-index_ _value_
+
+_array_->_byte-index_ = _value_, i.e. stores the given _value_ in the byte at address _array_+_byte-index_ (which must lie in dynamic memory). (See xref:15-opcodes.adoc#loadb[`*loadb*`].)
+
+== `storew`
+
+VAR:225 1 *storew* _array_ _word-index_ _value_
+
+_array_->_word-index_ = _value_, i.e. stores the given _value_ in the word at address _array_+2*_word-index_ (which must lie in dynamic memory). (See xref:15-opcodes.adoc#loadw[`*loadw*`].)
+
+== `sub`
+
+2OP:21 15 *sub* _a_ _b_ -> _(result)_
+
+Signed 16-bit subtraction.
+
+== `test`
+
+2OP:7 7 *test* _bitmap_ _flags_?_(label)_
+
+Jump if all of the _flags_ in _bitmap_ are set (i.e. if _bitmap_ & _flags_ == _flags_).
+
+== “test_array”
+
+See xref:15-opcodes.adoc#clear_flag[`*clear_flag*`]. (*ITF* implements this as unconditionally false.)
+
+// annotation!
+****
+
+NOTE: Neither `*test_array*` nor `*clear_flag*` is actually defined. I’m not sure what this is supposed to be.
+
+****
+
+== `test_attr`
+
+2OP:10 A *test_attr* _object_ _attribute_?_(label)_
+
+Jump if _object_ has _attribute_.
+
+== `throw`
+
+2OP:28 1C 5/6 *throw* _value_ _stack-frame_
+
+Opposite of xref:15-opcodes.adoc#catch[`*catch*`]: resets the routine call state to the state it had when the given _stack frame_ value was ‘caught’, and then returns. In other words, it returns as if from the routine which executed the catch which found this stack frame value.
+
+== `tokenise`
+
+VAR:251 1B 5 *tokenise* _text_ _parse_ _dictionary_ _flag_
+
+This performs lexical analysis (see xref:15-opcodes.adoc#read[`*read*`] above).
+
+The _dictionary_ and _flag_ operands are optional.
+
+If a non-zero _dictionary_ is supplied, it is used (if not, the ordinary game dictionary is). If the _flag_ is set, unrecognised words are not written into the _parse_ buffer and their slots are left unchanged: this is presumably so that if several `*tokenise*` instructions are performed in a row, each fills in more slots without wiping those filled by the others.
+
+Parsing a user dictionary is slightly different. A user dictionary should look just like the main one but need not be alphabetically sorted. If the number of entries is given as -_n_, then the interpreter reads this as “_n_ entries unsorted”. This is very convenient if the table is being altered in play: if, for instance, the player is naming things.
+
+== `verify`
+
+0OP:189 D 3 *verify*?_(label)_
+
+Verification counts a (two byte, unsigned) checksum of the file from `*$0040*` onwards (by taking the sum of the values of each byte in the file, modulo `*$10000*`) and compares this against the value in the game header, branching if the two values agree. (Early Version 3 games do not have the necessary checksums to make this possible.)
+
+The interpreter must stop calculating when the file length (as given in the header) is reached. It is legal for the file to contain more bytes than this, but if so the extra bytes should all be 0. (Some story files are padded out to an exact number of virtual-memory pages.) However, many Infocom story files in fact contain non-zero data in the padding, so interpreters must be sure to exclude the padding from checksum calculations.
+
+== `window_size`
+
+EXT:17 11 6 *window_size* _window_ _y_ _x_
+
+Change size of _window_ in pixels. (Does not change the current display.)
+
+== `window_style`
+
+EXT:18 12 6 *window_style* _window_ _flags_ _operation_
+
+Changes attributes for a given _window_. A bitmap of attributes is given, in which the bits are: 0—keep text within margins, 1—scroll when at bottom, 2—copy text to output stream 2 (the printer), 3—buffer text to word-wrap it between the margins of the window.
+
+The operation, by default, is 0, meaning “set to these settings”. 1 means “set the bits supplied”. 2 means “clear the ones supplied”, and 3 means “reverse the bits supplied” (i.e. eXclusive OR).

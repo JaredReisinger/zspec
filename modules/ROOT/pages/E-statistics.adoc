@@ -1,0 +1,118 @@
+= Appendix E. Statistics
+:idprefix:
+
+image::iconae.gif[]
+
+[quote, The New Zork Times (Winter 1984)]
+____
+LORD DIMWIT FLATHEAD: “It must have two hundred thousand rooms, four million takeable objects, and understand a vocabulary of every single word ever spoken in every language ever invented.”
+____
+
+NOTE: The information below has not been updated since the 20th June 1997 revision of this document.
+
+To give some idea of the sizes found in typical story files, here are a few statistics, mostly gathered by Paul David Doherty, whose _Infocom fact sheet_ file is the definitive reference.
+
+== Length
+
+The shortest files are those dating from the time of the _Zork_ trilogy, at about 85K; middle-period Version 3 games are typically 105K, and only the latest use the full memory map. In Versions 4 and 5, only _Trinity_, _A Mind Forever Voyaging_ and _Beyond Zork_ use the full 256K. _Border Zone_ and _Sherlock_, for instance, are about 180K. (The author’s short story _Balances_ is about 50K, an edition of _Adventure_ takes 80K, and _Curses_ takes 256K (it’s padded out to the maximum size with background information; the actual game comprises only about 245K). Under Inform, the library occupies about 35K regardless of the size of game.)
+
+== Code size
+
+_Zork I_ uses only about 5500 opcodes, but the number rises steeply with later games; _Hollywood Hijinx_ has 10355 and, e.g._Moonmist_ has 15900 (both these being Version 3). Against this, _A Mind Forever Voyaging_ has only 18700, and only _Trinity_ and _Beyond Zork_ reach 32000 or so. (Inform games are more efficiently compiled and make better use of common code—the library—so perform much better here: the old Version 3, release 10 of _Curses_ (128K long, and a larger game than any Infocom Version 3 game) has only 6720 opcodes.)
+
+== Objects and rooms
+
+This varies greatly with the style of game. _Zork I_ has 110 rooms and 60 takeable objects, but several quite complex games have as few as 30 rooms (the mysteries, or ’Hitch-hikers’). The average for Version 3 games is 69 rooms, 39 takeable objects.
+
+_A Mind Forever Voyaging_ contains many rooms (178) but few objects (30). _Trinity_, a more typical style of game, contains 134 rooms and 49 objects: the Version 5 _Curses_ has a few more of each. Of the Version 6 games, only _Zork Zero_ scores highly here, with 215 rooms and 106 objects. The average for Version 4/5 games is 105 rooms and 54 objects.
+
+The total number of objects tends to be close to the limit of 255 in Version 3 games. _Curses_ contains 508.
+
+== Dictionary
+
+Early games such as _Zork I_ know about 600 words, but again this rises steeply to about 1000 even in Version 3. Later games know 1569 (_Beyond Zork_) to the record, 2120 (_Trinity_). (This is achieved by heroic inclusion of unlikely synonyms: e.g. the Japanese lady with the umbrella can be called `WOMAN`, `LADY`, `CRONE`, `MADAM`, `MADAME`, `MATRON`, `DAME` or `FACE` with any of the adjectives `OLD`, `AGED`, `ANCIENT`, `JAP`, `JAPANESE`, `ORIENTAL` or `YELLOW`.) Version 6 games have smaller dictionaries. So has _Curses_, at 1364.
+
+== Opcodes
+
+(a) Of the 1426854 opcodes in the shipped Infocom story files in Paul David Doherty’s collection, here are the top and bottom ten most popular. (Leaving out those which never occur and so score 0: xref:15-opcodes.adoc#nop[`*nop*`], xref:15-opcodes.adoc#art_shift[`*art_shift*`], xref:15-opcodes.adoc#piracy[`*piracy*`] and the two post-Infocom opcodes, xref:15-opcodes.adoc#print_unicode[`*print_unicode*`] and xref:15-opcodes.adoc#check_unicode[`*check_unicode*`].)
+
+.Top Ten Opcodes Chart
+[%autowidth, cols="^1,1,>1" frame=none, grid=rows]
+|===
+| 1  | xref:15-opcodes.adoc#je[`*je*`]               | 195959
+| 2  | xref:15-opcodes.adoc#print[`*print*`]         | 142755
+| 3  | xref:15-opcodes.adoc#jz[`*jz*`]               | 112016
+| 4  | xref:15-opcodes.adoc#call_vs[`*call_vs*`]     | 104075
+| 5  | xref:15-opcodes.adoc#print_ret[`*print_ret*`] |  80870
+| 6  | xref:15-opcodes.adoc#store[`*store*`]         |  71128
+| 7  | xref:15-opcodes.adoc#rtrue[`*rtrue*`]         |  66125
+| 8  | xref:15-opcodes.adoc#jump[`*jump*`]           |  56534
+| 9  | xref:15-opcodes.adoc#new_line[`*new_line*`]   |  52553
+| 10 | xref:15-opcodes.adoc#test_attr[`*test_attr*`] |  46627
+|===
+
+.Bottom Ten Opcodes Chart
+[%autowidth, cols="^1,1,>1" frame=none, grid=rows]
+|===
+| 1  | xref:15-opcodes.adoc#print_form[`*print_form*`]       |  2
+| 2  | xref:15-opcodes.adoc#erase_picture[`*erase_picture*`] |  3
+| 3  | xref:15-opcodes.adoc#read_mouse[`*read_mouse*`]       |  3
+| 4  | xref:15-opcodes.adoc#encode_text[`*encode_text*`]     |  7
+| 5  | xref:15-opcodes.adoc#make_menu[`*make_menu*`]         |  9
+| 6  | xref:15-opcodes.adoc#not[`*not*`]                     | 14
+| 7  | xref:15-opcodes.adoc#scroll_window[`*scroll_window*`] | 16
+| 8  | xref:15-opcodes.adoc#pop_stack[`*pop_stack*`]         | 17
+| 9  | xref:15-opcodes.adoc#restore_undo[`*restore_undo*`]   | 18
+| 10 | xref:15-opcodes.adoc#mouse_window[`*mouse_window*`]   | 22
+|===
+
+So about 2/3rd s of all opcodes are those in the top ten; 1 in 8 opcodes is a xref:15-opcodes.adoc#je[`*je*`], and only 1 in 710000 is a xref:15-opcodes.adoc#print_form[`*print_form*`].
+
+(b) An experiment (conducted with the help of Kevin Bracey) sheds some light on the opcodes most frequently interpreted in typical play. Two very different games (_Zork I_, Version 5 “solid gold” edition; _Museum of Inform_, a complex Inform example game) were played for about 50000 cycles of the Z-machine (about 20 moves in _Zork I_, rather less in the _Museum_). The following table records all opcodes with a frequency of at least 1% (i.e., 0.01):
+
+.Zork I Solid Gold (Infocom)
+[%autowidth, cols="1,1" frame=none, grid=rows]
+|===
+| 0.116110 | xref:15-opcodes.adoc#loadb[`*loadb*`]
+| 0.103990 | xref:15-opcodes.adoc#storeb[`*storeb*`]
+| 0.101616 | xref:15-opcodes.adoc#jz[`*jz*`]
+| 0.074979 | xref:15-opcodes.adoc#dec_chk[`*dec_chk*`]
+| 0.066375 | xref:15-opcodes.adoc#add[`*add*`]
+| 0.066283 | xref:15-opcodes.adoc#je[`*je*`]
+| 0.060760 | xref:15-opcodes.adoc#store[`*store*`]
+| 0.053867 | xref:15-opcodes.adoc#loadw[`*loadw*`]
+| 0.038095 | xref:15-opcodes.adoc#storew[`*storew*`]
+| 0.036428 | xref:15-opcodes.adoc#mul[`*mul*`]
+| 0.032069 | xref:15-opcodes.adoc#inc_chk[`*inc_chk*`]
+| 0.030243 | xref:15-opcodes.adoc#jump[`*jump*`]
+| 0.029170 | xref:15-opcodes.adoc#test_attr[`*test_attr*`]
+| 0.020634 | xref:15-opcodes.adoc#call_vs[`*call_vs*`]
+| 0.011184 | xref:15-opcodes.adoc#get_sibling[`*get_sibling*`]
+|===
+
+.Museum of Inform (Inform)
+[%autowidth, cols="1,1" frame=none, grid=rows]
+|===
+| 0.104952 | xref:15-opcodes.adoc#je[`*je*`]
+| 0.101151 | xref:15-opcodes.adoc#jz[`*jz*`]
+| 0.092727 | xref:15-opcodes.adoc#jump[`*jump*`]
+| 0.080985 | xref:15-opcodes.adoc#jg[`*jg*`]
+| 0.079039 | xref:15-opcodes.adoc#jl[`*jl*`]
+| 0.070550 | xref:15-opcodes.adoc#inc[`*inc*`]
+| 0.070139 | xref:15-opcodes.adoc#store[`*store*`]
+| 0.047058 | xref:15-opcodes.adoc#loadw[`*loadw*`]
+| 0.034137 | xref:15-opcodes.adoc#get_prop_addr[`*get_prop_addr*`]
+| 0.024105 | xref:15-opcodes.adoc#jin[`*jin*`]
+| 0.022734 | xref:15-opcodes.adoc#rtrue[`*rtrue*`]
+| 0.021583 | xref:15-opcodes.adoc#storew[`*storew*`]
+| 0.020075 | xref:15-opcodes.adoc#add[`*add*`]
+| 0.018485 | xref:15-opcodes.adoc#call_vs[`*call_vs*`]
+| 0.016731 | xref:15-opcodes.adoc#and[`*and*`]
+| 0.016082 | xref:15-opcodes.adoc#loadb[`*loadb*`]
+| 0.012061 | xref:15-opcodes.adoc#call_vn[`*call_vn*`]
+| 0.011879 | xref:15-opcodes.adoc#test_attr[`*test_attr*`]
+| 0.011824 | xref:15-opcodes.adoc#dec[`*dec*`]
+| 0.011687 | xref:15-opcodes.adoc#ret[`*ret*`]
+|===
+
+Adventure games spend most of the time parsing, and the differences between these tables reflect different parser designs (byte arrays versus word arrays and arrays stored in properties) as well as different compiler code generators (Inform does not use xref:15-opcodes.adoc#inc_chk[`*inc_chk*`] or xref:15-opcodes.adoc#dec_chk[`*dec_chk*`], so it uses xref:15-opcodes.adoc#inc[`*inc*`], xref:15-opcodes.adoc#dec[`*dec*`], xref:15-opcodes.adoc#jl[`*jl*`] and xref:15-opcodes.adoc#jq[`*jg*`] correspondingly more). In the case of _Zork I_, about a third of all opcodes are branches: in the case of _Museum_, almost half.

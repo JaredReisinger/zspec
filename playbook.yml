@@ -1,0 +1,14 @@
+site:
+  title: The Z-Machine Standards Document, version 1.1 (annotated)
+  # start_page: sdsd
+
+content:
+  sources:
+    - url: .
+      branches: HEAD
+      # start_path: src
+
+ui:
+  bundle:
+    url: https://gitlab.com/antora/antora-ui-default/-/jobs/artifacts/HEAD/raw/build/ui-bundle.zip?job=bundle-stable
+    snapshot: true

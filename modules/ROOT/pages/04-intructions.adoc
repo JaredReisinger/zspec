@@ -1,0 +1,213 @@
+= 4. How instructions are encoded
+:idprefix:
+
+image::icon04.gif[]
+
+[quote, Shakespeare, Macbeth]
+____
+We do but teach bloody instructions
+
+Which, being taught, return to plague th’ inventor
+____
+
+[#4-1]
+== 4.1 Instructions
+
+A single Z-machine instruction consists of the following sections (and in the order shown):
+
+[%autowidth, cols="1,1" frame=none, grid=rows]
+|===
+| Opcode              | 1 or 2 bytes
+| (Types of operands) | 1 or 2 bytes: 4 or 8 2-bit fields
+| Operands            | Between 0 and 8 of these: each 1 or 2 bytes
+| (Store variable)    | 1 byte
+| (Branch offset)     | 1 or 2 bytes
+| (Text to print)     | An encoded string (of unlimited length)
+|===
+
+Bracketed sections are not present in all opcodes. (A few opcodes take both “store” and “branch”.)
+
+[#4-2]
+== 4.2 Operand types
+
+There are four ‘types’ of operand. These are often specified by a number stored in 2 binary digits:
+
+[%autowidth, cols="^1,1,1" frame=none, grid=rows]
+|===
+| $$00 | Large constant (0 to 65535) | 2 bytes
+| $$01 | Small constant (0 to 255)   | 1 byte
+| $$10 | Variable                    | 1 byte
+| $$11 | Omitted altogether          | 0 bytes
+|===
+
+=== 4.2.1
+
+Large constants, like all 2-byte words of data in the Z-machine, are stored with most significant byte first (e.g.`*$2478*` is stored as `*$24*` followed by `*$78*`). A ’large constant’ may in fact be a small number.
+
+=== 4.2.2
+
+Variable number `*$00*` refers to the top of the stack, `*$01*` to `*$0f*` mean the local variables of the current routine and `*$10*` to `*$ff*` mean the global variables. It is illegal to refer to local variables which do not exist for the current routine (there may even be none).
+
+=== 4.2.3
+
+The type ‘Variable’ really means “variable by value”. Some instructions take as an operand a “variable by reference”: for instance, xref:15-opcodes.adoc#inc[`*inc*`] has one operand, the reference number of a variable to increment. This operand usually has type ’Small constant’ (and Inform automatically assembles a line like `*@inc _turns_*` by writing the operand `*_turns_*` as a small constant with value the reference number of the variable `*_turns_*`).
+
+[#4-3]
+== 4.3 Form and operand count
+
+Each instruction has a form (long, short, extended or variable) and an operand count (0OP, 1OP, 2OP or VAR). If the top two bits of the opcode are `*${empty}$11*` the form is variable; if `*${empty}$10*`, the form is short. If the opcode is 190 (`*$BE*` in hexadecimal) and the version is 5 or later, the form is “extended”. Otherwise, the form is “long”.
+
+=== 4.3.1
+
+In short form, bits 4 and 5 of the opcode byte give an operand type as above. If this is `*${empty}$11*` then the operand count is 0OP; otherwise, 1OP. In either case the opcode number is given in the bottom 4 bits.
+
+=== 4.3.2
+
+In long form the operand count is always 2OP. The opcode number is given in the bottom 5 bits.
+
+=== 4.3.3
+
+In variable form, if bit 5 is 0 then the count is 2OP; if it is 1, then the count is VAR. The opcode number is given in the bottom 5 bits.
+
+=== 4.3.4
+
+In extended form, the operand count is VAR. The opcode number is given in a second opcode byte.
+
+[#4-4]
+== 4.4 Specifying operand types
+
+Next, the types of the operands are specified.
+
+=== 4.4.1
+
+In short form, bits 4 and 5 of the opcode give the type.
+
+=== 4.4.2
+
+In long form, bit 6 of the opcode gives the type of the first operand, bit 5 of the second. A value of 0 means a small constant and 1 means a variable. (If a 2OP instruction needs a large constant as operand, then it should be assembled in variable rather than long form.)
+
+=== 4.4.3
+
+In variable or extended forms, a byte of 4 operand types is given next. This contains 4 2-bit fields: bits 6 and 7 are the first field, bits 0 and 1 the fourth. The values are operand types as above. Once one type has been given as ‘omitted’, all subsequent ones must be. Example: `*${empty}$00101111*` means large constant followed by variable (and no third or fourth opcode).
+
+==== 4.4.3.1
+
+In the special case of the “double variable” VAR opcodes `*call_vs2*` and `*call_vn2*` (opcode numbers 12 and 26), a second byte of types is given, containing the types for the next four operands.
+
+[#4-5]
+== 4.5 Operands
+
+The operands are given next. Operand counts of 0OP, 1OP or 2OP require 0, 1 or 2 operands to be given, respectively. If the count is VAR, there must be as many operands as there were types other than ‘omitted’.
+
+=== 4.5.1
+
+Note that only xref:15-opcodes.adoc#call_vs2[`*call_vs2*`] and xref:15-opcodes.adoc#call_vn2[`*call_vn2*`] can have more than 4 operands, and no instruction can have more than 8.
+
+=== 4.5.2
+
+Opcode operands are always evaluated from first to last—this order is important when the stack pointer appears as an argument. Thus
+
+----
+@sub sp sp -> i;
+----
+
+subtracts the second-from-top stack item from the topmost stack item.
+
+[#4-6]
+== 4.6 Stores
+
+“Store” instructions return a value: e.g., xref:15-opcodes.adoc#mul[`*mul*`] multiplies its two operands together. Such instructions must be followed by a single byte giving the variable number of where to put the result.
+
+[#4-7]
+== 4.7 Branches
+
+Instructions which test a condition are called “branch” instructions. The branch information is stored in one or two bytes, indicating what to do with the result of the test. If bit 7 of the first byte is 0, a branch occurs when the condition was false; if 1, then branch is on true. If bit 6 is set, then the branch occupies 1 byte only, and the “offset” is in the range 0 to 63, given in the bottom 6 bits. If bit 6 is clear, then the offset is a signed 14-bit number given in bits 0 to 5 of the first byte followed by all 8 of the second.
+
+=== 4.7.1
+
+An offset of 0 means “return false from the current routine”, and 1 means “return true from the current routine”.
+
+=== 4.7.2
+
+Otherwise, a branch moves execution to the instruction at address
+
+====
+_Address after branch data_ + _Offset_ - 2.
+====
+
+[#4-8]
+== 4.8 Text opcodes
+
+Two opcodes, xref:15-opcodes.adoc#print[`*print*`] and xref:15-opcodes.adoc#print_ret[`*print_ret*`], are followed by a text string. This is stored according to the usual rules: in particular execution continues after the last 2-byte word of text (the one with top bit set).
+
+***
+
+== Remarks
+
+Some opcodes have type VAR only because the available codes for the other types had run out; xref:15-opcodes.adoc#print_char[`*print_char*`], for instance. Others, especially xref:15-opcodes.adoc#call[`*call*`], need the flexibility to have between 1 and 4 operands.
+
+The Inform assembler can assemble branches in either form, though the programmer should always use long form unless there’s a good reason. Inform automatically optimises branch statements so as to force as many of them as possible into short form. (This optimisation will happen to branches written by hand in assembler as well as to branches compiled by Inform.)
+
+The disassembler *Txd* numbers locals from 0 to 14 and globals from 0 to 239 in its output (corresponding to variable numbers 1 to 15, and 16 to 255, respectively).
+
+The branch formula is sensible because in the natural implementation, the program counter is at the address after the branch data when the branch takes place: thus it can be regarded as
+
+====
+PC = PC + _Offset_ - 2
+====
+
+If the rule were simply “add the offset” then, since the offset couldn’t be 0 or 1 (because of the return-false and return-true values), we would never be able to skip past a 1-byte instruction (say, a 0OP like quit), or specify the branch “don’t branch at all” (sometimes useful to ignore the result of the test altogether). Subtracting 2 means that the only effects we can’t achieve are
+
+====
+PC = PC - 1
+====
+
+and
+
+====
+PC = PC - 2
+====
+
+and we would never want these anyway, since they would put the program counter somewhere back inside the same instruction, with horrid consequences.
+
+=== On disassembly
+
+Briefly, the first byte of an instruction can be decoded using the following table:
+
+[%autowidth, cols="^1,1,^1,1" frame=none, grid=rows]
+|===
+| `$00`–`$1f`    | long     | 2OP | small constant, small constant
+| `$20`–`$3f`    | long     | 2OP | small constant, variable
+| `$40`–`$5f`    | long     | 2OP | variable, small constant
+| `$60`–`$7f`    | long     | 2OP | variable, variable
+| `$80`–`$8f`    | short    | 1OP | large constant
+| `$90`–`$9f`    | short    | 1OP | small constant
+| `$a0`–`$af`    | short    | 1OP | variable
+| `$b0`–`$bf`    | short    | 0OP |
+| _except_ `$be` | extended |     | opcode given in next byte
+| `$c0`–`$df`    | variable | 2OP | (operand types in next byte)
+| `$e0`–`$ff`    | variable | VAR | (operand types in next byte(s))
+|===
+
+Here is an example disassembly:
+
+----
+  @inc_chk c 0 label;    05 02 00 d4
+      long form; count 2OP; opcode number 5; operands:
+          02     small constant (referring to variable c)
+          00     small constant 0
+      branch if true: 1-byte offset, 20 (since label is
+      18 bytes forward from here).
+  @print "Hello.^";      b2 11 aa 46 34 16 45 9c a5
+      short form; count 0OP.
+      literal string, Z-chars: 4 13 10  17 17 20  5 18 5  7 5 5.
+  @mul 1000 c -> sp;     d6 2f 03 e8 02 00
+      variable form; count 2OP; opcode number 22; operands:
+          03 e8  long constant (1000 decimal)
+          02     variable c
+      store result to stack pointer (var number 00).
+  @call_1n Message;      8f 01 56
+      short form; count 1OP; opcode number 15; operand:
+          01 56  long constant (packed address of routine)
+  .label;
+----

@@ -1,0 +1,338 @@
+= 14. Complete table of opcodes
+:idprefix:
+
+// 2OP / 1OP / 0OP / VAR / EXT
+
+.Two-operand opcodes 2OP
+[cols="^1,^1,6,^1,^1,40,15", frame=none, grid=rows]
+|===
+| St  | Br  | Opcode | Hex |  V  | Inform name and syntax                    | Link
+
+|   |   |   ―    |  0  |  ―  | ―                                         |
+|   | * | 2OP:1  |  1  |     | je a b ?(label)                           | xref:15-opcodes.adoc#je[`*je*`]
+|   | * | 2OP:2  |  2  |     | jl a b ?(label)                           | xref:15-opcodes.adoc#jl[`*jl*`]
+|   | * | 2OP:3  |  3  |     | jg a b ?(label)                           | xref:15-opcodes.adoc#jg[`*jg*`]
+|   | * | 2OP:4  |  4  |     | dec_chk (variable) value ?(label)         | xref:15-opcodes.adoc#dec_chk[`*dec_chk*`]
+|   | * | 2OP:5  |  5  |     | inc_chk (variable) value ?(label)         | xref:15-opcodes.adoc#inc_chk[`*inc_chk*`]
+|   | * | 2OP:6  |  6  |     | jin obj1 obj2 ?(label)                    | xref:15-opcodes.adoc#jin[`*jin*`]
+|   | * | 2OP:7  |  7  |     | test bitmap flags ?(label)                | xref:15-opcodes.adoc#test[`*test*`]
+| * |   | 2OP:8  |  8  |     | or a b -> (result)                        | xref:15-opcodes.adoc#or[`*or*`]
+| * |   | 2OP:9  |  9  |     | and a b -> (result)                       | xref:15-opcodes.adoc#and[`*and*`]
+|   | * | 2OP:10 |  A  |     | test_attr object attribute ?(label)       | xref:15-opcodes.adoc#test_attr[`*test_attr*`]
+|   |   | 2OP:11 |  B  |     | set_attr object attribute                 | xref:15-opcodes.adoc#set_attr[`*set_attr*`]
+|   |   | 2OP:12 |  C  |     | clear_attr object attribute               | xref:15-opcodes.adoc#clear_attr[`*clear_attr*`]
+|   |   | 2OP:13 |  D  |     | store (variable) value                    | xref:15-opcodes.adoc#store[`*store*`]
+|   |   | 2OP:14 |  E  |     | insert_obj object destination             | xref:15-opcodes.adoc#insert_obj[`*insert_obj*`]
+| * |   | 2OP:15 |  F  |     | loadw array word-index -> (result)        | xref:15-opcodes.adoc#loadw[`*loadw*`]
+| * |   | 2OP:16 | 10  |     | loadb array byte-index -> (result)        | xref:15-opcodes.adoc#loadb[`*loadb*`]
+| * |   | 2OP:17 | 11  |     | get_prop object property -> (result)      | xref:15-opcodes.adoc#get_prop[`*get_prop*`]
+| * |   | 2OP:18 | 12  |     | get_prop_addr object property -> (result) | xref:15-opcodes.adoc#get_prop_addr[`*get_prop_addr*`]
+| * |   | 2OP:19 | 13  |     | get_next_prop object property -> (result) | xref:15-opcodes.adoc#get_next_prop[`*get_next_prop*`]
+| * |   | 2OP:20 | 14  |     | add a b -> (result)                       | xref:15-opcodes.adoc#add[`*add*`]
+| * |   | 2OP:21 | 15  |     | sub a b -> (result)                       | xref:15-opcodes.adoc#sub[`*sub*`]
+| * |   | 2OP:22 | 16  |     | mul a b -> (result)                       | xref:15-opcodes.adoc#mul[`*mul*`]
+| * |   | 2OP:23 | 17  |     | div a b -> (result)                       | xref:15-opcodes.adoc#div[`*div*`]
+| * |   | 2OP:24 | 18  |     | mod a b -> (result)                       | xref:15-opcodes.adoc#mod[`*mod*`]
+| * |   | 2OP:25 | 19  |  4  | call_2s routine arg1 -> (result)          | xref:15-opcodes.adoc#call_2s[`*call_2s*`]
+|   |   | 2OP:26 | 1A  |  5  | call_2n routine arg1                      | xref:15-opcodes.adoc#call_2n[`*call_2n*`]
+|   |   | 2OP:27 | 1B  |  5  | set_colour foreground background          | xref:15-opcodes.adoc#set_colour[`*set_colour*`]
+|   |   |        |     |  6  | set_colour foreground background window   | xref:15-opcodes.adoc#set_colour[`*set_colour*`]
+|   |   | 2OP:28 | 1C  | 5/6 | throw value stack-frame                   | xref:15-opcodes.adoc#throw[`*throw*`]
+|   |   |   ―    | 1D  |  ―  | ―                                         |
+|   |   |   ―    | 1E  |  ―  | ―                                         |
+|   |   |   ―    | 1F  |  ―  | ―                                         |
+|===
+
+_Opcode numbers 32 to 127: other forms of 2OP with different types._
+
+.One-operand opcodes 1OP
+[cols="^1,^1,6,^1,^1,40,15", frame=none, grid=rows]
+|===
+|St |Br | Opcode  | Hex |  V  | Inform name and syntax                    | Link
+
+|   | * | 1OP:128 |  0  |     | jz a ?(label)                             | xref:15-opcodes.adoc#jz[`*jz*`]
+| * | * | 1OP:129 |  1  |     | get_sibling object -> (result) ?(label)   | xref:15-opcodes.adoc#get_sibling[`*get_sibling*`]
+| * | * | 1OP:130 |  2  |     | get_child object -> (result) ?(label)     | xref:15-opcodes.adoc#get_child[`*get_child*`]
+| * |   | 1OP:131 |  3  |     | get_parent object -> (result)             | xref:15-opcodes.adoc#get_parent[`*get_parent*`]
+| * |   | 1OP:132 |  4  |     | get_prop_len property-address -> (result) | xref:15-opcodes.adoc#get_prop_len[`*get_prop_len*`]
+|   |   | 1OP:133 |  5  |     | inc (variable)                            | xref:15-opcodes.adoc#inc[`*inc*`]
+|   |   | 1OP:134 |  6  |     | dec (variable)                            | xref:15-opcodes.adoc#dec[`*dec*`]
+|   |   | 1OP:135 |  7  |     | print_addr byte-address-of-string         | xref:15-opcodes.adoc#print_addr[`*print_addr*`]
+| * |   | 1OP:136 |  8  |  4  | call_1s routine -> (result)               | xref:15-opcodes.adoc#call_1s[`*call_1s*`]
+|   |   | 1OP:137 |  9  |     | remove_obj object                         | xref:15-opcodes.adoc#remove_obj[`*remove_obj*`]
+|   |   | 1OP:138 |  A  |     | print_obj object                          | xref:15-opcodes.adoc#print_obj[`*print_obj*`]
+|   |   | 1OP:139 |  B  |     | ret value                                 | xref:15-opcodes.adoc#ret[`*ret*`]
+|   |   | 1OP:140 |  C  |     | jump ?(label)                             | xref:15-opcodes.adoc#jump[`*jump*`]
+|   |   | 1OP:141 |  D  |     | print_paddr packed-address-of-string      | xref:15-opcodes.adoc#print_paddr[`*print_paddr*`]
+| * |   | 1OP:142 |  E  |     | load (variable) -> (result)               | xref:15-opcodes.adoc#load[`*load*`]
+| * |   | 1OP:143 |  F  | 1/4 | not value -> (result)                     | xref:15-opcodes.adoc#not[`*not*`]
+|   |   |         |     |  5  | call_1n routine                           | xref:15-opcodes.adoc#call_1n[`*call_1n*`]
+|===
+
+_Opcode numbers 144 to 175: other forms of 1OP with different types._
+
+.Zero-operand opcodes 0OP
+[cols="^1,^1,6,^1,^1,40,15", frame=none, grid=rows]
+|===
+|St |Br | Opcode  | Hex |  V  | Inform name and syntax          | Link
+
+|   |   | 0OP:176 |  0  |     | rtrue                           | xref:15-opcodes.adoc#rtrue[`*rtrue*`]
+|   |   | 0OP:177 |  1  |     | rfalse                          | xref:15-opcodes.adoc#rfalse[`*rfalse*`]
+|   |   | 0OP:178 |  2  |     | print (literal-string)          | xref:15-opcodes.adoc#print[`*print*`]
+|   |   | 0OP:179 |  3  |     | print_ret (literal-string)      | xref:15-opcodes.adoc#print_ret[`*print_ret*`]
+|   |   | 0OP:180 |  4  | 1/- | nop                             | xref:15-opcodes.adoc#nop[`*nop*`]
+|   | * | 0OP:181 |  5  |  1  | save ?(label)                   | xref:15-opcodes.adoc#save[`*save*`]
+|   |   |         |     |  4  | save -> (result)                | xref:15-opcodes.adoc#save[`*save*`]
+|   |   |         |     |  5  | _illegal_                       |
+|   | * | 0OP:182 |  6  |  1  | restore ?(label)                | xref:15-opcodes.adoc#restore[`*restore*`]
+|   |   |         |     |  4  | restore -> (result)             | xref:15-opcodes.adoc#restore[`*restore*`]
+|   |   |         |     |  5  | _illegal_                       |
+|   |   | 0OP:183 |  7  |     | restart                         | xref:15-opcodes.adoc#restart[`*restart*`]
+|   |   | 0OP:184 |  8  |     | ret_popped                      | xref:15-opcodes.adoc#ret_popped[`*ret_popped*`]
+|   |   | 0OP:185 |  9  |  1  | pop                             | xref:15-opcodes.adoc#pop[`*pop*`]
+| * |   |         |     | 5/6 | catch -> (result)               | xref:15-opcodes.adoc#catch[`*catch*`]
+|   |   | 0OP:186 |  A  |     | quit                            | xref:15-opcodes.adoc#quit[`*quit*`]
+|   |   | 0OP:187 |  B  |     | new_line                        | xref:15-opcodes.adoc#new_line[`*new_line*`]
+|   |   | 0OP:188 |  C  |  3  | show_status                     | xref:15-opcodes.adoc#show_status[`*show_status*`]
+|   |   |         |     |  4  | _illegal_                       |
+|   | * | 0OP:189 |  D  |  3  | verify ?(label)                 | xref:15-opcodes.adoc#verify[`*verify*`]
+|   |   | 0OP:190 |  E  |  5  | [first byte of extended opcode] | xref:15-opcodes.adoc#extended[`*extended*`]
+|   | * | 0OP:191 |  F  | 5/- | piracy ?(label)                 | xref:15-opcodes.adoc#piracy[`*piracy*`]
+|===
+
+_Opcode numbers 192 to 223: VAR forms of 2OP:0 to 2OP:31._
+
+.Variable-operand opcodes VAR
+[cols="^1,^1,6,^1,^1,40,15", frame=none, grid=rows]
+|===
+|St |Br | Opcode  | Hex |  V  | Inform name and syntax                         | Link
+
+| * |   | VAR:224 |  0  |  1  | call routine ...0 to 3 args... -> (result)     | xref:15-opcodes.adoc#call[`*call*`]
+|   |   |         |     |  4  | call_vs routine ...0 to 3 args... -> (result)  | xref:15-opcodes.adoc#call_vs[`*call_vs*`]
+|   |   | VAR:225 |  1  |     | storew array word-index value                  | xref:15-opcodes.adoc#storew[`*storew*`]
+|   |   | VAR:226 |  2  |     | storeb array byte-index value                  | xref:15-opcodes.adoc#storeb[`*storeb*`]
+|   |   | VAR:227 |  3  |     | put_prop object property value                 | xref:15-opcodes.adoc#put_prop[`*put_prop*`]
+|   |   | VAR:228 |  4  |  1  | sread text parse                               | xref:15-opcodes.adoc#sread[`*sread*`]
+|   |   |         |     |  4  | sread text parse time routine                  | xref:15-opcodes.adoc#sread[`*sread*`]
+| * |   |         |     |  5  | aread text parse time routine -> (result)      | xref:15-opcodes.adoc#aread[`*aread*`]
+|   |   | VAR:229 |  5  |     | print_char output-character-code               | xref:15-opcodes.adoc#print_char[`*print_char*`]
+|   |   | VAR:230 |  6  |     | print_num value                                | xref:15-opcodes.adoc#print_num[`*print_num*`]
+| * |   | VAR:231 |  7  |     | random range -> (result)                       | xref:15-opcodes.adoc#random[`*random*`]
+|   |   | VAR:232 |  8  |     | push value                                     | xref:15-opcodes.adoc#push[`*push*`]
+|   |   | VAR:233 |  9  |  1  | pull (variable)                                | xref:15-opcodes.adoc#pull[`*pull*`]
+| * |   |         |     |  6  | pull stack -> (result)                         | xref:15-opcodes.adoc#pull[`*pull*`]
+|   |   | VAR:234 |  A  |  3  | split_window lines                             | xref:15-opcodes.adoc#split_window[`*split_window*`]
+|   |   | VAR:235 |  B  |  3  | set_window window                              | xref:15-opcodes.adoc#set_window[`*set_window*`]
+| * |   | VAR:236 |  C  |  4  | call_vs2 routine ...0 to 7 args... -> (result) | xref:15-opcodes.adoc#call_vs2[`*call_vs2*`]
+|   |   | VAR:237 |  D  |  4  | erase_window window                            | xref:15-opcodes.adoc#erase_window[`*erase_window*`]
+|   |   | VAR:238 |  E  | 4/- | erase_line value                               | xref:15-opcodes.adoc#erase_line[`*erase_line*`]
+|   |   |         |     |  6  | erase_line pixels                              | xref:15-opcodes.adoc#erase_line[`*erase_line*`]
+|   |   | VAR:239 |  F  |  4  | set_cursor line column                         | xref:15-opcodes.adoc#set_cursor[`*set_cursor*`]
+|   |   |         |     |  6  | set_cursor line column window                  | xref:15-opcodes.adoc#set_cursor[`*set_cursor*`]
+|   |   | VAR:240 | 10  | 4/6 | get_cursor array                               | xref:15-opcodes.adoc#get_cursor[`*get_cursor*`]
+|   |   | VAR:241 | 11  |  4  | set_text_style style                           | xref:15-opcodes.adoc#set_text_style[`*set_text_style*`]
+|   |   | VAR:242 | 12  |  4  | buffer_mode flag                               | xref:15-opcodes.adoc#buffer_mode[`*buffer_mode*`]
+|   |   | VAR:243 | 13  |  3  | output_stream number                           | xref:15-opcodes.adoc#output_stream[`*output_stream*`]
+|   |   |         |     |  5  | output_stream number table                     | xref:15-opcodes.adoc#output_stream[`*output_stream*`]
+|   |   |         |     |  6  | output_stream number table width               | xref:15-opcodes.adoc#output_stream[`*output_stream*`]
+|   |   | VAR:244 | 14  |  3  | input_stream number                            | xref:15-opcodes.adoc#input_stream[`*input_stream*`]
+|   |   | VAR:245 | 15  | 5/3 | sound_effect number effect volume routine      | xref:15-opcodes.adoc#sound_effect[`*sound_effect*`]
+| * |   | VAR:246 | 16  |  4  | read_char 1 time routine -> (result)           | xref:15-opcodes.adoc#read_char[`*read_char*`]
+| * | * | VAR:247 | 17  |  4  | scan_table x table len form -> (result)        | xref:15-opcodes.adoc#scan_table[`*scan_table*`]
+| * |   | VAR:248 | 18  | 5/6 | not value -> (result)                          | xref:15-opcodes.adoc#not[`*not*`]
+|   |   | VAR:249 | 19  |  5  | call_vn routine ...up to 3 args...             | xref:15-opcodes.adoc#call_vn[`*call_vn*`]
+|   |   | VAR:250 | 1A  |  5  | call_vn2 routine ...up to 7 args...            | xref:15-opcodes.adoc#call_vn2[`*call_vn2*`]
+|   |   | VAR:251 | 1B  |  5  | tokenise text parse dictionary flag            | xref:15-opcodes.adoc#tokenise[`*tokenise*`]
+|   |   | VAR:252 | 1C  |  5  | encode_text zscii-text length from coded-text  | xref:15-opcodes.adoc#encode_text[`*encode_text*`]
+|   |   | VAR:253 | 1D  |  5  | copy_table first second size                   | xref:15-opcodes.adoc#copy_table[`*copy_table*`]
+|   |   | VAR:254 | 1E  |  5  | print_table zscii-text width height skip       | xref:15-opcodes.adoc#print_table[`*print_table*`]
+|   | * | VAR:255 | 1F  |  5  | check_arg_count argument-number                | xref:15-opcodes.adoc#check_arg_count[`*check_arg_count*`]
+|===
+
+.Extended opcodes EXT
+[cols="^1,^1,6,^1,^1,40,15", frame=none, grid=rows]
+|===
+|St |Br | Opcode  | Hex |  V  | Inform name and syntax                           | Link
+
+| * |   |  EXT:0  |  0  |  5  | save table bytes name prompt -> (result)         | xref:15-opcodes.adoc#save[`*save*`]
+| * |   |  EXT:1  |  1  |  5  | restore table bytes name prompt -> (result)      | xref:15-opcodes.adoc#restore[`*restore*`]
+| * |   |  EXT:2  |  2  |  5  | log_shift number places -> (result)              | xref:15-opcodes.adoc#log_shift[`*log_shift*`]
+| * |   |  EXT:3  |  3  | 5/- | art_shift number places -> (result)              | xref:15-opcodes.adoc#art_shift[`*art_shift*`]
+| * |   |  EXT:4  |  4  |  5  | set_font font -> (result)                        | xref:15-opcodes.adoc#set_font[`*set_font*`]
+| * |   |         |     | 6/- | set_font font window -> (result)                 | xref:15-opcodes.adoc#set_font[`*set_font*`]
+|   |   |  EXT:5  |  5  |  6  | draw_picture picture-number y x                  | xref:15-opcodes.adoc#draw_picture[`*draw_picture*`]
+|   | * |  EXT:6  |  6  |  6  | picture_data picture-number array ?(label)       | xref:15-opcodes.adoc#picture_data[`*picture_data*`]
+|   |   |  EXT:7  |  7  |  6  | erase_picture picture-number y x                 | xref:15-opcodes.adoc#erase_picture[`*erase_picture*`]
+|   |   |  EXT:8  |  8  |  6  | set_margins left right window                    | xref:15-opcodes.adoc#set_margins[`*set_margins*`]
+| * |   |  EXT:9  |  9  |  5  | save_undo -> (result)                            | xref:15-opcodes.adoc#save_undo[`*save_undo*`]
+| * |   | EXT:10  |  A  |  5  | restore_undo -> (result)                         | xref:15-opcodes.adoc#restore_undo[`*restore_undo*`]
+|   |   | EXT:11  |  B  | 5/* | print_unicode char-number                        | xref:15-opcodes.adoc#print_unicode[`*print_unicode*`]
+|   |   | EXT:12  |  C  | 5/* | check_unicode char-number -> (result)            | xref:15-opcodes.adoc#check_unicode[`*check_unicode*`]
+|   |   | EXT:13  |  D  | 5/* | set_true_colour foreground background            | xref:15-opcodes.adoc#set_true_colour[`*set_true_colour*`]
+|   |   |         |     | 6/* | set_true_colour foreground background window     | xref:15-opcodes.adoc#set_true_colour[`*set_true_colour*`]
+|   |   |    ―    |  E  |  ―  | ―                                                |
+|   |   |    ―    |  F  |  ―  | ―                                                |
+|   |   | EXT:16  | 10  |  6  | move_window window y x                           | xref:15-opcodes.adoc#move_window[`*move_window*`]
+|   |   | EXT:17  | 11  |  6  | window_size window y x                           | xref:15-opcodes.adoc#window_size[`*window_size*`]
+|   |   | EXT:18  | 12  |  6  | window_style window flags operation              | xref:15-opcodes.adoc#window_style[`*window_style*`]
+| * |   | EXT:19  | 13  |  6  | get_wind_prop window property-number -> (result) | xref:15-opcodes.adoc#get_wind_prop[`*get_wind_prop*`]
+|   |   | EXT:20  | 14  |  6  | scroll_window window pixels                      | xref:15-opcodes.adoc#scroll_window[`*scroll_window*`]
+|   |   | EXT:21  | 15  |  6  | pop_stack items stack                            | xref:15-opcodes.adoc#pop_stack[`*pop_stack*`]
+|   |   | EXT:22  | 16  |  6  | read_mouse array                                 | xref:15-opcodes.adoc#read_mouse[`*read_mouse*`]
+|   |   | EXT:23  | 17  |  6  | mouse_window window                              | xref:15-opcodes.adoc#mouse_window[`*mouse_window*`]
+|   | * | EXT:24  | 18  |  6  | push_stack value stack ?(label)                  | xref:15-opcodes.adoc#push_stack[`*push_stack*`]
+|   |   | EXT:25  | 19  |  6  | put_wind_prop window property-number value       | xref:15-opcodes.adoc#put_wind_prop[`*put_wind_prop*`]
+|   |   | EXT:26  | 1A  |  6  | print_form formatted-table                       | xref:15-opcodes.adoc#print_form[`*print_form*`]
+|   | * | EXT:27  | 1B  |  6  | make_menu number table ?(label)                  | xref:15-opcodes.adoc#make_menu[`*make_menu*`]
+|   |   | EXT:28  | 1C  |  6  | picture_table table                              | xref:15-opcodes.adoc#picture_table[`*picture_table*`]
+| * |   | EXT:29  | 1D  | 6/* | buffer_screen mode -> (result)                   | xref:15-opcodes.adoc#buffer_screen[`*buffer_screen*`]
+|===
+
+== 14.1 Contents
+
+This table contains all 119 opcodes and, taken with the dictionary in xref:15-opcodes.adoc[**S**15], describes exactly what each should do. In addition, it lists which opcodes are actually used in the known Infocom story files, and documents the Inform assembly language syntax.
+
+== 14.2 Out of range opcodes
+
+Formally, it is illegal for a game to contain an opcode not specified for its version. An interpreter should normally halt with a suitable message.
+
+=== 14.2.1
+
+However, extended opcodes in the range EXT:29 to EXT:255 should be simply ignored (perhaps with a warning message somewhere off-screen).
+
+=== 14.2.2
+
+*[1.0][1.1]* EXT:11 and EXT:12 were opcodes added in Standard 1.0 and can be generated in code compiled by Inform 6.12 or later. EXT:13 and EXT:29 are new in Standard 1.1. EXT:14 to EXT:15, and EXT:30 to EXT:127, are reserved for future versions of this document to specify.
+
+=== 14.2.3
+
+Designers who wish to create their own “new” opcodes, for one specific game only, are asked to use opcode numbers in the range EXT:128 to EXT:255. It is easy to modify Inform to name and assemble such opcodes. (Of course the game will then have to be circulated with a suitably modified interpreter to run it.)
+
+=== 14.2.4
+
+Interpreter-writers should ideally make this easy by providing a routine which is called if EXT:128 to EXT:255 are found, so that the minimum possible modification to the interpreter is needed.
+
+***
+
+== Reading the opcode tables
+
+The two columns **St* and *Br** (store and branch) mark whether an instruction stores a result in a variable, and whether it must provide a label to jump to, respectively.
+
+The *Opcode* is written _TYPE_:_Decimal_ where the _TYPE_ is the operand count (2OP, 1OP, 0OP or VAR) or else EXT for two-byte opcodes (where the first byte is (decimal) 190). The decimal number is the lowest possible decimal opcode value. The hex number is the opcode number within each _TYPE_.
+
+The *V* column gives the Version information. If nothing is specified, the opcode is as stated from Version 1 onwards. Otherwise, it exists only from the version quoted onwards. Before this time, its use is illegal. Some opcodes change their meanings as the Version increases, and these have more than one line of specification. Others become illegal again, and these are marked “_illegal_”.
+
+In a few cases, the Version is given as “3/4″ or some such. The first number is the Version number whose specification the opcode belongs to, and the second is the earliest Version in which the opcode is known actually to be used in an Infocom-produced story file. A dash means that it seems never to have been used (in any of Versions 1 to 6). The notation”5/\_“or”6/\_" means that the opcode was introduced in this Standards document long after the Infocom era.
+
+The table explicitly marks opcodes which do not exist in any version of the Z-machine as “―”: in addition, none of the extended set of codes after EXT:29 have been used.
+
+***
+
+== Inform assembly language
+
+This section documents Inform 6 assembly language, which is richer than that of Inform 5. The Inform 6 assembler can generate every legal opcode and automatically sets any consequent header bits (for instance, a usage of `*set_colour*` will set the “colours needed” bit).
+
+One way to get a picture of Inform assembly language is to compile a short program with tracing switched on (using the `-a` or `-t` switches).
+
+1. An Inform statement beginning with an `*@*` is sent directly to the assembler. In the syntax below, *(variable)* and *(result)* must be variables (or `*sp*`, a special variable name available only in assembly language, and meaning the stack pointer); *(label)* a label (not a routine name).
++
+*(literal-string)* must be literal text in quotation marks `“thus”`.
++
+*routine* should be the name of a routine (this assembles to its packed address). Otherwise any Inform constant term (such as `/` or `beetle`) can be given as an operand.
+
+2. It is optional, but sensible, to place a `*->*` sign before a store-variable. For example, in
++
+----
+@mul a 56 -> sp;
+----
++
+(“multiply variable `*a*` by 56, and put the result on the stack”) the -> can be omitted, but should be included for clarity.
+
+3. A label to branch to should be prefaced with a question mark `*?*`, as in
++
+----
+@je a b ?Equal;      ! Branch to Equal if a == b
+----
++
+(If the question mark is omitted, the branch is compiled in the short form, which will only work for very nearby labels and is very seldom useful in code written by hand.) Note that the effect of any branch instruction can be negated using a tilde ~:
++
+----
+@je a b ?~Different; ! Branch to Different if a ~= b
+----
+
+4. Labels are assembled using full stops:
++
+----
+.MyLabel;
+----
++
+All branches must be to such a label within the same routine. (The Inform assembler imposes the same-routine restriction.)
+
+5. Most operands are assembled in the obvious way: numbers and constant values (like characters) as numbers, variables as variables, `*sp*` as the value on top of the stack. There are two exceptions. “Call” opcodes expect as first operand the name of a routine to call:
++
+----
+@call_1n MyRoutine;
+----
++
+but one can also give an indirect address, as a constant or variable, using square brackets:
++
+----
+@call_1n [x];        ! Call routine whose address is in x
+----
++
+Secondly, seven Z-machine opcodes access variables but by their numbers: thus one should write, say, the constant 0 instead of the variable `*sp*`. This is inconvenient, so the Inform assembler accepts variable names instead. The operands affected are those marked as *(variable)* in the syntax chart; Inform translates the variable name as a “small constant” operand with that variable’s number as value. The affected opcodes are: `*inc*`, `*dec*`, `*inc_chk*`, `*dec_chk*`, `*store*`, `*pull*`, `*load*`.
+_
+This is useful, but there is another possibility, of genuinely giving a variable operand. The Inform notation for this involves square brackets again:
++
+----
+@inc frog;          ! Increment var "frog"
+@inc [frog];        ! Increment var whose number is in "frog"
+----
++
+Infocom story files often use such instructions.
+
+6. The Inform assembler is also written with possible extensions to the Z-machine instruction set in mind. (Of course these can only work if a customised interpreter is used.) Simply give a specification in double-quotes where you would normally give the opcode name. For example,
++
+----
+@"1OP:4S" 34 -> i;
+@get_prop_len 34 -> i;
+----
++
+are equivalent instructions, since `*get_prop_len*` is instruction 4 in the 1OP (one-operand) set, and is a Store opcode. The syntax is:
++
+----
+"  0OP       :  decimal-number  flags  "        (range 0 to 15)
+    1OP                                                 0    15
+    2OP                                                 0    15
+    VAR                                                 32   63
+    VAR_LONG                                            32   63
+    EXT                                                 0    255
+    EXT_LONG                                            0    255
+----
++
+(*EXT_LONG* is a logical possibility but has not been used in the Z-machine so far: the assembler provides it in case it might be useful in future.) The possible flags are:
++
+[%autowidth, cols="^1,1", frame=none, grid=rows]
+|===
+|     S     | Store opcode
+|     B     | Branch opcode
+|     T     | Text in-line instead of operands (as with `*print*` and `*print_ret*`)
+|     I     | "Indirect addressing": first operand is a *(variable)*
+| F**_nn_** | Set bit _nn_ in Flags 2 (signalling to the interpreter that an unusual feature has been called for): the number is in decimal
+|===
++
+For example, `EXT:128BSF14` is an exotic new opcode, number 128 in the extended range, which is both Branch and Store, and the assembly of which causes bit 14 to be set in “Flags 2”. See xref:15-opcodes.adoc#14–2[**S**14.2 below] for rules on how to number newly created opcodes.
+
+***
+
+== Remarks
+
+The opcodes EXT:5 to EXT:8 were very likely in Infocom’s own Version 5 specification (documentary records of which are lost): they seem to have been partially implemented in existing Infocom interpreters, but do not occur in any existing Version 5 story file. They are here left unspecified.
+
+The notation “5/3” for `*sound_effect*` is because this plainly Version 5 feature was used also in one solitary Version 3 game, _The Lurking Horror_ (the sound version of which was the last Version 3 release, in September 1987).
+
+The 2OP opcode 0 was possibly intended for setting break-points in debugging (and may be used for this again). It was not `*nop*`.
+
+`*read_mouse*` and `*make_menu*` are believed to have been used only in _Journey_ (based on a check of 11 Version 6 story files).
+
+`*picture_table*` is used once by _Shogun_ and several times by _Zork Zero_.
