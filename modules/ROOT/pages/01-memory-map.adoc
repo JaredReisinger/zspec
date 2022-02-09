@@ -8,6 +8,11 @@ image::icon01.gif[]
 
 The memory map of the Z-machine is an array of bytes with “byte addresses” running from 0 upwards. This is divided into three regions: “dynamic”, “static” and “high”. Dynamic memory begins from byte address `$00000` and runs up to the byte before the byte address stored in the word at `$0e` in the header. (Dynamic memory must contain at least 64 bytes.) Static memory follows immediately on. Its extent is not defined in the header (or anywhere else), though it must end by the last byte of the story file or by byte address `$0ffff` (whichever is lower). High memory begins at the “high memory mark” (the byte address stored in the word at `$04` in the header) and continues to the end of the story file. The bottom of high memory may overlap with the top of static memory (but not with dynamic memory).
 
+.How do you go from story file to memory?
+****
+xref:002-overview.adoc#files-are-memory[Buried at the end of the overview] is a paragraph that includes the critical information that “A story file consists of a snapshot of main memory…”. It really is as easy as loading the story file directly into your memory space, and start interpreting!
+****
+
 === 1.1.1
 
 Dynamic memory can be read or written to (either directly, using xref:15-opcodes.adoc#loadb[`*loadb*`], xref:15-opcodes.adoc#loadw[`*loadw*`], xref:15-opcodes.adoc#storeb[`*storeb*`] and xref:15-opcodes.adoc#storew[`*storew*`], or indirectly with opcodes such as xref:15-opcodes.adoc#insert_obj[`*insert_obj*`] and xref:15-opcodes.adoc#remove_obj[`*remove_obj*`]).

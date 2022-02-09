@@ -92,12 +92,12 @@ One form of _Sherlock_ uses sound effects. _Border Zone_ introduces timed input.
 .Version 6 story files
 [%autowidth, cols="1,1,1,1,1" frame=none, grid=rows]
 |===
-| Game      | Mac        | Amiga       | Apple II    | IBM
+| Game        | Mac        | Amiga         | Apple II    | IBM
 
-| Arthur    | 54.890606  | same as Mac | 63.890622?  | 74.890714
-| Journey   | 26.890316  | 30.890322   | 77.890616?  | 83.890706
-| Shogun    | 292.890314 | 295.890321  | 311.890510? | 322.890706
-| Zork Zero | 296.881019 | 366.890323  | 383.890602? | 393.890714
+| _Arthur_    | 54.890606  | _same as Mac_ | 63.890622?  | 74.890714
+| _Journey_   | 26.890316  | 30.890322     | 77.890616?  | 83.890706
+| _Shogun_    | 292.890314 | 295.890321    | 311.890510? | 322.890706
+| _Zork Zero_ | 296.881019 | 366.890323    | 383.890602? | 393.890714
 |===
 
 The rule that story files should be independent of their target computers was dropped for Version 6 games and this leads to copious footnotes and exceptions in sections 8.8 and 16 of the standard. Story files for a particular game are substantially similar to each other but use fonts, pictures and so on slightly differently.

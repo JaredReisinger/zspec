@@ -601,7 +601,7 @@ Regardless of the limitations on colour numbers, in Version 6 each window must 
 
 ***
 
-xref:8_7_2_3[**S*8.7.2.3] states that it is illegal to move the cursor outside the current size of the upper window. xref:8_8_3_5[*S**8.8.3.5] gives the equivalent rule for Version 6.
+xref:8_7_2_3[**S**8.7.2.3] states that it is illegal to move the cursor outside the current size of the upper window. xref:8_8_3_5[**S**8.8.3.5] gives the equivalent rule for Version 6.
 
 Many modern games have been lax in obeying this rule; in particular some of the standard Inform menu libraries have violated it. Infocom’s _Sherlock_ also miscalculated the size of the upper window to use for box quotes.
 

@@ -83,6 +83,7 @@ l0009: je              g57 #3b ~rfalse
 l0010: print_ret       "That's difficult unless your eyes are prehensile".
 ----
 
+[#files-are-memory]
 Z-machine programs are stored on disc, or archived on the Internet, in what are called *story files*. (Since they were introduced to hold interactive stories.) A story file consists of a snapshot of main memory only. The processor begins to run a story file by starting with an empty stack and a PC value set according to some information in the story file’s header. Note that the story file has to be set up with many of the structures in memory, such as the dictionary and the object tree, already created and with sensible contents.
 
 The first byte of any story file, and so the byte at memory address 0, always contains the *version number* of the Z-machine to be used. The design was evolutionary over a period of a decade: as version number increases, the instruction set grows and tables are reformatted to allow more room for larger games. All of Infocom’s games can be played using versions between 3 (the majority) and 6. Games compiled by Inform mainly use versions 5 or 8.

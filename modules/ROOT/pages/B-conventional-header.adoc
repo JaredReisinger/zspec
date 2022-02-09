@@ -3,7 +3,7 @@
 
 The header table in xref:11-header.adoc[section 11] details everything the interpreter needs to know about the header's contents. A few other slots in the header are meaningful but only by convention (since existing Infocom and Inform games write them). These additional slots are described here.
 
-As in xref:11-header.adoc[**S*11], *Hex* means the address, in hexadecimal; *V* the earliest version in which the feature appeared; *Dyn* means that the byte or bit may legally be changed by the game during play (no others may legally be changed by the game); *Int** means that the interpreter may (in some cases must) do so.
+As in xref:11-header.adoc[**S**11], *Hex* means the address, in hexadecimal; *V* the earliest version in which the feature appeared; *Dyn* means that the byte or bit may legally be changed by the game during play (no others may legally be changed by the game); *Int* means that the interpreter may (in some cases must) do so.
 
 .Conventional usage of unspecified header memory
 [%autowidth, cols="^1,^1,^1,^1,1" frame=none, grid=rows]
@@ -14,7 +14,7 @@ As in xref:11-header.adoc[**S*11], *Hex* means the address, in hexadecimal; *V* 
 |     |  3  |     |  *  | Bit 3: The legendary “Tandy” bit (see note)
 |  2  |  1  |     |     | Release number (word)
 | 10  |  1  |  *  |     | _Flags 2:_
-|     |  3  |     |     | Bit 4: Set in the Amiga version of The Lurking Horror so presumably to do with sound effects?
+|     |  3  |     |     | Bit 4: Set in the Amiga version of _The Lurking Horror_ so presumably to do with sound effects?
 |     |  ?  |  ?  |  *  | 10: Possibly set by interpreter to indicate an error with the printer during transcription
 | 12  |  2  |     |     | Serial code (six characters of ASCII)
 |     |  3  |     |     | Serial number (ASCII for the compilation date in the form `YYMMDD`)

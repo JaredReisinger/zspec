@@ -214,8 +214,7 @@ This byte (decimal 190) is not an instruction, but indicates that the opcode is 
 
 == `get_child`
 
-1OP:130 2 *get_child* _object_ -> _(result)_
-?(label)
+1OP:130 2 *get_child* _object_ -> _(result)_?_(label)_
 
 Get first object contained in given _object_, branching if this exists, i.e. is not nothing (i.e., is not 0).
 
@@ -523,7 +522,7 @@ Print a rectangle of text on screen spreading right and down from the current c
 
 EXT:11 B 5/* *print_unicode* _char-number_
 
-Print a Unicode character. See xref:03-text.adoc#3_8_5_4[**S*3.8.5.4] and xref:07-output.adoc#7_5[*S**7.5] for details. The given character code must be defined in Unicode.
+Print a Unicode character. See xref:03-text.adoc#3_8_5_4[**S**3.8.5.4] and xref:07-output.adoc#7_5[**S**7.5] for details. The given character code must be defined in Unicode.
 
 *[1.0]* This opcode will only be present in interpreters obeying Standard 1.0 or later, so story files should check the standard number of the interpreter before executing this opcode.
 

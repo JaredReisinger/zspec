@@ -6,7 +6,7 @@
 .Two-operand opcodes 2OP
 [cols="^1,^1,6,^1,^1,40,15", frame=none, grid=rows]
 |===
-| St  | Br  | Opcode | Hex |  V  | Inform name and syntax                    | Link
+|St |Br | Opcode | Hex |  V  | Inform name and syntax                    | Link
 
 |   |   |   ―    |  0  |  ―  | ―                                         |
 |   | * | 2OP:1  |  1  |     | je a b ?(label)                           | xref:15-opcodes.adoc#je[`*je*`]
@@ -216,7 +216,7 @@ Interpreter-writers should ideally make this easy by providing a routine which 
 
 == Reading the opcode tables
 
-The two columns **St* and *Br** (store and branch) mark whether an instruction stores a result in a variable, and whether it must provide a label to jump to, respectively.
+The two columns *St* and *Br* (store and branch) mark whether an instruction stores a result in a variable, and whether it must provide a label to jump to, respectively.
 
 The *Opcode* is written _TYPE_:_Decimal_ where the _TYPE_ is the operand count (2OP, 1OP, 0OP or VAR) or else EXT for two-byte opcodes (where the first byte is (decimal) 190). The decimal number is the lowest possible decimal opcode value. The hex number is the opcode number within each _TYPE_.
 

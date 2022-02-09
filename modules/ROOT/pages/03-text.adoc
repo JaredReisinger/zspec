@@ -398,7 +398,7 @@ Ideally, an interpreter should be able to read time delays (for timed input) fro
 
 The _Beyond Zork_ story file is capable of receiving both mouse-click codes (253 and 254), listing both in its terminating characters table and treating them equally.
 
-The extant Infocom games in Versions 4 and 5 use the control characters 1 to 31 only as follows: they all accept 10 or 13 as equivalent, except that ‘Bureaucracy’ will only accept 13. ‘Bureaucracy’ needs either 127 or 8 to be a delete code. No other codes are used.
+The extant Infocom games in Versions 4 and 5 use the control characters 1 to 31 only as follows: they all accept 10 or 13 as equivalent, except that _Bureaucracy_ will only accept 13. _Bureaucracy_ needs either 127 or 8 to be a delete code. No other codes are used.
 
 Curiously, _Nord ‘n’ Bert Couldn’t Make Head Nor Tail Of It_ and _A Mind Forever Voyaging_ allow some letter characters to be typed in with the top bit set. That is, if reading an A, they would recognise 65 or 91 (upper or lower case) and also 193 or 219. Matthew Russotto suggests this was an accommodation for the Apple II, whose keyboard primitives returned the last key pressed in the bottom 7 bits of a byte, plus a top bit flag indicating whether or not the keyboard had been hit since last time.
 

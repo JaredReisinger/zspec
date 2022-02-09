@@ -78,7 +78,7 @@ It is illegal for a game to alter those fields not marked as “Dyn”. An inte
 
 === 11.1.2
 
-The state of the transcription bit (bit 0 of Flags 2) can be changed directly by the game to turn transcribing on or off (see xref:07-output.adoc#7_3[**S*7.3], xref:07-output.adoc#7_4[*S**7.4]). The interpreter must also alter it if stream 2 is turned on or off, to ensure that the bit always reflects the true state of transcribing. Note that the interpreter ensures that its value survives a restart or restore.
+The state of the transcription bit (bit 0 of Flags 2) can be changed directly by the game to turn transcribing on or off (see xref:07-output.adoc#7_3[**S**7.3], xref:07-output.adoc#7_4[**S**7.4]). The interpreter must also alter it if stream 2 is turned on or off, to ensure that the bit always reflects the true state of transcribing. Note that the interpreter ensures that its value survives a restart or restore.
 
 === 11.1.3
 
@@ -99,7 +99,7 @@ Infocom used the interpreter numbers:
 | 11 | Tandy Color
 |===
 
-(The DECSystem-20 was Infocom's own in-house mainframe.) An interpreter should choose the interpreter number most suitable for the machine it will run on. In Versions up to 5, the main consideration is that the behaviour of ’Beyond Zork’ depends on the interpreter number (in terms of its usage of the character graphics font). In Version 6, the decision is more serious, as existing Infocom story files depend on interpreter number in many ways: moreover, some story files expect to be run only on the interpreters for a particular machine. (There are, for instance, specifically Amiga versions.)
+(The DECSystem-20 was Infocom's own in-house mainframe.) An interpreter should choose the interpreter number most suitable for the machine it will run on. In Versions up to 5, the main consideration is that the behaviour of _Beyond Zork_ depends on the interpreter number (in terms of its usage of the character graphics font). In Version 6, the decision is more serious, as existing Infocom story files depend on interpreter number in many ways: moreover, some story files expect to be run only on the interpreters for a particular machine. (There are, for instance, specifically Amiga versions.)
 
 ==== 11.1.3.1
 
