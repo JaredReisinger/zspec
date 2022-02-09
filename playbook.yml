@@ -1,6 +1,9 @@
 site:
   title: The Z-Machine Standards Document
   url: https://zspec.jaredreisinger.com
+  robots: allow
+  keys:
+    googleAnalytics: 'G-ZJW7TDDE3W'
 
 content:
   sources:
