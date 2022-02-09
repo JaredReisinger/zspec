@@ -1,5 +1,4 @@
 = 15. Dictionary of opcodes
-:idprefix:
 
 image::icon15.gif[]
 

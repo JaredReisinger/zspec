@@ -1,5 +1,4 @@
 = 1. The memory map
-:idprefix:
 
 image::icon01.gif[]
 

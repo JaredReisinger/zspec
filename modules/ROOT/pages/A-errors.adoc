@@ -1,5 +1,4 @@
 = Appendix A. Error messages and debugging
-:idprefix:
 
 image::iconaa.gif[]
 

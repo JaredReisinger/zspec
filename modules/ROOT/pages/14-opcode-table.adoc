@@ -1,5 +1,4 @@
 = 14. Complete table of opcodes
-:idprefix:
 
 // 2OP / 1OP / 0OP / VAR / EXT
 
@@ -218,11 +217,11 @@ Interpreter-writers should ideally make this easy by providing a routine which 
 
 The two columns *St* and *Br* (store and branch) mark whether an instruction stores a result in a variable, and whether it must provide a label to jump to, respectively.
 
-The *Opcode* is written _TYPE_:_Decimal_ where the _TYPE_ is the operand count (2OP, 1OP, 0OP or VAR) or else EXT for two-byte opcodes (where the first byte is (decimal) 190). The decimal number is the lowest possible decimal opcode value. The hex number is the opcode number within each _TYPE_.
+The *Opcode* is written _TYPE_:__Decimal__ where the _TYPE_ is the operand count (2OP, 1OP, 0OP or VAR) or else EXT for two-byte opcodes (where the first byte is (decimal) 190). The decimal number is the lowest possible decimal opcode value. The hex number is the opcode number within each _TYPE_.
 
 The *V* column gives the Version information. If nothing is specified, the opcode is as stated from Version 1 onwards. Otherwise, it exists only from the version quoted onwards. Before this time, its use is illegal. Some opcodes change their meanings as the Version increases, and these have more than one line of specification. Others become illegal again, and these are marked “_illegal_”.
 
-In a few cases, the Version is given as “3/4″ or some such. The first number is the Version number whose specification the opcode belongs to, and the second is the earliest Version in which the opcode is known actually to be used in an Infocom-produced story file. A dash means that it seems never to have been used (in any of Versions 1 to 6). The notation”5/\_“or”6/\_" means that the opcode was introduced in this Standards document long after the Infocom era.
+In a few cases, the Version is given as “3/4″ or some such. The first number is the Version number whose specification the opcode belongs to, and the second is the earliest Version in which the opcode is known actually to be used in an Infocom-produced story file. A dash means that it seems never to have been used (in any of Versions 1 to 6). The notation ”5/-” or “6/-” means that the opcode was introduced in this Standards document long after the Infocom era.
 
 The table explicitly marks opcodes which do not exist in any version of the Z-machine as “―”: in addition, none of the extended set of codes after EXT:29 have been used.
 
@@ -321,7 +320,7 @@ are equivalent instructions, since `*get_prop_len*` is instruction 4 in the 1OP
 | F**_nn_** | Set bit _nn_ in Flags 2 (signalling to the interpreter that an unusual feature has been called for): the number is in decimal
 |===
 +
-For example, `EXT:128BSF14` is an exotic new opcode, number 128 in the extended range, which is both Branch and Store, and the assembly of which causes bit 14 to be set in “Flags 2”. See xref:15-opcodes.adoc#14_2[**S**14.2 below] for rules on how to number newly created opcodes.
+For example, `EXT:128BSF14` is an exotic new opcode, number 128 in the extended range, which is both Branch and Store, and the assembly of which causes bit 14 to be set in “Flags 2”. See xref:15-opcodes.adoc#14_2[**S**14.2] below for rules on how to number newly created opcodes.
 
 ***
 
@@ -329,10 +328,10 @@ For example, `EXT:128BSF14` is an exotic new opcode, number 128 in the extended 
 
 The opcodes EXT:5 to EXT:8 were very likely in Infocom’s own Version 5 specification (documentary records of which are lost): they seem to have been partially implemented in existing Infocom interpreters, but do not occur in any existing Version 5 story file. They are here left unspecified.
 
-The notation “5/3” for `*sound_effect*` is because this plainly Version 5 feature was used also in one solitary Version 3 game, _The Lurking Horror_ (the sound version of which was the last Version 3 release, in September 1987).
+The notation “5/3” for xref:15-opcodes.adoc#sound_effect[`*sound_effect*`] is because this plainly Version 5 feature was used also in one solitary Version 3 game, _The Lurking Horror_ (the sound version of which was the last Version 3 release, in September 1987).
 
-The 2OP opcode 0 was possibly intended for setting break-points in debugging (and may be used for this again). It was not `*nop*`.
+The 2OP opcode 0 was possibly intended for setting break-points in debugging (and may be used for this again). It was not xref:15-opcodes.adoc#nop[`*nop*`].
 
-`*read_mouse*` and `*make_menu*` are believed to have been used only in _Journey_ (based on a check of 11 Version 6 story files).
+xref:15-opcodes.adoc#read_mouse[`*read_mouse*`] and xref:15-opcodes.adoc#make_menu[`*make_menu*`] are believed to have been used only in _Journey_ (based on a check of 11 Version 6 story files).
 
-`*picture_table*` is used once by _Shogun_ and several times by _Zork Zero_.
+xref:15-opcodes.adoc#picture_table[`*picture_table*`] is used once by _Shogun_ and several times by _Zork Zero_.

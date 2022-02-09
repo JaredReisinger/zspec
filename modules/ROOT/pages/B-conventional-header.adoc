@@ -1,5 +1,4 @@
 = Appendix B. Conventional contents of the header
-:idprefix:
 
 The header table in xref:11-header.adoc[section 11] details everything the interpreter needs to know about the header's contents. A few other slots in the header are meaningful but only by convention (since existing Infocom and Inform games write them). These additional slots are described here.
 

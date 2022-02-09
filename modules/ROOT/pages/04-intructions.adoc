@@ -1,5 +1,4 @@
 = 4. How instructions are encoded
-:idprefix:
 
 image::icon04.gif[]
 
@@ -92,7 +91,7 @@ In variable or extended forms, a byte of 4 operand types is given next. This c
 
 ==== 4.4.3.1
 
-In the special case of the “double variable” VAR opcodes `*call_vs2*` and `*call_vn2*` (opcode numbers 12 and 26), a second byte of types is given, containing the types for the next four operands.
+In the special case of the “double variable” VAR opcodes xref:15-opcodes.adoc#call_vs_2[`*call_vs2*`] and xref:15-opcodes.adoc#call_vn2[`*call_vn2*`] (opcode numbers 12 and 26), a second byte of types is given, containing the types for the next four operands.
 
 [#4_5]
 == 4.5 Operands

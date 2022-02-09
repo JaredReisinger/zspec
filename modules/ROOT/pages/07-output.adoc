@@ -1,5 +1,4 @@
 = 7. Output streams and file handling
-:idprefix:
 
 image::icon07.gif[]
 

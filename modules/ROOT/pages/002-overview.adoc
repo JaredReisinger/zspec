@@ -1,5 +1,4 @@
 = Overview of Z-machine architecture
-:idprefix:
 
 image::diagram.gif[architecture diagram]
 

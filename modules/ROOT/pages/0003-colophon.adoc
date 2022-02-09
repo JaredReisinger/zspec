@@ -1,4 +1,3 @@
 = Colophon
-:idprefix:
 
 Why not? Something about how this was created could be neat!

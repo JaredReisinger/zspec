@@ -1,5 +1,4 @@
 = 2. Numbers and arithmetic
-:idprefix:
 
 image::icon02.gif[]
 

@@ -1,5 +1,4 @@
 = 11. The format of the header
-:idprefix:
 
 image::icon11.gif[]
 
@@ -29,7 +28,7 @@ The header table summarises those locations in the Z-machine’s header which an
 |     |  4  |     |  *  |  *  | 7: Timed keyboard input available?
 |  4  |  1  |     |     |     | Base of high memory (byte address)
 |  6  |  1  |     |     |     | Initial value of program counter (byte address)
-|     |  6  |     |     |     | Packed address of initial "main" routine
+|     |  6  |     |     |     | Packed address of initial “main” routine
 |  8  |  1  |     |     |     | Location of dictionary (byte address)
 |  A  |  1  |     |     |     | Location of object table (byte address)
 |  C  |  1  |     |     |     | Location of global variables table (byte address)
@@ -44,7 +43,7 @@ The header table summarises those locations in the Z-machine’s header which an
 |     |  5  |     |     |     | 6: If set, game wants to use colours
 |     |  5  |     |  *  |  *  | 7: If set, game wants to use sound effects
 |     |  6  |     |  *  |  *  | 8: If set, game wants to use menus
-|     |     |     |     |     | (For bits 3,4,5,7 and 8, Int clears again if it cannot provide the requested effect.)
+|     |     |     |     |     | (For bits 3, 4, 5, 7 and 8, Int clears again if it cannot provide the requested effect.)
 | 18  |  2  |     |     |     | Location of abbreviations table (byte address)
 | 1A  | 3+  |     |     |     | Length of file (see note)
 | 1C  | 3+  |     |     |     | Checksum of file

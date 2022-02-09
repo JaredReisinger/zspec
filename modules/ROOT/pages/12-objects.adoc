@@ -1,5 +1,4 @@
 = 12. The object table
-:idprefix:
 
 image::icon12.gif[]
 

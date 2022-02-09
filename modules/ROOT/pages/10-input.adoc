@@ -1,5 +1,4 @@
 = 10. Input streams and devices
-:idprefix:
 
 image::icon10.gif[]
 

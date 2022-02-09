@@ -1,5 +1,4 @@
 = 6. The game state: storage and routine calls
-:idprefix:
 
 image::icon06.gif[]
 
@@ -81,7 +80,7 @@ Routine calls occur in the following circumstances: when one of the xref:15-opco
 
 === 6.4.1
 
-A routine call may have any number of arguments, from 0 to 3 (in Versions 1 to 3) or 0 to 7 (Versions 4 and later). All routines return a value (though sometimes this value is thrown away afterward: for example by opcodes in the form xref:15-opcodes.adoc#call_vn[`*call_vn**`]).
+A routine call may have any number of arguments, from 0 to 3 (in Versions 1 to 3) or 0 to 7 (Versions 4 and later). All routines return a value (though sometimes this value is thrown away afterward: for example by opcodes in the form xref:15-opcodes.adoc#call_vn[`*call_vn*`]).
 
 === 6.4.2
 

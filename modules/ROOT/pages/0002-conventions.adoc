@@ -1,5 +1,4 @@
 = Conventions used in this document
-:idprefix:
 
 The original http://inform-fiction.org/zmachine/standards/z1point1[_The Z-Machine Standards Document_] used very little in the way of formatting, only a little *bold* to highlight keywords and values, and _italics_ for emphasis.  This version is far more liberal with formatting, using:
 

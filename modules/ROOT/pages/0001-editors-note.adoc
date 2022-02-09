@@ -1,5 +1,4 @@
 = Editor’s note
-:idprefix:
 
 // == _Why this version of the standard?_
 

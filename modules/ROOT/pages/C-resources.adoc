@@ -1,5 +1,4 @@
 = Appendix C. Resources available
-:idprefix:
 
 image::iconac.gif[]
 

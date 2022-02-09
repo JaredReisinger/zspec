@@ -1,5 +1,4 @@
 = Appendix E. Statistics
-:idprefix:
 
 image::iconae.gif[]
 

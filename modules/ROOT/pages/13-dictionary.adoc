@@ -1,5 +1,4 @@
 = 13. The dictionary and lexical analysis
-:idprefix:
 
 image::icon13.gif[]
 

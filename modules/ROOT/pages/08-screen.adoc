@@ -1,5 +1,4 @@
 = 8. The screen model
-:idprefix:
 
 image::icon08.gif[]
 
@@ -591,7 +590,7 @@ In V6, it is legal to position the cursor up against the right or bottom of a w
 
 Attempting to print text (including new-lines) when the cursor is fewer than font_height units from the bottom of the window results in undefined behaviour—this precludes any printing in windows less than font_height units high.
 
-It is legal for interpreters to always show the same value in property 11 if a true or sampled colour is in use. As a result, story files cannot assume that setting a value that was read from property 11 will give the same colour, if `*set_colour -1*` has been used in that window.
+It is legal for interpreters to always show the same value in property 11 if a true or sampled colour is in use. As a result, story files cannot assume that setting a value that was read from property 11 will give the same colour, if `*xref:15-opcodes.adoc#set_colour[set_colour] -1*` has been used in that window.
 
 The same rules apply if an interpreter offers non-standard default colours although in this case it would be ill-advised to show the same colour numbers for foreground and background—unless they can be distinguished, non-standard default colours should probably not be offered.
 

@@ -1,5 +1,4 @@
 = Appendix D. A short history of the Z-machine
-:idprefix:
 
 image::iconad.gif[]
 

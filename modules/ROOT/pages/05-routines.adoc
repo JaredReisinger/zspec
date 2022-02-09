@@ -1,5 +1,4 @@
 = 5. How routines are encoded
-:idprefix:
 
 image::icon05.gif[]
 

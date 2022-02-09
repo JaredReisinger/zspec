@@ -1,5 +1,4 @@
 = Appendix F. Canonical Story Files
-:idprefix:
 
 image::iconaf.gif[]
 

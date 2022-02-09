@@ -1,5 +1,4 @@
 = 16. Font 3 and character graphics
-:idprefix:
 
 image::icon16.gif[]
 
