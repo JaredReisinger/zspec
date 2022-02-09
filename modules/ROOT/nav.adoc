@@ -1,44 +1,6 @@
-// * xref:index.adoc[]
-
-
 include::partial$TOC.adoc[]
 
-// * xref:001-preface.adoc[]
-// * xref:002-overview.adoc[]
-
-// .Fundamentals
-// * xref:01-memory-map.adoc[]
-// * xref:02-numbers.adoc[]
-// * xref:03-text.adoc[]
-// * xref:04-intructions.adoc[]
-// * xref:05-routines.adoc[]
-// * xref:06-game-state.adoc[]
-
-// .Input/Output
-// * xref:07-output.adoc[]
-// * xref:08-screen.adoc[]
-// * xref:09-sound.adoc[]
-// * xref:10-input.adoc[]
-
-// .Tables
-// * xref:11-header.adoc[]
-// * xref:12-objects.adoc[]
-// * xref:13-dictionary.adoc[]
-
-// .Instruction Set
-// * xref:14-opcode-table.adoc[]
-// * xref:15-opcodes.adoc[]
-
-// .An Unusual Font
-// * xref:16-font3.adoc[]
-
-// .Appendices
-// * xref:A-errors.adoc[]
-// * xref:B-conventional-header.adoc[]
-// * xref:C-resources.adoc[]
-// * xref:D-history.adoc[]
-// * xref:E-statistics.adoc[]
-// * xref:F-canonical-story-files.adoc[]
+***
 
 .Meta information
 * xref:0001-editors-note.adoc[]

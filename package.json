@@ -22,7 +22,7 @@
   },
   "scripts": {
     "#": "echo NYI",
-    "build": "antora playbook.yml",
+    "build": "cross-env SITE_SEARCH_PROVIDER=true antora playbook.yml",
     "#prebuild": "npm run clean",
     "clean": "rimraf build",
     "serve": "serve -l 5000 ./build",
@@ -42,8 +42,10 @@
   },
   "devDependencies": {
     "@antora/cli": "^3.0.1",
+    "@antora/lunr-extension": "^1.0.0-alpha.4",
     "@antora/site-generator": "^3.0.1",
     "concurrently": "^7.0.0",
+    "cross-env": "^7.0.3",
     "npm-watch": "^0.11.0",
     "rimraf": "^3.0.2",
     "serve": "^13.0.2"

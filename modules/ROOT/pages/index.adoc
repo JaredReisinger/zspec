@@ -1,4 +1,18 @@
-= The Z-Machine Standards Document [.subtitle]*Version 1.1 _(annotated)_*
+= The Z-Machine Standards Document
+:page-role: title-page with-subtitle
 
+[discrete.subtitle]
+== Version 1.1 _(annotated)_
+
+24 February 2014
+
+***
 
 include::partial$TOC.adoc[]
+
+***
+
+.Meta information
+* xref:0001-editors-note.adoc[]
+* xref:0002-conventions.adoc[]
+* xref:0003-colophon.adoc[]

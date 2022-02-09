@@ -1,5 +1,5 @@
 site:
-  title: The Z-Machine Standard
+  title: The Z-Machine Standards Document
   url: https://zspec.jaredreisinger.com
 
 content:
@@ -10,6 +10,10 @@ content:
 asciidoc:
   attributes:
     page-pagination: true
+
+antora:
+  extensions:
+    - '@antora/lunr-extension'
 
 urls:
   html_extension_style: drop
