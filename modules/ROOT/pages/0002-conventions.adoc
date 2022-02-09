@@ -13,24 +13,17 @@ The original http://inform-fiction.org/zmachine/standards/z1point1[_The Z-Machin
 
 - tables for tabular data that previously used monospace/“pre” for rendering
 
-- hyperlinks have been added for cross-section references (rather than just refering to “**S*1.1″, say, it's now “xref:01-memory-map.adoc#1-1[*S**1.1]″)
+- hyperlinks have been added for cross-section references (rather than just refering to “**S**1.1″, say, it's now “xref:01-memory-map.adoc#1_1[**S**1.1]″)
 
 - text adventure game names are _italicized like a book title_ rather than ‘quoted’, purely to make the resulting text prettier
 
 - _M_._N_ sections are given names from the _M_ contents at the top of the page
 
-[NOTE]
-.This is no longer true.
-====
-In that the source document for this is Markdown, lengthy code samples will probably _not_ have in-sample formatting... but if I can figure out how to do syntax coloring, that may be added as well.
-====
-
-
 The spelling in the original document uses British English for the most part, and no spelling changes have been made.  The annotations are generally in American English.
 
 When significant commentary is made, it will be in a “sidebar”, shown as:
 
-.This is a sidebar
+.This is a sidebar example
 ****
 It might contain just a quick note, or maybe a long monograph.
 

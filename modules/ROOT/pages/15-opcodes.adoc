@@ -523,7 +523,7 @@ Print a rectangle of text on screen spreading right and down from the current c
 
 EXT:11 B 5/* *print_unicode* _char-number_
 
-Print a Unicode character. See xref:03-text.adoc#3–8–5–4[**S*3.8.5.4] and xref:07-output.adoc#7–5[*S**7.5] for details. The given character code must be defined in Unicode.
+Print a Unicode character. See xref:03-text.adoc#3_8_5_4[**S*3.8.5.4] and xref:07-output.adoc#7_5[*S**7.5] for details. The given character code must be defined in Unicode.
 
 *[1.0]* This opcode will only be present in interpreters obeying Standard 1.0 or later, so story files should check the standard number of the interpreter before executing this opcode.
 
@@ -701,7 +701,7 @@ On Versions 3 and 4, attempts to save the game (all questions about filenames a
 
 It is illegal to use this opcode within an interrupt routine (one called asynchronously by a sound effect, or keyboard timing, or newline counting).
 
-*[1.0]* The extension also has (optional) parameters, which save a region of the save area, whose address and length are in bytes, and provides a suggested filename: _name_ is a pointer to an array of ASCII characters giving this name (as usual preceded by a byte giving the number of characters). See xref:07-output.adoc#7–6[**S**7.6]. (Whether Infocom intended these options as part of Version 5 is doubtful, but it’s too useful a feature to exclude from this Standard.)
+*[1.0]* The extension also has (optional) parameters, which save a region of the save area, whose address and length are in bytes, and provides a suggested filename: _name_ is a pointer to an array of ASCII characters giving this name (as usual preceded by a byte giving the number of characters). See xref:07-output.adoc#7_6[**S**7.6]. (Whether Infocom intended these options as part of Version 5 is doubtful, but it’s too useful a feature to exclude from this Standard.)
 
 *[1.1]* As of Standard 1.1 an additional optional parameter, _prompt_, is allowed on Version 5 extended save/restore. This allows a game author to tell the interpreter whether it should ask for confirmation of the provided file name (_prompt_ is 1), or just silently save/restore using the provided filename (_prompt_ is 0). If the parameter is not provided, whether to prompt or not is a matter for the interpreter—this might be globally user-configurable. Infocom’s interpreters do prompt for filenames, many modern ones do not.
 
@@ -770,7 +770,7 @@ If the _font_ ID requested is 0, the font is not changed, and the ID of the curr
 
 EXT:8 8 6 *set_margins* _left_ _right_ _window_
 
-Sets the margin widths (in pixels) on the left and right for the given window (which are by default 0). If the cursor is overtaken and now lies outside the margins altogether, move it back to the left margin of the current line (see xref:08-screen.adoc#8-8-3-2-2–1[**S**8.8.3.2.2.1]).
+Sets the margin widths (in pixels) on the left and right for the given window (which are by default 0). If the cursor is overtaken and now lies outside the margins altogether, move it back to the left margin of the current line (see xref:08-screen.adoc#8_8_3_2_2_1[**S**8.8.3.2.2.1]).
 
 == `set_text_style`
 

@@ -321,7 +321,7 @@ are equivalent instructions, since `*get_prop_len*` is instruction 4 in the 1OP
 | F**_nn_** | Set bit _nn_ in Flags 2 (signalling to the interpreter that an unusual feature has been called for): the number is in decimal
 |===
 +
-For example, `EXT:128BSF14` is an exotic new opcode, number 128 in the extended range, which is both Branch and Store, and the assembly of which causes bit 14 to be set in “Flags 2”. See xref:15-opcodes.adoc#14–2[**S**14.2 below] for rules on how to number newly created opcodes.
+For example, `EXT:128BSF14` is an exotic new opcode, number 128 in the extended range, which is both Branch and Store, and the assembly of which causes bit 14 to be set in “Flags 2”. See xref:15-opcodes.adoc#14_2[**S**14.2 below] for rules on how to number newly created opcodes.
 
 ***
 

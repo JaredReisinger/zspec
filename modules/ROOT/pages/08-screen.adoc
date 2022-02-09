@@ -505,7 +505,7 @@ Each window can be erased using xref:15-opcodes.adoc#erase_window[`*erase_window
 
 ===== 8.8.5.3.1
 
-Erasing window number -1 erases the entire screen to the background colour of window 0, unsplits windows 0 and 1 (see xref:8–7–3–3[**S**8.7.3.3 above]) and selects window 0.
+Erasing window number -1 erases the entire screen to the background colour of window 0, unsplits windows 0 and 1 (see xref:8_7_3_3[**S**8.7.3.3 above]) and selects window 0.
 
 ===== 8.8.5.3.2
 
@@ -533,7 +533,7 @@ The game may, if it wishes, use the xref:15-opcodes.adoc#picture_table[`*picture
 
 When xref:15-opcodes.adoc#buffer_screen[`*buffer_screen*`] is set to 1, the interpreter need not change the visible display at all. Any display changes can be done purely in the backing store. A program may set xref:15-opcodes.adoc#buffer_screen[`*buffer_screen*`] to 1 before carrying out a complex layered graphical composition, to indicate that the intermediate states are not worth showing. It would be extremely ill-advised to prompt for input with xref:15-opcodes.adoc#buffer_screen[`*buffer_screen*`] set to 1.
 
-When xref:15-opcodes.adoc#buffer_screen[`*buffer_screen*`] is set back to 0, the display is not necessarily updated immediately. If this is required, the game must request it seperately (see xref:8–8–7–2[**S**8.8.7.2 below]).
+When xref:15-opcodes.adoc#buffer_screen[`*buffer_screen*`] is set back to 0, the display is not necessarily updated immediately. If this is required, the game must request it seperately (see xref:8_8_7_2[**S**8.8.7.2 below]).
 
 ==== 8.8.7.2
 
@@ -601,7 +601,7 @@ Regardless of the limitations on colour numbers, in Version 6 each window must 
 
 ***
 
-xref:8–7–2–3[**S*8.7.2.3] states that it is illegal to move the cursor outside the current size of the upper window. xref:8–8–3–5[*S**8.8.3.5] gives the equivalent rule for Version 6.
+xref:8_7_2_3[**S*8.7.2.3] states that it is illegal to move the cursor outside the current size of the upper window. xref:8_8_3_5[*S**8.8.3.5] gives the equivalent rule for Version 6.
 
 Many modern games have been lax in obeying this rule; in particular some of the standard Inform menu libraries have violated it. Infocom’s _Sherlock_ also miscalculated the size of the upper window to use for box quotes.
 

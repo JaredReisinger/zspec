@@ -33,11 +33,11 @@ Before a “restore”, an interpreter should check that the file to be used ha
 
 ==== 6.1.2.2
 
-After a “restore” or “undo”, an interpreter should reset the header values marked *Rst* in the xref:11-header.adoc#11–1[header table] of xref:11-header.adoc[**S**11]. (It should not be assumed that the game was saved by the same interpreter.)
+After a “restore” or “undo”, an interpreter should reset the header values marked *Rst* in the xref:11-header.adoc#11_1[header table] of xref:11-header.adoc[**S**11]. (It should not be assumed that the game was saved by the same interpreter.)
 
 === 6.1.3
 
-A “restart” is similar: the entire state is restored from the original story file, and the stack is emptied; but ’Flags 2′ is preserved; and the interpreter should reset the *Rst* parts of xref:11-header.adoc#11–1[the header].
+A “restart” is similar: the entire state is restored from the original story file, and the stack is emptied; but ’Flags 2′ is preserved; and the interpreter should reset the *Rst* parts of xref:11-header.adoc#11_1[the header].
 
 === 6.1.4
 

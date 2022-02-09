@@ -3,7 +3,7 @@
 
 image::icon07.gif[]
 
-[#7-1]
+[#7_1]
 == 7.1 Output streams
 
 At any given time text is being output through a selection of “output streams” (possibly none, possibly several at once).
@@ -44,7 +44,7 @@ Newlines are written to output stream 3 as ZSCII 13. (A game should never xref
 
 Output stream 4 is unusual in that, when it is selected, the only text printed to it is that of the player’s commands and keypresses (as read by xref:15-opcodes.adoc#read_char[`*read_char*`]). (Each command is written, in one go, when it has been finished. Time delays and mouse-clicks should ideally be recorded. For suggestions on how this might be achieved, see xref:remarks[the remarks section below]. Mistypes and uses of ‘delete’ are not written.)
 
-[#7-2]
+[#7_2]
 == 7.2 Buffering
 
 On output streams 1 and 2 (only), text printing may be “buffered” in that new-lines are automatically printed to ensure that no word (of length less than the width of the screen) spreads across two lines (if the interpreter is able to control this). (This process is sometimes called “word-wrapping”.)
@@ -57,24 +57,24 @@ In Versions 1 to 3, buffering is always on. In Versions 4 and later it is on b
 
 In Version 6, each of the eight windows has its own “buffering flag”. In Versions 3 to 5, the xref:15-opcodes.adoc#buffer_mode[`*buffer_mode*`] applies only to the lower window, and buffering never happens in the upper window.
 
-[#7-3]
+[#7_3]
 == 7.3 Selection (V1 and V2)
 
 In Versions 1 and 2, output stream 1 is always selected and stream 2 can be selected or deselected by the game, by setting or clearing bit 0 of ’Flags 2′.
 
-[#7-4]
+[#7_4]
 == 7.4 Selection (later versions)
 
 In Versions 3 and later, all four output streams can be selected or deselected using the xref:15-opcodes.adoc#output_stream[`*output_stream*`] opcode. In addition, stream 2 can be selected or deselected by setting or clearing bit 0 of ’Flags 2′. Whichever method is used, the interpreter must ensure that this flag holds the current status of stream 2. (_A Mind Forever Voyaging_ requires this.)
 
-[#7-5]
+[#7_5]
 == 7.5 Dealing with Unicode or invalid characters
 
 *[1.0]* Because of the xref:15-opcodes.adoc#print_unicode[`*print_unicode*`] opcode, it is possible for arbitrary Unicode characters to be sent to the output streams: that is, for characters which are not in the ZSCII set at all, even in the “extra characters” range.
 
 === 7.5.1
 
-See xref:03-text.adoc#3–8–5–4[**S**3.8.5.4] for rules on printing Unicode to stream 1.
+See xref:03-text.adoc#3_8_5_4[**S**3.8.5.4] for rules on printing Unicode to stream 1.
 
 === 7.5.2
 
@@ -88,7 +88,7 @@ When printed to stream 3, Unicode characters should be converted to ZSCII if pos
 
 Non-ZSCII characters never need to be printed to stream 4.
 
-[#7-6]
+[#7_6]
 == 7.6 File handling
 
 *[1.0]* In Versions 5 and later, the Z-machine has the ability to load and save files (using optional operands with the xref:15-opcodes.adoc#save[`*save*`] and xref:15-opcodes.adoc#restore[`*restore*`] opcodes: these operands were not used in Infocom’s Version 5 games, but I wish to specify them as in Version 5 anyway).
@@ -139,7 +139,7 @@ An attempt by the game to use streams to access external files which is not supp
 
 The *ITF* interpreter incorrectly applies buffering when printing to the upper window.
 
-Note that the requirement xref:7-1-2-1-1[**S**7.1.2.1.1], that usages of stream 3 can be ‘nested’, is new in Standard 1.0. This is potentially important for Inform games, as stream 3 is often used to examine text before printing, for instance to choose between the articles “a” and “an” in front of an object name. But the process of printing an object name may itself require a usage of stream 3, and so on.
+Note that the requirement xref:7_1_2_1_1[**S**7.1.2.1.1], that usages of stream 3 can be ‘nested’, is new in Standard 1.0. This is potentially important for Inform games, as stream 3 is often used to examine text before printing, for instance to choose between the articles “a” and “an” in front of an object name. But the process of printing an object name may itself require a usage of stream 3, and so on.
 
 An ambiguous point about output stream 4 is whether it should contain the answers to interpreter questions like “what file name should your saved game have?” it can actually be quite useful to be able to include such answers in test script files. (When running a long script, I often save the game at several places during it, in order to save time in re-running passages.)
 

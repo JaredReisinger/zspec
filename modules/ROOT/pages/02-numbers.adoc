@@ -3,12 +3,12 @@
 
 image::icon02.gif[]
 
-[#2-1]
+[#2_1]
 == 2.1 Numbers
 
 In the Z-machine, numbers are usually stored in 2 bytes (in the form most-significant-byte first, then least-significant) and hold any value in the range `*$0000*` to `*$ffff*` (0 to 65535 decimal).
 
-[#2-2]
+[#2_2]
 == 2.2 Signed operations
 
 These values are sometimes regarded as signed, in the range -32768 to 32767. In effect _-n_ is stored as 65536-_n_ and so the top bit is the sign bit.
@@ -17,7 +17,7 @@ These values are sometimes regarded as signed, in the range -32768 to 32767. In 
 
 The operations of numerical comparison, multiplication, addition, subtraction, division, remainder-after-division and printing of numbers are signed; bitwise operations are unsigned. (In particular, since comparison is signed, it is unsafe to compare two addresses using simply xref:15-opcodes.adoc#jl[`*jl*`] and xref:15-opcodes.adoc#jg[`*jg*`].)
 
-[#2-3]
+[#2_3]
 == 2.3 Arithmetic errors
 
 Arithmetic errors:
@@ -30,7 +30,7 @@ It is illegal to divide by 0 (or to ask for remainder after division by 0) and a
 
 Formally it has never been specified what the result of an out-of-range calculation should be. The author suggests that the result should be reduced modulo `*$10000*`.
 
-[#2-4]
+[#2_4]
 == 2.4 Random number generator
 
 The Z-machine needs a random number generator which at any time has one of two states, “random” and “predictable”. When the game starts or restarts the state becomes “random”. Ideally the generator should not produce identical sequences after each restart.

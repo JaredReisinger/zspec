@@ -1,14 +1,26 @@
 site:
-  title: The Z-Machine Standards Document, version 1.1 (annotated)
-  # start_page: sdsd
+  title: The Z-Machine Standard
+  url: https://zspec.jaredreisinger.com
 
 content:
   sources:
     - url: .
       branches: HEAD
-      # start_path: src
+
+asciidoc:
+  attributes:
+    page-pagination: true
+
+urls:
+  html_extension_style: drop
+  redirect_facility: netlify
+
+output:
+  clean: true
+  dir: ./build
 
 ui:
   bundle:
     url: https://gitlab.com/antora/antora-ui-default/-/jobs/artifacts/HEAD/raw/build/ui-bundle.zip?job=bundle-stable
     snapshot: true
+  supplemental_files: ./supplemental-ui

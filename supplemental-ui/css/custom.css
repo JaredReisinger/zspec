@@ -1,0 +1,11 @@
+.doc h1 .subtitle,
+.doc h2 .subtitle,
+.doc h3 .subtitle,
+.doc h4 .subtitle,
+.doc h5 .subtitle,
+.doc h6 .subtitle {
+  color: #c1c1c1; /* var(--color-gray-10); */
+  font-size: 84%;
+  font-weight: normal; /* var(--heading-font-weight); */
+  font-style: normal;
+}

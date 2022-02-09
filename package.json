@@ -23,19 +23,20 @@
   "scripts": {
     "#": "echo NYI",
     "build": "antora playbook.yml",
-    "prebuild": "npm run clean",
+    "#prebuild": "npm run clean",
     "clean": "rimraf build",
-    "serve": "serve -l 5000 ./build/site",
+    "serve": "serve -l 5000 ./build",
     "watch": "npm-watch build",
     "dev": "concurrently \"npm:serve\" \"npm:watch\""
   },
   "watch": {
     "build": {
       "patterns": [
-        ".",
-        "modules"
+        "*.yml",
+        "modules/**/*.{adoc,yml}",
+        "supplemental-ui/**/*.{hbs,css}"
       ],
-      "extensions": "adoc,yml",
+      "extensions": "adoc,yml,hbs,css",
       "runOnChangeOnly": false
     }
   },
