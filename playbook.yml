@@ -13,6 +13,9 @@ content:
 asciidoc:
   attributes:
     page-pagination: true
+  extensions:
+    - '@deepsymmetry/asciidoctor-bytefield'
+    - asciidoctor-kroki
 
 antora:
   extensions:

@@ -71,6 +71,216 @@ The header table summarises those locations in the Z-machine’s header which an
 
 Some early Version 3 files do not contain length and checksum data, hence the notation *3+*.
 
+.Another view of the header
+****
+The above table is missing explicit field widths and unused bytes; here’s another view of the header that might make looking at a binary/hex dump easier to comprehend:
+
+// The default of 16 boxes/addresses per row makes naming the 1-byte fields
+// tricky.  I'm hoping that 4- or 8-bytes per row will let us make the boxes
+// wider.
+[bytefield]
+----
+(def box-width 100)
+(def row-height 40)
+(def boxes-per-row 8)
+
+(defattrs :plain {:font-family "inherit" :font-size 14})
+(defattrs :unused [:plain {:font-size 12 :font-style "italic"}])
+
+(defattrs :v1 {:fill "hsl(120, 50%, 80%)"})
+(defattrs :v2 {:fill "hsl(110, 50%, 80%)"})
+(defattrs :v3 {:fill "hsl(100, 50%, 80%)"})
+(defattrs :v4 {:fill "hsl( 80, 50%, 80%)"})
+(defattrs :v5 {:fill "hsl( 60, 50%, 80%)"})
+(defattrs :v6 {:fill "hsl( 40, 50%, 80%)"})
+(defattrs :vX {:fill "hsl(  0, 50%, 70%)"})
+
+(draw-column-headers)
+
+(draw-box "version" :v1)
+(draw-box "flags 1" :vX)
+(draw-box (text "(unused)" :unused) {:span 2})
+(draw-box "high mem" [:v1 {:span 2}])
+(draw-box "initial PC" [:vX {:span 2}])
+
+(draw-box "dictionary addr" [:v1 {:span 2}])
+(draw-box "objects addr" [:v1 {:span 2}])
+(draw-box "globals addr" [:v1 {:span 2}])
+(draw-box "static addr" [:v1 {:span 2}])
+
+(draw-box "flags 2" [:vX {:span 2}])
+(draw-box (text "(unused)" :unused) {:span 6})
+
+(draw-box "abbreviations addr" [:v2 {:span 2}])
+(draw-box "file length" [:v3 {:span 2}])
+(draw-box "checksum" [:v3 {:span 2}])
+(draw-related-boxes ["terp num" "terp rev"] :v4)
+
+(draw-related-boxes ["height" "width"] :v4)
+(draw-related-boxes ["width units" "height units"] [:v5 {:span 2}])
+(draw-related-boxes ["font w/h" "font h/w"] :vX)
+
+(draw-box "routines addr" [:v6 {:span 2}])
+(draw-box "static strings addr" [:v6 {:span 2}])
+(draw-related-boxes ["bg color" "fg color"] :v5)
+(draw-box "term chars addr" [:v5 {:span 2}])
+
+(draw-box "stream 3 width" [:v6 {:span 2}])
+(draw-box "standard rev" [:v1 {:span 2}])
+(draw-box "alphabet addr" [:v5 {:span 2}])
+(draw-box "header extension addr" [:v5 {:span 2}])
+
+(draw-gap)
+
+(draw-bottom)
+----
+
+_(It’s an open question as to whether this would be better as a 4-byte-wide display. For byte-address reasons, 16 bytes wide makes a lot of sense, but the fields are then too narrow for most field names. 8 bytes wide gives about enough room for just-intelligible abbreviation while keeping the display compact.)_
+
+The background colors represent the version that the field was introduced, on a sliding scale from green (v1) to orange (v6), with red for any fields whose meaning changes beteween versions:
+
+[bytefield]
+----
+(def left-margin 1)
+(def box-width 40)
+(def row-height 40)
+(def boxes-per-row 7)
+
+(defattrs :plain {:font-family "inherit" :font-size 14})
+(defattrs :unused [:plain {:font-size 12 :font-style "italic"}])
+
+(defattrs :v1 {:fill "hsl(120, 50%, 80%)"})
+(defattrs :v2 {:fill "hsl(110, 50%, 80%)"})
+(defattrs :v3 {:fill "hsl(100, 50%, 80%)"})
+(defattrs :v4 {:fill "hsl( 80, 50%, 80%)"})
+(defattrs :v5 {:fill "hsl( 60, 50%, 80%)"})
+(defattrs :v6 {:fill "hsl( 40, 50%, 80%)"})
+(defattrs :vX {:fill "hsl(  0, 50%, 70%)"})
+
+(draw-box "1" :v1)
+(draw-box "2" :v2)
+(draw-box "3" :v3)
+(draw-box "4" :v4)
+(draw-box "5" :v5)
+(draw-box "6" :v6)
+(draw-box "???" :vX)
+
+(draw-bottom)
+----
+
+And here’s a visual of the bits in the “flags” values (the “?”-suffixed fields are those that the interpreter must set to indicate available functionality):
+
+.Flags1 in Versions 1–3
+[bytefield]
+----
+(def left-margin 1)
+(def box-width 30)
+(def row-height 100)
+(def boxes-per-row 8)
+
+(defattrs :plain {:font-family "inherit" :font-size 14})
+(defattrs :unused [:plain {:font-size 12 :font-style "italic"}])
+(defattrs :vertical [:plain {:writing-mode "vertical-rl"}])
+
+(defattrs :v1 {:fill "hsl(120, 50%, 80%)"})
+(defattrs :v2 {:fill "hsl(110, 50%, 80%)"})
+(defattrs :v3 {:fill "hsl(100, 50%, 80%)"})
+(defattrs :v4 {:fill "hsl( 80, 50%, 80%)"})
+(defattrs :v5 {:fill "hsl( 60, 50%, 80%)"})
+(defattrs :v6 {:fill "hsl( 40, 50%, 80%)"})
+(defattrs :vX {:fill "hsl(  0, 50%, 70%)"})
+
+(draw-column-headers {:labels ["7" "6" "5" "4" "3" "2" "1" "0"]})
+
+(draw-box (text "(unused)" [:vertical :unused])  [:box-first    ])
+(draw-box (text "variable font?" :vertical)      [:box-related :v1])
+(draw-box (text "screen split?" :vertical)       [:box-related :v1])
+(draw-box (text "status unavail?" :vertical)     [:box-related :v1])
+(draw-box (text "(unused)" [:vertical :unused])  [:box-related    ])
+(draw-box (text "split story" :vertical)         [:box-related :v1])
+(draw-box (text "status-line" :vertical)         [:box-related :v1])
+(draw-box (text "(unused)" [:vertical :unused])  [:box-last    ])
+
+(draw-bottom)
+----
+
+.Flags1 in Versions 4–6
+[bytefield]
+----
+(def left-margin 1)
+(def box-width 30)
+(def row-height 100)
+(def boxes-per-row 8)
+
+(defattrs :plain {:font-family "inherit" :font-size 14})
+(defattrs :unused [:plain {:font-size 12 :font-style "italic"}])
+(defattrs :vertical [:plain {:writing-mode "vertical-rl"}])
+
+(defattrs :v1 {:fill "hsl(120, 50%, 80%)"})
+(defattrs :v2 {:fill "hsl(110, 50%, 80%)"})
+(defattrs :v3 {:fill "hsl(100, 50%, 80%)"})
+(defattrs :v4 {:fill "hsl( 80, 50%, 80%)"})
+(defattrs :v5 {:fill "hsl( 60, 50%, 80%)"})
+(defattrs :v6 {:fill "hsl( 40, 50%, 80%)"})
+(defattrs :vX {:fill "hsl(  0, 50%, 70%)"})
+
+(draw-column-headers {:labels ["7" "6" "5" "4" "3" "2" "1" "0"]})
+
+(draw-box (text "timed?" :vertical)              [:box-first   :v4])
+(draw-box (text "(unused)" [:vertical :unused])  [:box-related    ])
+(draw-box (text "sounds?" :vertical)             [:box-related :v6])
+(draw-box (text "monospace?" :vertical)          [:box-related :v4])
+(draw-box (text "italics?" :vertical)            [:box-related :v4])
+(draw-box (text "boldface?" :vertical)           [:box-related :v4])
+(draw-box (text "pictures?" :vertical)           [:box-related :v6])
+(draw-box (text "colors?" :vertical)             [:box-last    :v5])
+
+(draw-bottom)
+----
+
+.Flags2 (first byte is the "high" word/bit byte)
+[bytefield]
+----
+(def left-margin 1)
+(def box-width 30)
+(def row-height 100)
+(def boxes-per-row 16)
+
+(defattrs :plain {:font-family "inherit" :font-size 14})
+(defattrs :unused [:plain {:font-size 12 :font-style "italic"}])
+(defattrs :vertical [:plain {:writing-mode "vertical-rl"}])
+
+(defattrs :v1 {:fill "hsl(120, 50%, 80%)"})
+(defattrs :v2 {:fill "hsl(110, 50%, 80%)"})
+(defattrs :v3 {:fill "hsl(100, 50%, 80%)"})
+(defattrs :v4 {:fill "hsl( 80, 50%, 80%)"})
+(defattrs :v5 {:fill "hsl( 60, 50%, 80%)"})
+(defattrs :v6 {:fill "hsl( 40, 50%, 80%)"})
+(defattrs :vX {:fill "hsl(  0, 50%, 70%)"})
+
+(draw-column-headers {:labels [
+    "15" "14" "13" "12" "11" "10" "9" "8"
+    "7" "6" "5" "4" "3" "2" "1" "0"
+    ]})
+
+(draw-box (text "(unused)" :unused)      [:box-first {:span 7}])
+(draw-box (text "menus" :vertical)       [:box-last    :v6])
+
+(draw-box (text "sounds" :vertical)      [:box-first   :v5])
+(draw-box (text "color" :vertical)       [:box-related :v5])
+(draw-box (text "mouse" :vertical)       [:box-related :v5])
+(draw-box (text "undo" :vertical)        [:box-related :v5])
+(draw-box (text "pictures" :vertical)    [:box-related :v5])
+(draw-box (text "redraw" :vertical)      [:box-related :v6])
+(draw-box (text "force mono?" :vertical) [:box-related :v3])
+(draw-box (text "transcript?" :vertical) [:box-last    :v1])
+
+(draw-bottom)
+----
+
+****
+
+
 === 11.1.1
 
 It is illegal for a game to alter those fields not marked as “Dyn”. An interpreter is therefore free to store values of such fields in its own variables.
