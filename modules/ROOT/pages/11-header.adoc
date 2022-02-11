@@ -79,30 +79,13 @@ The above table is missing explicit field widths and unused bytes; here’s anot
 // tricky.  I'm hoping that 4- or 8-bytes per row will let us make the boxes
 // wider.
 
-:bytefieldDefaults: (defattrs :plain {:font-family "inherit" :font-size 14}) \
-(defattrs :unused [:plain {:font-size 12 :font-style "italic"}]) \
-(defattrs :vertical [:plain {:writing-mode "vertical-rl"}]) \
-(defattrs :v1 {:fill "hsl(120, 50%, 80%)"}) \
-(defattrs :v2 {:fill "hsl(110, 50%, 80%)"}) \
-(defattrs :v3 {:fill "hsl(100, 50%, 80%)"}) \
-(defattrs :v4 {:fill "hsl( 80, 50%, 80%)"}) \
-(defattrs :v5 {:fill "hsl( 60, 50%, 80%)"}) \
-(defattrs :v6 {:fill "hsl( 40, 50%, 80%)"}) \
-(defattrs :vX {:fill "hsl(  0, 50%, 70%)"})
-
-:bitfieldDefaults: (def left-margin 1) \
-(def box-width 30) \
-(def row-height 100) \
-{bytefieldDefaults}
-
-
 [bytefield,subs=attributes]
 ----
 (def box-width 100)
 (def row-height 40)
 (def boxes-per-row 8)
 
-{bytefieldDefaults}
+{bytefield-defaults}
 
 (draw-column-headers)
 
@@ -155,7 +138,7 @@ The background colors represent the version that the field was introduced, on a�
 (def row-height 40)
 (def boxes-per-row 7)
 
-{bytefieldDefaults}
+{bytefield-defaults}
 
 (draw-box "1" :v1)
 (draw-box "2" :v2)
@@ -164,8 +147,6 @@ The background colors represent the version that the field was introduced, on a�
 (draw-box "5" :v5)
 (draw-box "6" :v6)
 (draw-box "???" :vX)
-
-(draw-bottom)
 ----
 
 And here’s a visual of the bits in the “flags” values (the “?”-suffixed fields are those that the interpreter must set to indicate available functionality):
@@ -173,7 +154,8 @@ And here’s a visual of the bits in the “flags” values (the “?”-suffix
 .Flags1 in Versions 1–3
 [bytefield,subs=attributes]
 ----
-{bitfieldDefaults}
+{bitfield-defaults}
+{bytefield-defaults}
 (def boxes-per-row 8)
 
 (draw-column-headers {:labels ["7" "6" "5" "4" "3" "2" "1" "0"]})
@@ -186,14 +168,13 @@ And here’s a visual of the bits in the “flags” values (the “?”-suffix
 (draw-box (text "split story" :vertical)         [:box-related :v1])
 (draw-box (text "status-line" :vertical)         [:box-related :v1])
 (draw-box (text "(unused)" [:vertical :unused])  [:box-last    ])
-
-(draw-bottom)
 ----
 
 .Flags1 in Versions 4–6
 [bytefield,subs=attributes]
 ----
-{bitfieldDefaults}
+{bitfield-defaults}
+{bytefield-defaults}
 (def boxes-per-row 8)
 
 (draw-column-headers {:labels ["7" "6" "5" "4" "3" "2" "1" "0"]})
@@ -206,14 +187,13 @@ And here’s a visual of the bits in the “flags” values (the “?”-suffix
 (draw-box (text "boldface?" :vertical)           [:box-related :v4])
 (draw-box (text "pictures?" :vertical)           [:box-related :v6])
 (draw-box (text "colors?" :vertical)             [:box-last    :v5])
-
-(draw-bottom)
 ----
 
 .Flags2 (first byte is the "high" word/bit byte)
 [bytefield,subs=attributes]
 ----
-{bitfieldDefaults}
+{bitfield-defaults}
+{bytefield-defaults}
 (def boxes-per-row 16)
 
 (draw-column-headers {:labels [
@@ -232,8 +212,6 @@ And here’s a visual of the bits in the “flags” values (the “?”-suffix
 (draw-box (text "redraw" :vertical)      [:box-related :v6])
 (draw-box (text "force mono?" :vertical) [:box-related :v3])
 (draw-box (text "transcript?" :vertical) [:box-last    :v1])
-
-(draw-bottom)
 ----
 
 ****
@@ -316,6 +294,32 @@ If the interpreter needs to write a word which is beyond the length of the exte
 |  5   |  5  |     |  *  |  *  | True default foreground colour
 |  6   |  5  |     |  *  |  *  | True default background colour
 |===
+
+.Header extension visualized
+****
+
+[bytefield,subs=attributes]
+----
+(def box-width 100)
+(def row-height 40)
+(def boxes-per-row 8)
+
+{bytefield-defaults}
+
+(draw-column-headers)
+
+(draw-gap)
+(draw-box "num words"    [:v5 {:span 2}])
+(draw-box "mouse X"      [:v5 {:span 2}])
+(draw-box "mouse Y"      [:v5 {:span 2}])
+(draw-box "Unicode addr" [:v5 {:span 2}])
+(draw-box "Flags 3"      [:vX {:span 2}])
+(draw-box "true fg"      [:v5 {:span 2}])
+(draw-box "true bg"      [:v5 {:span 2}])
+(draw-gap)
+(draw-bottom)
+----
+****
 
 ==== 11.1.7.4
 

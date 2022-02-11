@@ -78,7 +78,7 @@ For “score games”: the score and number of turns, held in the values of the 
 
 ==== 8.2.3.2
 
-For “time games”: the time, in the form *_`hours`_`:`_`minutes`_* (held in the second and third globals). The time may be given on a 24-hour clock or the number of hours may be reduced modulo 12 (but if so, `AM` or `PM` should be appended). Either way the player should be able to see the difference between 4am and 4pm, for example. The hours global may be assumed to be in the range 0 to 23 and the minutes global in the range 0 to 59.
+For “time games”: the time, in the form `*__hours__:__minutes__*` (held in the second and third globals). The time may be given on a 24-hour clock or the number of hours may be reduced modulo 12 (but if so, `AM` or `PM` should be appended). Either way the player should be able to see the difference between 4am and 4pm, for example. The hours global may be assumed to be in the range 0 to 23 and the minutes global in the range 0 to 59.
 
 === 8.2.4
 
@@ -92,25 +92,25 @@ Under Versions 5 and later, text printing has a current foreground and backgro
 
 The following codes are used to refer to colours:
 
-[%autowidth, cols="^1,1,1" frame=none, grid=rows]
+[%autowidth, cols="^1,2,5" frame=none, grid=rows]
 |===
-|  -1  | the colour of the pixel under the cursor (if any) | -3 _(V6 only)_
-|  0   | current                                           | -2
-|  1   | default                                           | -1
-|  2   | black                                             | `$0000` (`$$0000000000000000`)
-|  3   | red                                               | `$001D` (`$$0000000000011101`)
-|  4   | green                                             | `$0340` (`$$0000001101000000`)
-|  5   | yellow                                            | `$03BD` (`$$0000001110111101`)
-|  6   | blue                                              | `$59A0` (`$$0101100110100000`)
-|  7   | magenta                                           | `$7C1F` (`$$0111110000011111`)
-|  8   | cyan                                              | `$77A0` (`$$0111011110100000`)
-|  9   | white                                             | `$7FFF` (`$$0111111111111111`)
-|  10  | light grey                                        | `$5AD6` (`$$0101101011010110`)
-|  11  | medium grey                                       | `$4631` (`$$0100011000110001`)
-|  12  | dark grey                                         | `$2D6B` (`$$0010110101101011`)
+|  -1  | the colour of the pixel under the cursor (if any) | true -3 _(V6 only)_
+|  0   | current                                           | true -2
+|  1   | default                                           | true -1
+|  2   | black                                             | true `$0000` (`$$0000000000000000`)
+|  3   | red                                               | true `$001D` (`$$0000000000011101`)
+|  4   | green                                             | true `$0340` (`$$0000001101000000`)
+|  5   | yellow                                            | true `$03BD` (`$$0000001110111101`)
+|  6   | blue                                              | true `$59A0` (`$$0101100110100000`)
+|  7   | magenta                                           | true `$7C1F` (`$$0111110000011111`)
+|  8   | cyan                                              | true `$77A0` (`$$0111011110100000`)
+|  9   | white                                             | true `$7FFF` (`$$0111111111111111`)
+|  10  | light grey                                        | true `$5AD6` (`$$0101101011010110`)
+|  11  | medium grey                                       | true `$4631` (`$$0100011000110001`)
+|  12  | dark grey                                         | true `$2D6B` (`$$0010110101101011`)
 |  13  | _reserved_                                        |
 |  14  | _reserved_                                        |
-|  15  | transparent                                       | -4 _(V6 only)_
+|  15  | transparent                                       | true -4 _(V6 only)_
 |===
 
 Colours 10, 11, 12, 15 and -1 are available only in Version 6.

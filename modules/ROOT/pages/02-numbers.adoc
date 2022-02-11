@@ -12,6 +12,11 @@ In the Z-machine, numbers are usually stored in 2 bytes (in the form most-signi
 
 These values are sometimes regarded as signed, in the range -32768 to 32767. In effect _-n_ is stored as 65536-_n_ and so the top bit is the sign bit.
 
+.In other words...
+****
+Signed values are represented using https://en.wikipedia.org/wiki/Two%27s_complement[two's complement], which is most likely the same as the actual computer the Z-machine is running on.
+****
+
 === 2.2.1
 
 The operations of numerical comparison, multiplication, addition, subtraction, division, remainder-after-division and printing of numbers are signed; bitwise operations are unsigned. (In particular, since comparison is signed, it is unsafe to compare two addresses using simply xref:15-opcodes.adoc#jl[`*jl*`] and xref:15-opcodes.adoc#jg[`*jg*`].)

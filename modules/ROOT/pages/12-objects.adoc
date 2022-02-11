@@ -18,9 +18,33 @@ Next is the object tree. Objects are numbered consecutively from 1 upward, with
 
 In Versions 1 to 3, there are at most 255 objects, each having a 9-byte entry as follows:
 
+// ----
+// the 32 attribute flags     parent     sibling     child   properties
+// ---32 bits in 4 bytes---   ---3 bytes------------------  ---2 bytes--
+// ----
+
+[bytefield,subs=attributes]
 ----
-the 32 attribute flags     parent     sibling     child   properties
----32 bits in 4 bytes---   ---3 bytes------------------  ---2 bytes--
+{bytefield-defaults}
+(def boxes-per-row 9)
+
+(def row-header-fn (fn [address] nil))
+(def left-margin 1)
+(def box-width 60)
+
+(draw-column-headers)
+
+(draw-box (text "32 bits in 4 bytes" :unused) {:span 4 :borders {:right :border-related}})
+(draw-box (text "3 bytes"            :unused) {:span 3 :borders {:left  :border-related :right :border-related}})
+(draw-box (text "2 bytes"            :unused) {:span 2 :borders {:left  :border-related}})
+
+(draw-box "the 32 attribute flags" {:span 4})
+
+(draw-box "parent")
+(draw-box "sibling")
+(draw-box "child")
+
+(draw-box "properties" {:span 2})
 ----
 
 *parent*, *sibling* and *child* must all hold valid object numbers. The *properties* pointer is the byte address of the list of properties attached to the object. Attributes 0 to 31 are flags (at any given time, they are either on (1) or off (0)) and are stored topmost bit first: e.g., attribute 0 is stored in bit 7 of the first byte, attribute 31 is stored in bit 0 of the fourth.
@@ -29,18 +53,60 @@ the 32 attribute flags     parent     sibling     child   properties
 
 In Version 4 and later, there are at most 65535 objects, each having a 14-byte entry as follows:
 
+// ----
+// the 48 attribute flags     parent    sibling   child     properties
+// ---48 bits in 6 bytes---   ---3 words, i.e. 6 bytes----  ---2 bytes--
+// ----
+
+[bytefield,subs=attributes]
 ----
-the 48 attribute flags     parent    sibling   child     properties
----48 bits in 6 bytes---   ---3 words, i.e. 6 bytes----  ---2 bytes--
+{bytefield-defaults}
+(def boxes-per-row 14)
+
+(def row-header-fn (fn [address] nil))
+(def left-margin 1)
+(def box-width 60)
+
+(draw-column-headers)
+
+(draw-box (text "48 bits in 6 bytes" :unused) {:span 6 :borders {:right :border-related}})
+(draw-box (text "3 words (6 bytes)"  :unused) {:span 6 :borders {:left  :border-related :right :border-related}})
+(draw-box (text "2 bytes"            :unused) {:span 2 :borders {:left  :border-related}})
+
+(draw-box "the 48 attribute flags" {:span 6})
+
+(draw-box "parent"  {:span 2})
+(draw-box "sibling" {:span 2})
+(draw-box "child"   {:span 2})
+
+(draw-box "properties" {:span 2})
 ----
 
 == 12.4 Property tables
 
 Each object has its own property table. Each of these can be anywhere in dynamic memory (indeed, a game can legally change an object’s properties table address in play, provided the new address points to another valid properties table). The header of a property table is as follows:
 
+// ----
+// text-length     text of short name of object
+// -----byte----   --some even number of bytes---
+// ----
+
+[bytefield,subs=attributes]
 ----
-text-length     text of short name of object
------byte----   --some even number of bytes---
+{bytefield-defaults}
+(def boxes-per-row 7)
+
+(def row-header-fn (fn [address] nil))
+(def left-margin 1)
+(def box-width 60)
+
+(draw-column-headers)
+
+(draw-box (text "byte"                      :unused) {:borders {:right :border-related}})
+(draw-box (text "some even number of bytes" :unused) {:span 6 :borders {:left  :border-related}})
+
+(draw-box "length")
+(draw-box "text of short name of object" {:span 6})
 ----
 
 where the *text-length* is the number of 2-byte words making up the text, which is stored in the usual format. (This means that an object’s short name is limited to 765 Z-characters.) After the header, the properties are listed in descending numerical order. (This order is essential and is not a matter of convention.)
@@ -49,20 +115,98 @@ where the *text-length* is the number of 2-byte words making up the text, which 
 
 In Versions 1 to 3, each property is stored as a block
 
+// ----
+// size byte     the actual property data
+//             ---between 1 and 8 bytes--
+// ----
+
+[bytefield,subs=attributes]
 ----
-size byte     the actual property data
-            ---between 1 and 8 bytes--
+{bytefield-defaults}
+(def boxes-per-row 7)
+
+(def row-header-fn (fn [address] nil))
+(def left-margin 1)
+(def box-width 60)
+
+(draw-column-headers)
+
+(draw-box (text "byte"                  :unused) {:borders {:right :border-related}})
+(draw-box (text "between 1 and 8 bytes" :unused) {:span 6 :borders {:left  :border-related}})
+
+(draw-box "size")
+(draw-box "the actual property data" {:span 6})
 ----
 
 where the *size byte* is arranged as 32 times the number of data bytes minus one, plus the property number. A property list is terminated by a size byte of 0. (It is otherwise illegal for a size byte to be a multiple of 32.)
+
+.How to interpret the size byte
+****
+The “is arranged as” phrasing threw me for longer than I would like to admit. What this really means is that the value “data bytes minus one” has been left-shifted by 5 (i.e. multiplied by 32) and occupies the top three bits in the byte. The lower 5 bits contain the property number. That is:
+
+."Size" byte for a property
+[bytefield,subs=attributes]
+----
+{bitfield-defaults}
+{bytefield-defaults}
+(def boxes-per-row 8)
+(def row-height 30)
+
+(draw-column-headers {:labels ["7" "6" "5" "4" "3" "2" "1" "0"]})
+
+(draw-box "length - 1" [:box-first {:span 3}])
+(draw-box "prop num"   [:box-last  {:span 5}])
+----
+
+This also matches the “1–8 byte” range for the data; three bits can represent the values from 0 to 7, which yields 1 to 8 once you “add one” back to the length value.
+****
+
 
 === 12.4.2
 
 In Versions 4 and later, a property block instead has the form
 
+// ----
+// size and number       the actual property data
+// --1 or 2 bytes---     --between 1 and 64 bytes--
+// ----
+
+[bytefield,subs=attributes]
 ----
-size and number       the actual property data
---1 or 2 bytes---     --between 1 and 64 bytes--
+{bytefield-defaults}
+(def boxes-per-row 10)
+
+(def row-header-fn (fn [address] nil))
+(def left-margin 1)
+(def box-width 60)
+
+(draw-column-headers)
+
+(draw-box (text "1 or 2 bytes"           :unused) {:span 2 :borders {:right :border-related}})
+(draw-box (text "between 1 and 64 bytes" :unused) {:span 8 :borders {:left  :border-related}})
+
+(draw-box "size" {:span 2})
+(draw-box "the actual property data" {:span 8})
+----
+
+or
+
+[bytefield,subs=attributes]
+----
+{bytefield-defaults}
+(def boxes-per-row 10)
+
+(def row-header-fn (fn [address] nil))
+(def left-margin 1)
+(def box-width 60)
+
+(draw-column-headers)
+
+;;(draw-box (text "1 byte"                 :unused) {:span 1 :borders {:right :border-related}})
+;;(draw-box (text "between 1 and 64 bytes" :unused) {:span 8 :borders {:left  :border-related}})
+
+(draw-box "size" {:span 1})
+(draw-box "the actual property data" {:span 8})
 ----
 
 The property number occupies the bottom 6 bits of the first size byte.
@@ -79,6 +223,57 @@ If the top bit (bit 7) of the first size byte is set, then there are two size-an
 
 If the top bit (bit 7) of the first size byte is clear, then there is only one size-and-number byte. Bits 0 to 5 contain the property number; bit 6 is either clear to indicate a property data length of 1, or set to indicate a length of 2; bit 7 is clear.
 
+.Size byte(s) in versions 4 and later
+****
+Again, showing the byte/bit variations helps make things more clear.
+
+With the high bit clear in the first byte:
+
+.Single-byte size (high bit clear)
+[bytefield,subs=attributes]
+----
+{bitfield-defaults}
+{bytefield-defaults}
+(def boxes-per-row 8)
+;;(def row-height 30)
+
+(draw-column-headers {:labels ["7" "6" "5" "4" "3" "2" "1" "0"]})
+
+(draw-box (text "0" :hex)            [:box-first   {:span 1}])
+(draw-box (text "length" :vertical)  [:box-related {:span 1}])
+(draw-box "prop num"                 [:box-last    {:span 6}])
+----
+
+where the actual data length is _length_+1 (resulting in either 1 or 2).
+
+With the high bit set in the first byte:
+
+.Two-byte size (high bit set)
+[bytefield,subs=attributes]
+----
+{bitfield-defaults}
+{bytefield-defaults}
+(def boxes-per-row 16)
+(def row-height 30)
+
+(draw-column-headers {:labels ["7" "6" "5" "4" "3" "2" "1" "0" "7" "6" "5" "4" "3" "2" "1" "0"]})
+
+(draw-box (text "first byte"  :unused) {:span 8 :borders {:right :border-related}})
+(draw-box (text "second byte" :unused) {:span 8 :borders {:left  :border-related}})
+
+(draw-box (text "1" :hex)            [:box-first   {:span 1}])
+(draw-box "?"                        [:box-related {:span 1}])
+(draw-box "prop num"                 [:box-last    {:span 6}])
+
+(draw-box (text "1" :hex)            [:box-first   {:span 1}])
+(draw-box "?"                        [:box-related {:span 1}])
+(draw-box "length"                   [:box-last    {:span 6}])
+----
+
+And in this case, rather than adding one to the length value, it is taken as-is _except_ a zero value is treated as 64 as per xref:#12_4_2_1_1[**S**12.4.2.1.1].
+****
+
+
 == 12.5 Well-foundedness of the tree
 
 It is the game’s responsibility to keep the object tree well-founded: the interpreter is not required to check. “Well-founded” means the following:
@@ -94,6 +289,24 @@ It is the game’s responsibility to keep the object tree well-founded: the inte
 == Remarks
 
 The largest valid object number is not directly stored anywhere in the Z-machine. Utility programs like *Infodump* deduce this number by assuming that, initially, the object entries end where the first property table begins.
+
+.Discovering the largest object
+****
+If you’re writing an interpreter and want to determine the largest valid object number, loop from the address of the first object entry until the “lowest property address seen”, updating this “lowest property address” from each object entry you see. In pseudocode:
+
+----
+objectAddrStart <== address from header (at $0a) + size of property defaults table
+objectAddr <== objectAddrStart
+lowestPropertyAddr <== infinity (or game file size, or static addr)
+
+while objectAddr < lowestPropertyAddr:
+  objectPropertiesAddr <== properties field from objectAddr entry
+  lowestPropertyAddr <== minimum(lowestPropertyAddr, objectPropertiesAddr)
+  objectAddr <== objectAddr + size of table entry
+
+lastObjectID <== ((objectAddr - objectAddrStart) / size of table entry) - 1
+----
+****
 
 Infocom’s _Sherlock_ contains a bug making it try to set and clear attribute 48.
 

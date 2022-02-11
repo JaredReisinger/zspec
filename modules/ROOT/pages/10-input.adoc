@@ -44,8 +44,8 @@ Whenever a mouse click takes place (and provided the header extension table exi
 
 [%autowidth, cols="^1,1" frame=none, grid=rows]
 |===
-|  1   | x coordinate where click took place
-|  2   | y coordinate where click took place
+| Word 1   | x coordinate where click took place
+| Word 2   | y coordinate where click took place
 |===
 
 === 10.3.3

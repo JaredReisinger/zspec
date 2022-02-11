@@ -17,10 +17,33 @@ Z-machine text is a sequence of ZSCII character codes (ZSCII is a system similar
 
 Text in memory consists of a sequence of 2-byte words. Each word is divided into three 5-bit ’Z-characters’, plus 1 bit left over, arranged as
 
+// ----
+// --first byte-------   --second byte---
+//  7   6 5 4 3 2  1 0   7 6 5  4 3 2 1 0
+// bit  --first--  --second---  --third--
+// ----
+
+[bytefield,subs=attributes]
 ----
---first byte-------   --second byte---
- 7   6 5 4 3 2  1 0   7 6 5  4 3 2 1 0
-bit  --first--  --second---  --third--
+{bytefield-defaults}
+(def boxes-per-row 16)
+
+(def row-header-fn (fn [address] nil))
+(def left-margin 1)
+(def box-width 20)
+
+(draw-column-headers {:labels [
+    "7" "6" "5" "4" "3" "2" "1" "0"
+    "7" "6" "5" "4" "3" "2" "1" "0"
+    ]})
+
+(draw-box (text "first byte"  :unused) {:span 8 :borders {:right :border-related}})
+(draw-box (text "second byte" :unused) {:span 8 :borders {:left  :border-related}})
+
+(draw-box "bit")
+(draw-box "first" {:span 5})
+(draw-box "second" {:span 5})
+(draw-box "third" {:span 5})
 ----
 
 The bit is set only on the last 2-byte word of the text, and so marks the end.
@@ -202,14 +225,44 @@ ZSCII code 27 (“escape” or “break”) is defined for input only.
 
 ZSCII codes between 32 (“space”) and 126 (“tilde”) are defined for input and output, and agree with standard ASCII (as well as all of the ISO 8859 character sets and Unicode). Specifically:
 
+// ----
+//       0123456789abcdef0123456789abcdef
+//       --------------------------------
+//  $20   !"#$%&'()*+,-./0123456789:;<=>?
+//  $40  @ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_
+//  $60  'abcdefghijklmnopqrstuvwxyz{|}~
+//       --------------------------------
+// ----
+
+[bytefield,subs=attributes]
 ----
-      0123456789abcdef0123456789abcdef
-      --------------------------------
- $20   !"#$%&'()*+,-./0123456789:;<=>?
- $40  @ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_
- $60  'abcdefghijklmnopqrstuvwxyz{|}~
-      --------------------------------
+{bytefield-defaults}
+(def boxes-per-row 32)
+(def box-width 16)
+(def row-height 20)
+
+(draw-column-headers {:labels [
+  "00" "01" "02" "03" "04" "05" "06" "07" "08" "09" "0a" "0b" "0c" "0d" "0e" "0f"
+  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19" "1a" "1b" "1c" "1d" "1e" "1f"
+]})
+
+;; a fake box to bump up the row number?
+(draw-box nil {:span 32 :borders #{}})
+
+(doseq [ch [
+  " " "!" "\"" "#" "$" "%" "&" "'" "(" ")" "*" "+" "," "-" "." "/"
+  "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" ":" ";" "<" "=" ">" "?"
+
+  "@" "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O"
+  "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z" "[" "\\" "]" "^" "_"
+
+  "'" "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o"
+  "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "{" "|" "}" "~"
+]]
+  (draw-box ch {:borders #{}})
+)
 ----
+
 
 Note that code `*$23*` (35 decimal) is a hash mark, not a pound sign. (Code `*$7c*` (124 decimal) is a vertical stroke [.line-through]#which is shown as ! here for typesetting reasons#.)
 
@@ -297,7 +350,13 @@ Unicode characters U+0000 to U+001F and U+007F to U+009F are control codes, and 
 
 ZSCII codes 252 to 254 are defined for input only:
 
-252: menu click 253: mouse double-click 254: mouse single-click
+[%autowidth, cols="^1,1" frame=none, grid=rows]
+|===
+| 252 | menu click
+| 253 | mouse double-click
+| 254 | mouse single-click
+|===
+
 Menu clicks are available only in Version 6. A single click, or the first click of a double-click, is passed in as 254. The second click of a double-click is passed in as 253. In Versions 5 and later it is recommended that an interpreter should only send code 254, whether the mouse is clicked once or twice.
 
 === 3.8.7

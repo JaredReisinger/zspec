@@ -10,9 +10,31 @@ The dictionary table is held in static memory and its byte address is stored in 
 
 The table begins with a short header:
 
+// ----
+//  n     list of keyboard input codes   entry-length  number-of-entries
+// byte  ------n bytes-----------------      byte         2-byte word
+// ----
+
+[bytefield,subs=attributes]
 ----
- n     list of keyboard input codes   entry-length  number-of-entries
-byte  ------n bytes-----------------      byte         2-byte word
+{bytefield-defaults}
+(def boxes-per-row 8)
+
+(def row-header-fn (fn [address] nil))
+(def left-margin 1)
+(def box-width 60)
+
+(draw-column-headers)
+
+(draw-box (text "byte"        :unused) {:span 1 :borders {:right :border-related}})
+(draw-box (text "n bytes"     :unused) {:span 4 :borders {:left  :border-related :right :border-related}})
+(draw-box (text "byte"        :unused) {:span 1 :borders {:left  :border-related :right :border-related}})
+(draw-box (text "2 byte word" :unused) {:span 2 :borders {:left  :border-related}})
+
+(draw-box "n"                   {:span 1})
+(draw-box "list of input codes" {:span 4})
+(draw-box "length"              {:span 1})
+(draw-box "count"               {:span 2})
 ----
 
 The keyboard input codes are “word-separators”: typically (and under Inform mandatorily) these are the ZSCII codes for full stop, comma and double-quote. Note that a space character (32) should never be a word-separator. The “entry length” is the length of each word’s entry in the dictionary table. (It must be at least 4 in Versions 1 to 3, and at least 6 in later Versions.)
@@ -25,9 +47,27 @@ Note that the word-separators table can only contain codes which are defined in 
 
 In Versions 1 to 3, each word has an entry in the form
 
+// ----
+//  encoded text of word        bytes of data
+// ------- 4 bytes ------   (entry length-4) bytes
+// ----
+
+[bytefield,subs=attributes]
 ----
- encoded text of word        bytes of data
-------- 4 bytes ------   (entry length-4) bytes
+{bytefield-defaults}
+(def boxes-per-row 7)
+
+(def row-header-fn (fn [address] nil))
+(def left-margin 1)
+(def box-width 60)
+
+(draw-column-headers)
+
+(draw-box (text "4 bytes"        :unused) {:span 4 :borders {:right :border-related}})
+(draw-box (text "length-4 bytes" :unused) {:span 3 :borders {:left  :border-related}})
+
+(draw-box "encoded text of word" {:span 4})
+(draw-box "data"                 {:span 3})
 ----
 
 The interpreter ignores the bytes of data (presumably the game’s parser will use them). The encoded text contains 6 Z-characters (it is always padded out with Z-character 5’s to make up 4 bytes: see xref:03-text.adoc[**S**3]). The text may include spaces or other word-separators (though, if so, the interpreter will never match any text to the dictionary word in question: surprisingly, this can be useful and is a trick used in the Inform library).
