@@ -1,0 +1,13 @@
+diff --git a/node_modules/@deepsymmetry/asciidoctor-bytefield/extension.js b/node_modules/@deepsymmetry/asciidoctor-bytefield/extension.js
+index 2b11ae4..02fbe4e 100644
+--- a/node_modules/@deepsymmetry/asciidoctor-bytefield/extension.js
++++ b/node_modules/@deepsymmetry/asciidoctor-bytefield/extension.js
+@@ -12,7 +12,7 @@ module.exports = function (registry) {
+     const doc = parent.getDocument()
+     const subs = attrs.subs
+     if (subs) {
+-      source = doc.$apply_subs(attrs.subs, doc.$resolve_subs(subs))
++      source = doc.$apply_subs(source, doc.$resolve_subs(subs))
+     }
+     var svgText
+     try {

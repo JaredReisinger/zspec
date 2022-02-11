@@ -1,8 +1,16 @@
 = Overview of Z-machine architecture
 
-image::diagram.gif[architecture diagram]
+// image::diagram.gif[architecture diagram]
+image::diagram.svg[architecture diagram]
 
 The Z-machine is a design for an imaginary computer: Z is for ‘Zork’, the adventure game it was originally designed to play. Like any computer, it stores its information (mostly) in an array of variables numbered from 0 up to some large number: this is called its *memory*. A stock of some 240 memory locations are set aside for easy and quick access, and these are called *global variables* (since they are available to any part of the program which is running, at any time).
+
+.Bytes, bits, and addresses
+****
+Although xref:02-numbers.adoc#2_1[mentioned with regards to numbers], it’s not made particularly explicit that there are really only two semantically meaningful kinds of values in a Z-machine: a byte (8 bits), and a 2-byte word (16 bits) where the first byte is the most-significant byte. Bit-field flags are stored in one or more bytes, with the bit number 0 starting at the least-significant bit of the least-significant byte, and bit number 8__N__-1 at the most-significant bit of the most significant byte.
+
+Similarly, it’s worth calling out in this overview that xref:01-memory-map.adoc#1_2_1[the Z-machine is fundamentally byte-addressable]. Regardless of the nuance of “kind” of address used in a given context (byte address, word address, packed address), it ultimately resolves to a byte offset from the beginning of memory.
+****
 
 The two important pieces of information not stored in memory are the *program counter* (*PC*) and the *stack*. The Z-machine continuously runs a program by getting the instruction stored at position PC in memory, acting on the instruction and then moving the PC forward to the next. The *instruction set* of the Z-machine (the range of possible actions and how they are encoded as numbers in memory) occupies much of this document.
 

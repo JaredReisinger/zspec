@@ -1,10 +1,15 @@
 = The Z-Machine Standards Document
+Graham Nelson
+:revnumber: 1.1
+:revdate: 2014-02-24
 :page-role: title-page with-subtitle
 
 [discrete.subtitle]
-== Version 1.1 _(annotated)_
+== Version {revnumber} _(annotated)_
 
-24 February 2014
+date:{revdate}[format=d MMMM yyyy]
+
+_(annotations updated as of date:{docdate}[format=d MMMM yyyy])_
 
 ***
 

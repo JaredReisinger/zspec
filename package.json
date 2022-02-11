@@ -21,7 +21,7 @@
     "url": "https://github.com/JaredReisinger/zspec/issues"
   },
   "scripts": {
-    "#": "echo NYI",
+    "postinstall": "patch-package",
     "build": "cross-env SITE_SEARCH_PROVIDER=true antora playbook.yml",
     "#prebuild": "npm run clean",
     "clean": "rimraf build",
@@ -33,10 +33,11 @@
     "build": {
       "patterns": [
         "*.yml",
-        "modules/**/*.{adoc,yml}",
-        "supplemental-ui/**/*.{hbs,css}"
+        "modules/**/*.{adoc,yml,svg,gif,jpg,png}",
+        "supplemental-ui/**/*.{hbs,css}",
+        "extensions/**/*.js"
       ],
-      "extensions": "adoc,yml,hbs,css",
+      "extensions": "adoc,yml,hbs,css,js,svg,gif,jpg,png",
       "runOnChangeOnly": false
     }
   },
@@ -48,7 +49,9 @@
     "asciidoctor-kroki": "^0.15.4",
     "concurrently": "^7.0.0",
     "cross-env": "^7.0.3",
+    "luxon": "^2.3.0",
     "npm-watch": "^0.11.0",
+    "patch-package": "^6.4.7",
     "rimraf": "^3.0.2",
     "serve": "^13.0.2"
   }

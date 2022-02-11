@@ -13,9 +13,11 @@ content:
 asciidoc:
   attributes:
     page-pagination: true
+    kroki-fetch-diagram: true
   extensions:
     - '@deepsymmetry/asciidoctor-bytefield'
     - asciidoctor-kroki
+    - './extensions/date-formatter.js'
 
 antora:
   extensions:
