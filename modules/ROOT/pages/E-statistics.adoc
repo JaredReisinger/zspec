@@ -36,7 +36,7 @@ Early games such as _Zork I_ know about 600 words, but again this rises steeply 
 (a) Of the 1426854 opcodes in the shipped Infocom story files in Paul David Doherty’s collection, here are the top and bottom ten most popular. (Leaving out those which never occur and so score 0: xref:15-opcodes.adoc#nop[`*nop*`], xref:15-opcodes.adoc#art_shift[`*art_shift*`], xref:15-opcodes.adoc#piracy[`*piracy*`] and the two post-Infocom opcodes, xref:15-opcodes.adoc#print_unicode[`*print_unicode*`] and xref:15-opcodes.adoc#check_unicode[`*check_unicode*`].)
 
 .Top Ten Opcodes Chart
-[%autowidth, cols="^1,1,>1" frame=none, grid=rows]
+[width=50%, cols="^1,5,>5", frame=none, grid=rows]
 |===
 | 1  | xref:15-opcodes.adoc#je[`*je*`]               | 195959
 | 2  | xref:15-opcodes.adoc#print[`*print*`]         | 142755
@@ -51,7 +51,7 @@ Early games such as _Zork I_ know about 600 words, but again this rises steeply 
 |===
 
 .Bottom Ten Opcodes Chart
-[%autowidth, cols="^1,1,>1" frame=none, grid=rows]
+[width=50%, cols="^1,5,>5", frame=none, grid=rows]
 |===
 | 1  | xref:15-opcodes.adoc#print_form[`*print_form*`]       |  2
 | 2  | xref:15-opcodes.adoc#erase_picture[`*erase_picture*`] |  3
@@ -70,7 +70,7 @@ So about 2/3rd s of all opcodes are those in the top ten; 1 in 8 opcodes is a
 (b) An experiment (conducted with the help of Kevin Bracey) sheds some light on the opcodes most frequently interpreted in typical play. Two very different games (_Zork I_, Version 5 “solid gold” edition; _Museum of Inform_, a complex Inform example game) were played for about 50000 cycles of the Z-machine (about 20 moves in _Zork I_, rather less in the _Museum_). The following table records all opcodes with a frequency of at least 1% (i.e., 0.01):
 
 .Zork I Solid Gold (Infocom)
-[%autowidth, cols="1,1" frame=none, grid=rows]
+[width=40%, cols="1,1", frame=none, grid=rows]
 |===
 | 0.116110 | xref:15-opcodes.adoc#loadb[`*loadb*`]
 | 0.103990 | xref:15-opcodes.adoc#storeb[`*storeb*`]
@@ -90,7 +90,7 @@ So about 2/3rd s of all opcodes are those in the top ten; 1 in 8 opcodes is a
 |===
 
 .Museum of Inform (Inform)
-[%autowidth, cols="1,1" frame=none, grid=rows]
+[width=40%, cols="1,1", frame=none, grid=rows]
 |===
 | 0.104952 | xref:15-opcodes.adoc#je[`*je*`]
 | 0.101151 | xref:15-opcodes.adoc#jz[`*jz*`]

@@ -16,7 +16,7 @@ asciidoc:
     kroki-fetch-diagram: true
     bytefield-defaults: |
       (defattrs :plain {:font-family "inherit" :font-size 14})
-      (defattrs :unused [:plain {:font-size 12 :font-style "italic"}])
+      (defattrs :unused [:plain {:font-size 12 :font-style "italic" :fill "hsl(0, 0%, 60%)"}])
       (defattrs :vertical [:plain {:writing-mode "vertical-rl"}])
       (defattrs :v1 {:fill "hsl(120, 50%, 80%)"})
       (defattrs :v2 {:fill "hsl(110, 50%, 80%)"})

@@ -21,6 +21,137 @@ As in xref:11-header.adoc[**S**11], *Hex* means the address, in hexadecimal; *V*
 | 3C  |     |     |     | Inform 6 stores 4 bytes of ASCII here, giving the version of Inform used to compile the file: for instance, `6.11`.
 |===
 
+.Conventional non-specified usage, revisualized
+****
+[bytefield,subs=attributes]
+----
+(def box-width 100)
+(def row-height 40)
+(def boxes-per-row 8)
+
+{bytefield-defaults}
+
+(defattrs :specd [:unused {:font-style "normal"}])
+(defattrs :xx {:fill "hsl(260, 60%, 80%)"})
+
+(draw-column-headers)
+
+(draw-box (text "version"         :specd))
+(draw-box "flags 1"                              :v1)
+(draw-box "release number"                       [:v1 {:span 2}])
+(draw-box (text "high mem"        :specd)        {:span 2})
+(draw-box (text "initial PC"      :specd)        {:span 2})
+
+(draw-box (text "dictionary addr" :specd)        {:span 2})
+(draw-box (text "objects addr"    :specd)        {:span 2})
+(draw-box (text "globals addr"    :specd)        {:span 2})
+(draw-box (text "static addr"     :specd)        {:span 2})
+
+(draw-box "flags 2"                              [:v3 {:span 2}])
+(draw-box "serial code/number"                   [:vX {:span 6}])
+
+(draw-box (text "abbreviations addr" :specd)     {:span 2})
+(draw-box (text "file length"     :specd)        {:span 2})
+(draw-box (text "checksum"        :specd)        {:span 2})
+(draw-related-boxes [
+  (text "terp num"     :specd)
+  (text "terp rev"     :specd)
+])
+
+(draw-related-boxes [
+  (text "height"       :specd)
+  (text "width"        :specd)
+])
+(draw-related-boxes [
+  (text "width units"  :specd)
+  (text "height units" :specd)
+]                                                {:span 2})
+(draw-related-boxes [
+  (text "font w/h"     :specd)
+  (text "font h/w"     :specd)
+])
+
+(draw-box (text "routines addr"          :specd) {:span 2})
+(draw-box (text "static strings addr"    :specd) {:span 2})
+(draw-related-boxes [
+  (text "bg color"     :specd)
+  (text "fg color"     :specd)
+])
+(draw-box (text "term chars addr"        :specd) {:span 2})
+
+(draw-box (text "stream 3 width"         :specd) {:span 2})
+(draw-box (text "standard rev"           :specd) {:span 2})
+(draw-box (text "alphabet addr"          :specd) {:span 2})
+(draw-box (text "header extension addr"  :specd) {:span 2})
+
+(draw-related-boxes [
+  "8 bytes ASCII (Infocom)..."
+  "4 bytes ASCII (Inform)"
+]                                                [:v6 {:span 4}])
+
+(draw-gap)
+
+(draw-bottom)
+----
+
+Aside from “flags1” and “flags2”, the other fields aren’t specified at all, and were marked as “_(unused)_” in xref:11-header.adoc[the header].
+
+
+.Flags1 in Versions 3
+[bytefield,subs=attributes]
+----
+{bitfield-defaults}
+{bytefield-defaults}
+(def boxes-per-row 8)
+
+(defattrs :specd [:unused {:font-style "normal"}])
+
+(draw-column-headers {:labels ["7" "6" "5" "4" "3" "2" "1" "0"]})
+
+(draw-box (text "(unused)"        [:vertical :unused])  :box-first)
+(draw-box (text "variable font?"  [:vertical :specd])   :box-related)
+(draw-box (text "screen split?"   [:vertical :specd])   :box-related)
+(draw-box (text "status unavail?" [:vertical :specd])   :box-related)
+(draw-box (text "Tandy bit"       :vertical)            [:box-related :v3])
+(draw-box (text "split story"     [:vertical :specd])   :box-related)
+(draw-box (text "status-line"     [:vertical :specd])   :box-related)
+(draw-box (text "(unused)"        [:vertical :unused])  :box-last)
+----
+
+.Flags2
+[bytefield,subs=attributes]
+----
+{bitfield-defaults}
+{bytefield-defaults}
+(def boxes-per-row 16)
+
+(defattrs :specd [:unused {:font-style "normal"}])
+
+(draw-column-headers {:labels [
+    "15" "14" "13" "12" "11" "10" "9" "8"
+    "7" "6" "5" "4" "3" "2" "1" "0"
+    ]})
+
+(draw-box (text "(unused)"    :unused)             [:box-first {:span 5}])
+(draw-box (text "print error" :vertical)           [:box-related :vX])
+(draw-box (text "(unused)"    [:vertical :unused]) :box-related)
+(draw-box (text "menus"       [:vertical :specd]) :box-last)
+
+(draw-box (text "sounds"      [:vertical :specd]) :box-first)
+(draw-box (text "color"       [:vertical :specd]) :box-related)
+(draw-box (text "mouse"       [:vertical :specd]) :box-related)
+(draw-box (text "TLH sounds"  :vertical)          [:box-related :v3])
+(draw-box (text "pictures"    [:vertical :specd]) :box-related)
+(draw-box (text "redraw"      [:vertical :specd]) :box-related)
+(draw-box (text "force mono?" [:vertical :specd]) :box-related)
+(draw-box (text "transcript?" [:vertical :specd]) :box-last)
+----
+
+
+
+****
+
+
 1. In Versions 1 to 3, bits 0 and 7 of ’Flags 1′ are unused. (The meaning of bit 2 has recently been discovered: see section 11.) In later Versions, bits 0, 6 and 7 are unused. In ’Flags 2′, bits 9 and 11–15 are unused. Infocom used up almost the whole header: only the bytes at `*$32*` and `*$33*` are unused in any Version, and those are now allocated for standard interpreters to give their Revision numbers.
 
 2. Some early Infocom games were sold by the Tandy Corporation, who seem to have been sensitive souls. _Zork I_ pretends not to have sequels if it finds the Tandy bit set. And to quote Paul David Doherty:

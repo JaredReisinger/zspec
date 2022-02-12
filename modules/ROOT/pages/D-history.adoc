@@ -6,14 +6,14 @@ Infocom made six main Versions of the Z-machine and several minor variant forms.
 
 Broadly, these fall into two groups: early (Versions 1 to 3) and late (4 to 6). More fully:
 
-[%autowidth, cols="^1,1" frame=none, grid=rows]
+[cols="1,6" frame=none, grid=rows]
 |===
-| 1 | Early Apple II and TRS-80 Model I games
-| 2 | Early Apple II and TRS-80 Model I games
-| 3 | “Standard” series games
-| 4 | “Plus” series games
-| 5 | “Advanced” series games, or, as the marketing division would have it, “Solid Gold Interactive Fiction”—a reference to the colour (though not composition) of the boxes they came in
-| 6 | Later games with graphics, mouse support, etc.
+| Version 1 | Early Apple II and TRS-80 Model I games
+| Version 2 | Early Apple II and TRS-80 Model I games
+| Version 3 | “Standard” series games
+| Version 4 | “Plus” series games
+| Version 5 | “Advanced” series games, or, as the marketing division would have it, “Solid Gold Interactive Fiction”—a reference to the colour (though not composition) of the boxes they came in
+| Version 6 | Later games with graphics, mouse support, etc.
 |===
 
 Infocom called their own interpreters *ZIP* (versions 1 to 3), *EZIP*/*LZIP* (V4), *XZIP* (V5) and *YZIP* (V6). They speculated on the possibility of an interpreter capable of running all Versions, but never published one.
