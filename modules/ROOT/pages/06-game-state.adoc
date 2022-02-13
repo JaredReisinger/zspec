@@ -2,6 +2,7 @@
 
 image::icon06.gif[]
 
+[#6_1]
 == 6.1 Saved states
 
 The “state of play” is defined as the following: the contents of dynamic memory; the contents of the stack; the value of the program counter (PC), and the “routine call state” (that is, the chain of routines which have called each other in sequence, and the values of their local variables). Note that the routine call state, the stack and the PC must be stored outside the Z-machine memory map, in the interpreter’s private memory.
@@ -42,10 +43,12 @@ A “restart” is similar: the entire state is restored from the original stor
 
 In Versions 5 and later, an interpreter unable to save the game state into internal memory (for “undo” purposes) must clear bit 4 of ’Flags 2′ in the header.
 
+[#6_2]
 == 6.2 Storage of global variables
 
 Global variables (variable numbers `*$10*` to `*$ff*`) are stored in a table in the Z-machine’s dynamic memory, at a byte address given in word 6 of the header. The table consists of 240 2-byte words and the initial values of the global variables are the values initially contained in the table. (It is legal for a program to alter the table’s contents directly in play, though not for it to change the table’s address.)
 
+[#6_3]
 == 6.3 The stack
 
 Writing to the stack pointer (variable number `*$00*`) pushes a value onto the stack; reading from it pulls a value off. Stack entries are 2-byte words as usual.
@@ -74,6 +77,7 @@ Two examples of modern interpreters with increased stack size are *Windows Frotz
 
 In the seven opcodes that take indirect variable references (xref:15-opcodes.adoc#inc[`*inc*`], xref:15-opcodes.adoc#dec[`*dec*`], xref:15-opcodes.adoc#inc_chk[`*inc_chk*`], xref:15-opcodes.adoc#dec_chk[`*dec_chk*`], xref:15-opcodes.adoc#load[`*load*`], xref:15-opcodes.adoc#store[`*store*`], xref:15-opcodes.adoc#pull[`*pull*`]), an indirect reference to the stack pointer does not push or pull the top item of the stack—it is read or written in place.
 
+[#6_4]
 == 6.4 Routine calls
 
 Routine calls occur in the following circumstances: when one of the xref:15-opcodes.adoc#call[`*call*`]… opcodes is executed; in Versions 4 and later, when timed keyboard input is being monitored; in Versions 5 and later, when a sound effect finishes; in Version 6, when the game begins (to call the “main” routine); in Version 6, when a “newline interrupt” occurs.
@@ -102,10 +106,12 @@ It is legal for there to be more arguments than local variables (any spare argum
 
 The return value of a routine can be any Z-machine number. Returning ‘false’ means returning 0; returning ‘true’ means returning 1.
 
+[#6_5]
 == 6.5 Stack frames
 
 A “stack frame” is an index to the routine call state (that is, the call-stack of return addresses from routines currently running, and values of local variables within them). This index is a Z-machine number. The interpreter must be able to produce the current value and to set a value further down the call-stack than the current one, effectively throwing away its recent history (see xref:15-opcodes.adoc#catch[`*catch*`] and xref:15-opcodes.adoc#throw[`*throw*`]).
 
+[#6_6]
 == 6.6 User stacks (V6)
 
 In Version 6, the Z-machine understands a third kind of stack: a “user stack”, which is a table of words in dynamic memory. The first word in this table always holds the number of spare slots on the stack (so the initial value is the capacity of the stack). The Z-machine makes no check on stack under-flow (i.e., pulling more values than were pushed) which would over-run the length of the table if the program allowed it to happen.

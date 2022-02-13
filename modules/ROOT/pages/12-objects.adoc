@@ -2,14 +2,17 @@
 
 image::icon12.gif[]
 
+[#12_1]
 == 12.1 Storage
 
 The object table is held in dynamic memory and its byte address is stored in the word at `*$0a*` in the header. (Recall that objects have flags attached called attributes, numbered from 0 upward, and variables attached called properties, numbered from 1 upward. An object need not provide every property.)
 
+[#12_2]
 == 12.2 Property defaults table
 
 The table begins with a block known as the property defaults table. This contains 31 words in Versions 1 to 3 and 63 in Versions 4 and later. When the game attempts to read the value of property _n_ for an object which does not provide property _n_, the _n_-th entry in this table is the resulting value.
 
+[#12_3]
 == 12.3 Object tree
 
 Next is the object tree. Objects are numbered consecutively from 1 upward, with object number 0 being used to mean “nothing” (though there is formally no such object). The table consists of a list of entries, one for each object.
@@ -82,6 +85,7 @@ In Version 4 and later, there are at most 65535 objects, each having a 14-byte
 (draw-box "properties" {:span 2})
 ----
 
+[#12_4]
 == 12.4 Property tables
 
 Each object has its own property table. Each of these can be anywhere in dynamic memory (indeed, a game can legally change an object’s properties table address in play, provided the new address points to another valid properties table). The header of a property table is as follows:
@@ -274,6 +278,7 @@ And in this case, rather than adding one to the length value, it is taken as-is 
 ****
 
 
+[#12_5]
 == 12.5 Well-foundedness of the tree
 
 It is the game’s responsibility to keep the object tree well-founded: the interpreter is not required to check. “Well-founded” means the following:

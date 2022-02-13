@@ -7,14 +7,17 @@ ____
 The highest ideal of a translation… is achieved when the reader flings it impatiently into the fire, and begins patiently to learn the language for himself.
 ____
 
+[#15_1]
 == 15.1
 
 The dictionary below is alphabetical and includes entries on every opcode listed in the table above, as well as brief notes on a few opcodes once thought to exist but now disproved.
 
+[#15_2]
 == 15.2
 
 The Z-machine has the same concept of “table” (as an internal data structure) as Inform. Specifically, a table is an array of words (in dynamic or static memory) of which the initial entry is the number of subsequent words in the table. For example, a table with three entries occupies 8 bytes, arranged as the words 3, _x_, _y_, _z_.
 
+[#15_3]
 == 15.3
 
 In all cases below where one operand is supposed to be in a particular range, behaviour is undefined if it is not. For instance an interpreter complies with the Standard even if it crashes when an illegal object number (including 0) is given for an object operand. However, see xref:A-errors.adoc[**S**A] for guidelines on detecting and dealing with errors.

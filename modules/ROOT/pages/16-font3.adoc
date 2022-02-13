@@ -2,9 +2,12 @@
 
 image::icon16.gif[]
 
+[#16_1]
 == 16.1
 
 The following table of 8 × 8 bitmaps gives a suitable appearance for font 3. The font must have a fixed pitch and characters must be printed immediately next to each other in all four directions.
+
+// TODO: make this more graphical?
 
 ----
  32( ):  76543210   33(!):  76543210   34("):  76543210   35(#):  76543210

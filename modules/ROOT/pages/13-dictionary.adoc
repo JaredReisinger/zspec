@@ -2,10 +2,12 @@
 
 image::icon13.gif[]
 
+[#13_1]
 == 13.1 Storage
 
 The dictionary table is held in static memory and its byte address is stored in the word at `*$08*` in the header.
 
+[#13_2]
 == 13.2 Header
 
 The table begins with a short header:
@@ -43,6 +45,7 @@ The keyboard input codes are “word-separators”: typically (and under Inform 
 
 Note that the word-separators table can only contain codes which are defined in ZSCII for both input and output.
 
+[#13_3]
 == 13.3 Entries (V1 to V3)
 
 In Versions 1 to 3, each word has an entry in the form
@@ -72,14 +75,17 @@ In Versions 1 to 3, each word has an entry in the form
 
 The interpreter ignores the bytes of data (presumably the game’s parser will use them). The encoded text contains 6 Z-characters (it is always padded out with Z-character 5’s to make up 4 bytes: see xref:03-text.adoc[**S**3]). The text may include spaces or other word-separators (though, if so, the interpreter will never match any text to the dictionary word in question: surprisingly, this can be useful and is a trick used in the Inform library).
 
+[#13_4]
 == 13.4 Entries (later versions)
 
 In Versions 4 and later, the encoded text has 6 bytes and always contains 9 Z-characters.
 
+[#13_5]
 == 13.5 Ordering
 
 The word entries follow immediately after the dictionary header and must be given in numerical order of the encoded text (when the encoded text is regarded as a 32 or 48-bit binary number with most-significant byte first). It must not contain two entries with the same encoded text.
 
+[#13_6]
 == 13.6 Lexical analysis
 
 Lexical analysis takes place in two circumstances: on request of a xref:15-opcodes.adoc#tokenise[`*tokenise*`] opcode (in which case it can use any dictionary table it likes, in the format above) and during acceptance of a game command (in which case the standard dictionary is used).

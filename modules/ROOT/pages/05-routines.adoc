@@ -2,10 +2,12 @@
 
 image::icon05.gif[]
 
+[#5_1]
 == 5.1 Start position
 
 A routine is required to begin at an address in memory which can be represented by a packed address (for instance, in Version 5 it must occur at a byte address which is divisible by 4).
 
+[#5_2]
 == 5.2 Header
 
 A routine begins with one byte indicating the number of local variables it has (between 0 and 15 inclusive).
@@ -14,14 +16,17 @@ A routine begins with one byte indicating the number of local variables it has 
 
 In Versions 1 to 4, that number of 2-byte words follows, giving initial values for these local variables. In Versions 5 and later, the initial values are all zero.
 
+[#5_3]
 == 5.3 First instruction
 
 Execution of instructions begins from the byte after this header information. There is no formal ’end-marker’ for a routine (it is simply assumed that execution eventually results in a return taking place).
 
+[#5_4]
 == 5.4 Main routine (V6)
 
 In Version 6, there is a “main” routine (whose packed address is stored in the word at `*$06*` in the header) called when the game starts up. It is illegal to return from this routine.
 
+[#5_5]
 == 5.5 Initial execution point (other versions)
 
 In all other Versions, the word at `*$06*` contains the byte address of the first instruction to execute. The Z-machine starts in an environment with no local variables from which, again, a return is illegal.

@@ -2,6 +2,7 @@
 
 image::icon09.gif[]
 
+[#9_1]
 == 9.1 Sound effects
 
 Some games, from Version 3 onward, have sound effects attached. These are not stored in the story files (or the Z-machine) itself, and the interpreter is simply expected to know where to find them. Other games have only one sound effect, usable in a much more restricted way: a beep or bell sound, which we shall call a “bleep”.
@@ -14,6 +15,7 @@ In Version 6, the interpreter should set bit 5 of ’Flags 1′ if it can provi
 
 In Version 5 and later, a game should have bit 7 of ’Flags 2′ set in its story file if it wants to use sound effects beyond a bleep. The interpreter should then clear this bit if it cannot oblige.
 
+[#9_2]
 == 9.2 Numbering of
 
 Sound effects are numbered upwards from 1. Number 1 is a high-pitched bleep, number 2 a low-pitched one and effects from 3 upward are supplied by the interpreter somehow for the particular game in question.
@@ -22,10 +24,12 @@ Sound effects are numbered upwards from 1. Number 1 is a high-pitched bleep, n
 
 *[1.1]* Aside from bleeps, there are two types of sound effect, samples and music. The game has no way of telling the type of a given sound effect.
 
+[#9_3]
 == 9.3 Volume
 
 Sound effects (other than bleeps) can be played at any volume level from 1 to 8 (8 being loudest of these). The volume level -1 should be implemented as “loudest possible”.
 
+[#9_4]
 == 9.4 Sound playing autonymously
 
 Bleeps are immediate and brief. Other sound effects take place in the background, while normal operation of the Z-machine is going on. Control is via the xref:15-opcodes.adoc#sound_effect[`*sound_effect*`] opcode, allowing the game to prepare, start, stop or finish with an effect.

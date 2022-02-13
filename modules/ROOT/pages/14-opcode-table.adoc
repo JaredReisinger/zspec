@@ -187,10 +187,12 @@ _Opcode numbers 192 to 223: VAR forms of 2OP:0 to 2OP:31._
 | * |   | EXT:29  | 1D  | 6/* | buffer_screen mode -> (result)                   | xref:15-opcodes.adoc#buffer_screen[`*buffer_screen*`]
 |===
 
+[#14_1]
 == 14.1 Contents
 
 This table contains all 119 opcodes and, taken with the dictionary in xref:15-opcodes.adoc[**S**15], describes exactly what each should do. In addition, it lists which opcodes are actually used in the known Infocom story files, and documents the Inform assembly language syntax.
 
+[#14_2]
 == 14.2 Out of range opcodes
 
 Formally, it is illegal for a game to contain an opcode not specified for its version. An interpreter should normally halt with a suitable message.

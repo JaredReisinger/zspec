@@ -2,6 +2,7 @@
 
 image::icon08.gif[]
 
+[#8_1]
 == 8.1 Fonts
 
 Text may be printed in any font of the interpreter’s choice, variable-or fixed-pitch: except that when bit 1 of ’Flags 2′ in the header is set, font 4 has been selected, or when the text style has been set to Fixed Pitch, then a fixed-pitch font must be used. The fixed pitch-bit is deprecated in Version 5 and later, and interpreter support in Version 6 is optional.
@@ -48,6 +49,7 @@ In Version 5 (only), an interpreter which cannot provide the character graphics 
 
 Any new fonts will have numbers higher than 4. Fonts 5–1023 are reserved for future Standards to specify. Local use may be made of higher font numbers.
 
+[#8_2]
 == 8.2 Status line
 
 In Versions 1 to 3, a status line should be printed by the interpreter, as follows. In Version 3, it must set bit 4 of ’Flags 1′ in the header if it is unable to produce a status line.
@@ -84,6 +86,7 @@ For “time games”: the time, in the form `*__hours__:__minutes__*` (held in t
 
 The status line is updated in exactly two circumstances: when a xref:15-opcodes.adoc#show_status[`*show_status*`] opcode is executed, and just before the keyboard is read by xref:15-opcodes.adoc#read[`*read*`]. (It is not displayed when the game begins.)
 
+[#8_3]
 == 8.3 Text colours
 
 Under Versions 5 and later, text printing has a current foreground and background colour. In Version 6, each window has its own pair. (Note that a Version 6 interpreter going under the Amiga interpreter number must use the same pair of colours for all windows when running Infocom’s games. If either is changed, then the interpreter must change the colour of all text on the screen to match. This simulates the Amiga hardware, which used two logical colours for text and switched palette to change their physical colour. This behaviour should not occur when running non-Infocom games, and modern games should never expect it. An interpreter that does not wish to handle this behaviour at all should avoid using the Amiga interpreter number when running Infocom’s Version 6 games.)
@@ -173,6 +176,7 @@ In the minimal implementation, interpreters just need to match to the closest of
 
 True colour specifications are in the Srgb colour space, `*$0000*` being black and `*$7FFF*` being white. Colours should be gamma adjusted if necessary. See the *PNG* specification for a good introduction to colour spaces and gamma correction.
 
+[#8_4]
 == 8.4 Screen dimensions
 
 The screen should ideally be at least 60 characters wide by 14 lines deep. (Old Apple II interpreters had a 40 character width and some modern laptop ones have a 9 line height, but implementors should seek to avoid these extremes if possible.) The interpreter may change the exact dimensions whenever it likes but must write the current height (in lines) and width (in characters) into bytes `*$20*` and `*$21*` in the header.
@@ -189,6 +193,7 @@ Screen dimensions are measured in notional “units”. In Versions 1 to 4, one
 
 In Version 5 and later, the screen’s width and height in units should be written to the words at `*$22*` and `*$24*`.
 
+[#8_5]
 == 8.5 Screen model (V1, V2)
 
 The screen model for Versions 1 and 2 is as follows:
@@ -201,6 +206,7 @@ The screen can only be printed to (like a teletype) and there is no control of 
 
 At the start of a game, the screen should be cleared and the text cursor placed at the bottom left (so that text scrolls upwards as the game gets under way).
 
+[#8_6]
 == 8.6 Screen model (V3)
 
 The screen model for Version 3 is as follows:
@@ -237,6 +243,7 @@ When text reaches the bottom right of the lower window, it should be scrolled up
 
 At the start of a game, the screen should be cleared and the text cursor placed at the bottom left (so that text scrolls upwards as the game gets under way).
 
+[#8_7]
 == 8.7 Screen model (V4, V5)
 
 The screen model for Versions 4 and later, except Version 6, is as follows:
@@ -309,6 +316,7 @@ Erasing window -1 clears the whole screen to the background colour of the lower
 
 Using xref:15-opcodes.adoc#erase_line[`*erase_line*`] in the upper window should erase the current line from the cursor position to the right-hand edge, clearing it to background colour. (Even if the text style is Reverse Video the new blank space should not have reversed colours.)
 
+[#8_8]
 == 8.8 Screen model (V6)
 
 The screen model for Version 6 is as follows:

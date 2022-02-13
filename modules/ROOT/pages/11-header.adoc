@@ -2,6 +2,7 @@
 
 image::icon11.gif[]
 
+[#11_1]
 == 11.1
 
 The header table summarises those locations in the Z-machine’s header which an interpreter must deal with. (For further notes on traditional usage, see Appendix B.) “Hex” means the address, in hexadecimal; “V” the earliest Version to which the rule is applicable; “Dyn” means that the byte or bit may legally be changed by the game during play; “Int” means that the interpreter may change it; “Rst” means that the interpreter must set it correctly after loading the game, after a restore or after a restart.

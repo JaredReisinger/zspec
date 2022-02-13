@@ -2,10 +2,12 @@
 
 image::icon10.gif[]
 
+[#10_1]
 == 10.1 Keyboard only in V1
 
 In Versions 1 and 2, the player’s commands can only be drawn from the keyboard.
 
+[#10_2]
 == 10.2 Input streams
 
 In Versions 3 and later, the player’s keypresses are drawn from the current “input stream”. There are two input streams: numbered 0 (the keyboard) and 1 (a file containing commands). Other inputs (mouse clicks or menu selections), if available, are also implemented as keypresses (see below).
@@ -26,6 +28,7 @@ When input stream 1 is first selected, the interpreter may use any method of ch
 
 When the the current stream is stream 1, the interpreter should not hold up long passages of text (by printing `[MORE]` and waiting for a keypress, for instance).
 
+[#10_3]
 == 10.3 Mouse support
 
 Mouse support is optional but can be provided in Versions 5 and later.
@@ -56,6 +59,7 @@ The mouse is presumed to have between 0 and 16 buttons. The state of these but
 
 In Version 6, the mouse can either be free or constrained to one of the 8 windows: if so, clicks outside the ’mouse window’ must be ignored, and the interpreter is at liberty to confine the mouse’s movement to the boundary of its window.
 
+[#10_4]
 == 10.4 Menu support
 
 Menu support can optionally be provided in Version 6.
@@ -76,6 +80,7 @@ Menus are numbered from 0 upwards. 0, 1 and 2 are reserved for the interprete
 
 Menu selection is reported to the game as a keypress (see below). Details of what selection has been made are read with xref:15-opcodes.adoc#read_mouse[`*read_mouse*`].
 
+[#10_5]
 == 10.5 Terminating characters and timed input
 
 Whole commands are read from the input stream using the xref:15-opcodes.adoc#read[`*read*`] opcode. (Note that this has two different internal names in Inform, xref:15-opcodes.adoc#sread[`*sread*`] for Versions 1 to 4 and xref:15-opcodes.adoc#aread[`*aread*`] subsequently.)
@@ -96,10 +101,12 @@ In Versions 5 and later, the game may provide a “terminating characters tabl
 
 *[1.0]* In Versions 4 and later, an interpreter should ideally be able to time input and to call a (game) routine at periodic intervals: see the xref:15-opcodes.adoc#read[`*read*`] opcode. If it is able to do this, it should set bit 7 of ’Flags 1′ in the header.
 
+[#10_6]
 == 10.6 Single keypresses
 
 In Versions 4 and later, individual characters can be read from the current input stream, using xref:15-opcodes.adoc#read_char[`*read_char*`]. Again, the interpreter should ideally be able to time input and to call a (game) routine at periodic intervals. If it is able to do this, it should set bit 7 of ’Flags 1′ in the header.
 
+[#10_7]
 == 10.7 Reading ZSCII from the keyboard
 
 The only characters which can be read from the keyboard are ZSCII characters defined for input (see S 3).
