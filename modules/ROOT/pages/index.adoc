@@ -18,6 +18,7 @@ include::partial$TOC.adoc[]
 ***
 
 .Meta information
-* xref:0001-editors-note.adoc[]
-* xref:0002-conventions.adoc[]
-* xref:0003-colophon.adoc[]
+* xref:ZZ01-editors-note.adoc[]
+* xref:ZZ02-conventions.adoc[]
+* xref:ZZ03-opcodes.adoc[]
+* xref:ZZ04-colophon.adoc[]

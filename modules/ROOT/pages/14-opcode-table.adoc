@@ -2,6 +2,13 @@
 
 // 2OP / 1OP / 0OP / VAR / EXT
 
+.Confused?
+****
+I find these tables really confusing.  The __TYPE__:__Decimal__ notation actually represents the operand-count value *twice*, because the _Decimal_ value is actually the *_entire_* encoded opcode byte, not just the xref:04-instructions.adoc#4_3[opcode number]... but the *Hex* column *_is_* just the opcode number.
+
+To that end, I have an xref:ZZ03-opcodes.adoc[alternative, exhasutive opcode table] (on a separate page, to try to avoid cluttering this one).
+****
+
 .Two-operand opcodes 2OP
 [cols="^1,^1,6,^1,^1,40,15", frame=none, grid=rows]
 |===

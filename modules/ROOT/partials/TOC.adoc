@@ -7,7 +7,7 @@
 * xref:01-memory-map.adoc[]
 * xref:02-numbers.adoc[]
 * xref:03-text.adoc[]
-* xref:04-intructions.adoc[]
+* xref:04-instructions.adoc[]
 * xref:05-routines.adoc[]
 * xref:06-game-state.adoc[]
 

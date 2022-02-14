@@ -60,17 +60,92 @@ Each instruction has a form (long, short, extended or variable) and an operand 
 
 In short form, bits 4 and 5 of the opcode byte give an operand type as above. If this is `*${empty}$11*` then the operand count is 0OP; otherwise, 1OP. In either case the opcode number is given in the bottom 4 bits.
 
+.Short form opcodes
+[bytefield,subs=attributes]
+----
+{bitfield-defaults}
+{bytefield-defaults}
+(def boxes-per-row 8)
+
+(draw-column-headers {:labels ["7" "6" "5" "4" "3" "2" "1" "0"]})
+
+(draw-box (text "1" :hex)                        [:box-first   ])
+(draw-box (text "0" :hex)                        [:box-related ])
+(draw-box (text "operand type" :vertical)        [:box-related {:span 2}])
+(draw-box "opcode number"                        [:box-last    {:span 4}])
+----
+
 === 4.3.2
 
 In long form the operand count is always 2OP. The opcode number is given in the bottom 5 bits.
+
+.Long form opcodes
+[bytefield,subs=attributes]
+----
+{bitfield-defaults}
+{bytefield-defaults}
+(def boxes-per-row 8)
+
+(draw-column-headers {:labels ["7" "6" "5" "4" "3" "2" "1" "0"]})
+
+(draw-box (text "0" :hex)                        [:box-first   ])
+(draw-box (text "first type" :vertical)          [:box-related ])
+(draw-box (text "second type" :vertical)         [:box-related ])
+(draw-box "opcode number"                        [:box-last    {:span 5}])
+----
+
+.Bit 6 (and 5)?
+****
+Since “long form” is defined as “_not_ a leading `*${empty}$11*` or `*${empty}$10*`”, that implies that the bit 7 must be zero, and bit 6 isn’t needed to define the form. Since the opcode number occupies the low 5 bits, that also leaves bit 5 itself unspecified here. xref:#4_4_2[**S**4.4.2], below describes that these two bits are used to define the operand types, selecting from two possible options.
+****
 
 === 4.3.3
 
 In variable form, if bit 5 is 0 then the count is 2OP; if it is 1, then the count is VAR. The opcode number is given in the bottom 5 bits.
 
+.Variable form opcodes
+[bytefield,subs=attributes]
+----
+{bitfield-defaults}
+{bytefield-defaults}
+(def boxes-per-row 8)
+
+(draw-column-headers {:labels ["7" "6" "5" "4" "3" "2" "1" "0"]})
+
+(draw-box (text "1" :hex)                        [:box-first   ])
+(draw-box (text "1" :hex)                        [:box-related ])
+(draw-box (text "operand count" :vertical)       [:box-related ])
+(draw-box "opcode number"                        [:box-last    {:span 5}])
+----
+
 === 4.3.4
 
 In extended form, the operand count is VAR. The opcode number is given in a second opcode byte.
+
+.Extended form opcodes (versions 5+ only)
+[bytefield,subs=attributes]
+----
+{bitfield-defaults}
+{bytefield-defaults}
+(def boxes-per-row 16)
+
+(draw-column-headers {:labels [
+    "7" "6" "5" "4" "3" "2" "1" "0"
+    "7" "6" "5" "4" "3" "2" "1" "0"
+]})
+
+(draw-box (text "1" :hex)                        [:box-first   ])
+(draw-box (text "0" :hex)                        [:box-related ])
+(draw-box (text "1" :hex)                        [:box-related ])
+(draw-box (text "1" :hex)                        [:box-related ])
+(draw-box (text "1" :hex)                        [:box-related ])
+(draw-box (text "1" :hex)                        [:box-related ])
+(draw-box (text "1" :hex)                        [:box-related ])
+(draw-box (text "0" :hex)                        [:box-last ])
+(draw-box "opcode number"                        {:span 8})
+----
+
+
 
 [#4_4]
 == 4.4 Specifying operand types
