@@ -618,7 +618,7 @@ It is recommended that if the cursor is moved below the split position in V4/V5,
 
 Some modern Z-Machine interpeters (mainly those using Andrew Plotkin’s *Glk* interface standard) use a seperate text windows for the status line. While this is not Standard behaviour, it largely causes no problems. However _Trinity_, and many more recent Inform games, print quote boxes using a technique that is not compatible with this implementation.
 
-Andrew Plotkin has written up some http://eblong.com/zarf/glk/quote-box.html[notes] on the issue, including a workaround.
+Andrew Plotkin has written up some https://eblong.com/zarf/glk/quote-box.html[notes] on the issue, including a workaround.
 
 ***
 

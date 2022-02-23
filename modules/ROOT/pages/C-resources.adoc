@@ -9,41 +9,45 @@ ____
 
 NOTE: The hypertext links in this appendix are to WWW sites external to the standards document, and were correct as of 21th February 2014.
 
-The resources below are mainly available from the http://www.ifarchive.org/if-archive/[if-archive] maintained by David Kinder and Stephen Granade.
+****
+I have also verified the links as of 23 February 2022—or rendered them with [line-through]#strikethrough# and added a footnote about their disappearance—and converted most from `http` to `https`.
+****
+
+The resources below are mainly available from the https://ifarchive.org/if-archive/[if-archive] maintained by David Kinder and Stephen Granade.
 
 == Public Interpreters
 
-Since the 1.0 Standard was first introduced, a variety of http://www.ifarchive.org/indexes/if-archiveXinfocomXinterpreters.html [interpreters] have become available, for many different platforms and with a variety of features. The page on http://inform7.com/if/interpreters/[Playing Interactive Fiction] at inform7.com is a good place to start when looking for an interpreter, as is the http://www.ifwiki.org/index.php/Z-machine#Assorted_Z-machine_interpreters[ifwiki page on the Z-Machine].
+Since the 1.0 Standard was first introduced, a variety of https://ifarchive.org/indexes/if-archiveXinfocomXinterpreters.html[interpreters] have become available, for many different platforms and with a variety of features. The page on [line-through]#http://inform7.com/if/interpreters/[Playing Interactive Fiction]#{empty}footnote:[This page seems to no longer exist (as of 23 February 2022).] at inform7.com is a good place to start when looking for an interpreter, as is the https://www.ifwiki.org/index.php/Z-machine#Assorted_Z-machine_interpreters[ifwiki page on the Z-Machine].
 
 == Testing compliance
 
 A few story files exist to test interpreter for various Z-Machine features:
 
-1. http://ifarchive.org/if-archive/infocom/interpreters/tools/czech_0_8.zip[Czech] is a general Z-Machine unit test by Evin Robertson and Amir Karger.
+1. https://ifarchive.org/if-archive/infocom/interpreters/tools/czech_0_8.zip[Czech] is a general Z-Machine unit test by Evin Robertson and Amir Karger.
 
-2. http://eblong.com/zarf/ftp/praxix.z5[Praxix] is a general Z-Machine unit test by Andrew Plotkin and Dannii Willis.
+2. https://eblong.com/zarf/ftp/praxix.z5[Praxix] is a general Z-Machine unit test by Andrew Plotkin and Dannii Willis.
 
-3. http://ifarchive.org/if-archive/infocom/interpreters/tools/etude.tar.Z[TerpEtude] by Andrew Plotkin is a unit test with a focus on IO.
+3. https://ifarchive.org/if-archive/infocom/interpreters/tools/etude.tar.Z[TerpEtude] by Andrew Plotkin is a unit test with a focus on IO.
 
-4. http://curiousdannii.github.com/if/tests/unicode.z5[Unicode] by David Kinder tests Unicode input and output.
+4. [line-through]#http://curiousdannii.github.com/if/tests/unicode.z5[Unicode]#{empty}footnote:[This page seems to no longer exist (as of 23 February 2022).] by David Kinder tests Unicode input and output.
 
-5. http://ifarchive.org/if-archive/infocom/interpreters/tools/strictz.z5[Strict Z Test] by Torbjorn Andersson tests an interpreter’s abilitity to handle errors in story files.
+5. https://ifarchive.org/if-archive/infocom/interpreters/tools/strictz.z5[Strict Z Test] by Torbjorn Andersson tests an interpreter’s abilitity to handle errors in story files.
 
 == Compilers
 
-Infocom’s original compiler *Zilch* no longer exists, but a PDF copy of http://www.xlisp.org/zil.pdf[Learning ZIL], Infocom’s documentation for their *ZIL* language, is available. Since the emergence of this file, there have been a few attempts at making a new *ZIL* compiler, most notably https://sourceforge.net/projects/zilf/[*ZILF*] by Jesse McGrew.
+Infocom’s original compiler *Zilch* no longer exists, but a PDF copy of [line-through]#http://www.xlisp.org/zil.pdf[Learning ZIL]#{empty}footnote:[This page seems to no longer exist (as of 23 February 2022).], Infocom’s documentation for their *ZIL* language, is available. Since the emergence of this file, there have been a few attempts at making a new *ZIL* compiler, most notably https://sourceforge.net/projects/zilf/[*ZILF*] by Jesse McGrew.
 
-No continuous part of the source code of any of Infocom’s games is in the public domain (but see http://www.ifarchive.org/if-archive/infocom/articles/NZT-Zorkhistory.txt[Stu Galley’s chapter of an Infocom history article], and the IEEE article, for fragments).
+No continuous part of the source code of any of Infocom’s games is in the public domain (but see https://ifarchive.org/if-archive/infocom/articles/NZT-Zorkhistory.txt[Stu Galley’s chapter of an Infocom history article], and the IEEE article, for fragments).
 
-*Inform* remains the most popular compiler for Z-Machine games. In 2006, the first public release of http://inform7.com/[*Inform 7*] was made available. *Inform 7* is a very different language from previous versions of Inform, with a focus on natural language and a powerful IDE.
+*Inform* remains the most popular compiler for Z-Machine games. In 2006, the first public release of https://inform7.com/[*Inform 7*] was made available. *Inform 7* is a very different language from previous versions of Inform, with a focus on natural language and a powerful IDE.
 
-While *Inform 7* is the main focus of development, http://inform-fiction.org/[*Inform 6*] is still widely used and the compiler and libraries continue to be maintained.
+While *Inform 7* is the main focus of development, https://inform-fiction.org/[*Inform 6*] is still widely used and the compiler and libraries continue to be maintained.
 
-A few http://www.ifarchive.org/indexes/if-archiveXinfocomXcompilers.html[other compilers] have been made available over the years.
+A few https://ifarchive.org/indexes/if-archiveXinfocomXcompilers.html[other compilers] have been made available over the years.
 
 == Utility programs
 
-Mark Howell has written a toolkit of http://www.ifarchive.org/indexes/if-archiveXinfocomXtoolsXztools.html[*Ztools*], or utility programs (1991–5, updated 1997), which includes:
+Mark Howell has written a toolkit of https://ifarchive.org/indexes/if-archiveXinfocomXtoolsXztools.html[*Ztools*], or utility programs (1991–5, updated 1997), which includes:
 
 1. *Txd*, a disassembler for Versions 1 to 8. (Uses the same opcode names as Inform and this document, and has an option to disassemble in Inform assembly-language syntax.)
 
@@ -55,15 +59,15 @@ Mark Howell has written a toolkit of http://www.ifarchive.org/indexes/if-archiv
 
 These continue to be maintained (by Matthew Russotto) and the first two are extremely useful. *Infodump* largely supersedes Mike Threepoint’s vocabulary dumper *Zorkword* (1991–2), which was important in its day (and which this author found extremely helpful when writing Inform 1).
 
-http://www.ifarchive.org/indexes/if-archiveXinfocomXtoolsXreform.html[*Reform*], by Ben Rudiak-Gould, is a decompiler for Z-Machine games which will attempt to convert them into Inform 6 source code.
+https://ifarchive.org/indexes/if-archiveXinfocomXtoolsXreform.html[*Reform*], by Ben Rudiak-Gould, is a decompiler for Z-Machine games which will attempt to convert them into Inform 6 source code.
 
 == Story files
 
-1. Numerous http://www.ifarchive.org/indexes/if-archiveXgamesXzcode.html[Inform-compiled story files] are publically available.
+1. Numerous https://ifarchive.org/indexes/if-archiveXgamesXzcode.html[Inform-compiled story files] are publically available.
 
-2. A few Infocom story files are public, notably two 4-in-1 sample games (released for advertising purposes: http://www.ifarchive.org/if-archive/infocom/demos/sampler1_R55.z3[55.850823] and http://www.ifarchive.org/if-archive/infocom/demos/sampler2.z3[97.870601]) and http://www.ifarchive.org/if-archive/infocom/demos/minizork.z3[Minizork] (a heavily abbreviated form of _Zork I_ released with a Commodore magazine).
+2. A few Infocom story files are public, notably two 4-in-1 sample games (released for advertising purposes: https://ifarchive.org/if-archive/infocom/demos/sampler1_R55.z3[55.850823] and https://ifarchive.org/if-archive/infocom/demos/sampler2.z3[97.870601]) and https://ifarchive.org/if-archive/infocom/demos/minizork.z3[Minizork] (a heavily abbreviated form of _Zork I_ released with a Commodore magazine).
 
-3. Almost all Infocom’s games remain commercially available in anthologies published by http://www.activision.com/[Activision]. Copyright resides in them and they should not available by FTP from any site.
+3. Almost all Infocom’s games remain commercially available in anthologies published by https://www.activision.com/[Activision]. Copyright resides in them and they should not available by FTP from any site.
 
 4. A few other Infocom story files have existed but are neither on sale nor released from copyright: this applies to several of the Version 6 games, those games involving literary rights or other legal issues (_Shogun_, _Hitch-Hiker’s Guide To The Galaxy_) and ephemera such as beta-test versions (notably the German version of _Zork I_) which have somehow passed into private circulation.
 
@@ -73,14 +77,14 @@ Version 1 and 2 games are extinct, though there are a few fossils in the hand
 
 == Documents
 
-The definitive guide to all Infocom story files known to exist, and an indispensable reference for anyone interested in Infocom, is Paul David Doherty’s http://www.ifarchive.org/if-archive/infocom/info/fact-sheet.txt[_Infocom fact sheet_], which is regularly updated, concise and precise. This supersedes Paul Smith’s _Infocom Game Information_ file.
+The definitive guide to all Infocom story files known to exist, and an indispensable reference for anyone interested in Infocom, is Paul David Doherty’s https://ifarchive.org/if-archive/infocom/info/fact-sheet.txt[_Infocom fact sheet_], which is regularly updated, concise and precise. This supersedes Paul Smith’s _Infocom Game Information_ file.
 
-Stefan Jokisch has written a http://www.ifarchive.org/if-archive/infocom/info/sound_format.txt[brief specification of Infocom-format sound effects files].
+Stefan Jokisch has written a https://ifarchive.org/if-archive/infocom/info/sound_format.txt[brief specification of Infocom-format sound effects files].
 
-Martin Frost is the author of the http://inform-fiction.org/zmachine/standards/quetzal/index.html[*Quetzal*] standard for saved-game files. Patches to adapt *Zip*-based interpreters to use *Quetzal* are available.
+Martin Frost is the author of the https://inform-fiction.org/zmachine/standards/quetzal/index.html[*Quetzal*] standard for saved-game files. Patches to adapt *Zip*-based interpreters to use *Quetzal* are available.
 
-Andrew Plotkin is the author of the http://www.eblong.com/zarf/blorb/blorb.html[*Blorb*] standard for packaging up images and sounds with Z-machine games.
+Andrew Plotkin is the author of the https://eblong.com/zarf/blorb/blorb.html[*Blorb*] standard for packaging up images and sounds with Z-machine games.
 
-The http://www.inform-fiction.org/source/tm/TechMan.txt[_Inform Technical Manual_] documents the format of parsing tables used in Inform games.
+The https://inform-fiction.org/source/tm/TechMan.txt[_Inform Technical Manual_] documents the format of parsing tables used in Inform games.
 
-The documentation for Infocom’s games is available online (with permission from Activision) courtesy of the http://infodoc.plover.net/[Infocom Documentation Project]. In addition, an archive of the http://www.ifarchive.org/indexes/if-archiveXinfocomXshipped-documentation.html[“samplers”] is publically available, as is http://www.ifarchive.org/indexes/if-archiveXinfocomXarticles.html[an interesting historical archive of magazine articles] concerning Infocom, and articles from Infocom’s own publicity magazine (indexed http://www.ifarchive.org/if-archive/infocom/NZT+TSL/NZT+TSL.list[here]).
+The documentation for Infocom’s games is available online (with permission from Activision) courtesy of the http://infodoc.plover.net/[Infocom Documentation Project]. In addition, an archive of the https://ifarchive.org/indexes/if-archiveXinfocomXshipped-documentation.html[“samplers”] is publically available, as is https://ifarchive.org/indexes/if-archiveXinfocomXarticles.html[an interesting historical archive of magazine articles] concerning Infocom, and articles from Infocom’s own publicity magazine (indexed https://ifarchive.org/if-archive/infocom/NZT+TSL/NZT+TSL.list[here]).

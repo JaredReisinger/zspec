@@ -92,7 +92,7 @@ A further difficulty with _TLH_ is that it assumes the interpreter is as slow a
 
 Infocom’s MS-DOS interpreters for V4 to V6 set bit 5 of ’Flags 1′ in all circumstances (i.e., whether or not sound effects are available). This would be incorrect behaviour for a standard interpreter.
 
-Infocom implemented sound effects differently on different machines. The format of Infocom’s shipped sound effects files has been documented by Stefan Jokisch and his notes are available from http://www.ifarchive.org[www.ifarchive.org].
+Infocom implemented sound effects differently on different machines. The format of Infocom’s shipped sound effects files has been documented by Stefan Jokisch and his notes are available from https://ifarchive.org[www.ifarchive.org].
 
 However, modern interpreters are strong encouraged to support Andrew Plotkin’s *Blorb* format, which is a more modern way to make sound effects available to newer games. Blorb files have been made available for the Infocom sound effects, so that modern interpreters need no longer support the Infocom format.
 
