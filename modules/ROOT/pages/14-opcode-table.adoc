@@ -1,5 +1,7 @@
 = 14. Complete table of opcodes
 
+image::icon14.gif[]
+
 // 2OP / 1OP / 0OP / VAR / EXT
 
 .Confused?

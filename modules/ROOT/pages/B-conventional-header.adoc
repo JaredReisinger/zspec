@@ -1,5 +1,7 @@
 = Appendix B. Conventional contents of the header
 
+image::iconab.gif[]
+
 The header table in xref:11-header.adoc[section 11] details everything the interpreter needs to know about the header's contents. A few other slots in the header are meaningful but only by convention (since existing Infocom and Inform games write them). These additional slots are described here.
 
 As in xref:11-header.adoc[**S**11], *Hex* means the address, in hexadecimal; *V* the earliest version in which the feature appeared; *Dyn* means that the byte or bit may legally be changed by the game during play (no others may legally be changed by the game); *Int* means that the interpreter may (in some cases must) do so.
