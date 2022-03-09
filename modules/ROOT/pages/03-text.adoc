@@ -105,27 +105,113 @@ In Version 1, Z-character 1 is printed as a new-line (ZSCII 13).
 
 In Versions 2 to 4, the alphabet table for converting Z-characters into ZSCII character codes is as follows:
 
-[%autowidth, cols="^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1" frame=none, grid=rows]
-|===
-| current |$06|$07|$08|$09|$0a|$0b|$0c|$0d|$0e|$0f|$10|$11|$12|$13|$14|$15|$16|$17|$18|$19|$1a|$1b|$1c|$1d|$1e|$1f
+// The table rendering is *really* wide, so we (ab)use a bytefield to render
+// a compact table.
+//
+// [%autowidth, cols="^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1" frame=none, grid=rows]
+// |===
+// | current |$06|$07|$08|$09|$0a|$0b|$0c|$0d|$0e|$0f|$10|$11|$12|$13|$14|$15|$16|$17|$18|$19|$1a|$1b|$1c|$1d|$1e|$1f
+// 
+// |*A0*     | a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p | q | r | s | t | u | v | w | x | y | z
+// |*A1*     | A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T | U | V | W | X | Y | Z
+// |*A2*     |   | ^ | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | . | , | ! | ? | _ | # | ' | " | / | \ | - | : | ( | )
+// |===
 
-|*A0*     | a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p | q | r | s | t | u | v | w | x | y | z
-|*A1*     | A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T | U | V | W | X | Y | Z
-|*A2*     |   | ^ | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | . | , | ! | ? | _ | # | ' | " | / | \ | - | : | ( | )
-|===
+[bytefield,subs=attributes]
+----
+{bytefield-defaults}
+(def boxes-per-row 26)
+(def box-width 16)
+(def row-height 20)
 
-(Character 6 in A2 is printed as a space here, but is not translated using the alphabet table: see xref:3_4[**S**3.4] above. Character 7 in A2, written here as a circumflex `^`, is a new-line.) For example, in alphabet A1 the Z-character 12 is translated as a capital `G` (ZSCII character code 71).
+(draw-column-headers {:labels [
+  "06" "07" "08" "09" "0a" "0b" "0c" "0d" "0e" "0f" "10" "11" "12"
+  "13" "14" "15" "16" "17" "18" "19" "1a" "1b" "1c" "1d" "1e" "1f"
+]})
+
+(defn alpha-row-header
+  [{:keys [address gap?]}]
+  (let [label (case address
+       0 "A0"
+      26 "A1"
+      52 "A2"
+    )]
+    (text label {
+      :font-size         11
+      :font-style        "normal"
+      :font-weight       "bold"
+      :dominant-baseline "middle"
+    })
+  )
+)
+
+(def row-header-fn alpha-row-header)
+
+
+(doseq [ch [
+   "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m"
+   "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z"
+
+   "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M"
+   "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z"
+   
+   " " "^" "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" "."
+   "," "!" "?" "_" "#" "'" "\"" "/" "\\" "-" ":" "(" ")"
+]]
+  (draw-box ch {:borders #{}})
+)
+----
+
+
+(Character 6 in A2 is printed as a space here, but is not translated using the alphabet table: see xref:3_4[**S**3.4] above. Character 7 in A2, written here as a circumflex `^`, is a new-line.) For example, in alphabet A1 the Z-character 12 (`$0c`) is translated as a capital `G` (ZSCII character code 71).
 
 === 3.5.4
 
 Version 1 has a slightly different A2 row in its alphabet table (new-line is not needed, making room for the < character):
 
-[%autowidth, cols="^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1" frame=none, grid=rows]
-|===
-| current |$06|$07|$08|$09|$0a|$0b|$0c|$0d|$0e|$0f|$10|$11|$12|$13|$14|$15|$16|$17|$18|$19|$1a|$1b|$1c|$1d|$1e|$1f
+// Table is too wide! We use a bytefield instead.
+//
+// [%autowidth, cols="^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1" frame=none, grid=rows]
+// |===
+// | current |$06|$07|$08|$09|$0a|$0b|$0c|$0d|$0e|$0f|$10|$11|$12|$13|$14|$15|$16|$17|$18|$19|$1a|$1b|$1c|$1d|$1e|$1f
 
-|*A2*     |   | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | . | , | ! | ? | _ | # | ' | " | / | \ | < | - | : | ( | )
-|===
+// |*A2*     |   | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | . | , | ! | ? | _ | # | ' | " | / | \ | < | - | : | ( | )
+// |===
+
+
+[bytefield,subs=attributes]
+----
+{bytefield-defaults}
+(def boxes-per-row 26)
+(def box-width 16)
+(def row-height 20)
+
+(draw-column-headers {:labels [
+  "06" "07" "08" "09" "0a" "0b" "0c" "0d" "0e" "0f" "10" "11" "12"
+  "13" "14" "15" "16" "17" "18" "19" "1a" "1b" "1c" "1d" "1e" "1f"
+]})
+
+;; With a single row, no label is drawn, but we can live with that...
+(defn alpha-row-header
+  [{:keys [address gap?]}]
+  (text "A2" {
+    :font-size         11
+    :font-style        "normal"
+    :font-weight       "bold"
+    :dominant-baseline "middle"
+  })
+)
+
+(def row-header-fn alpha-row-header)
+
+
+(doseq [ch [
+   " " "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" "." ","
+   "!" "?" "_" "#" "'" "\"" "/" "\\" "<" "-" ":" "(" ")"
+]]
+  (draw-box ch {:borders #{}})
+)
+----
 
 === 3.5.5
 
