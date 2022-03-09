@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@antora/cli": "^3.0.1",
-    "@antora/lunr-extension": "^1.0.0-alpha.5",
+    "@antora/lunr-extension": "^1.0.0-alpha.4",
     "@antora/site-generator": "^3.0.1",
     "@deepsymmetry/asciidoctor-bytefield": "^1.6.1",
     "asciidoctor-kroki": "^0.15.4",
