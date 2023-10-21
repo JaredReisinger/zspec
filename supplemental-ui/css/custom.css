@@ -1,3 +1,9 @@
+header.header button.navbar_burger,
+header.header div#topbar-nav,
+div.edit-this-page {
+  display: none;
+}
+
 .with-subtitle .doc>h1.page:first-child {
   margin-bottom: 0;
 }

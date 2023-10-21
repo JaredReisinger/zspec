@@ -5,6 +5,9 @@ site:
   keys:
     googleAnalytics: 'G-ZJW7TDDE3W'
 
+runtime:
+  cache_dir: ./.cache/antora
+
 content:
   sources:
     - url: .

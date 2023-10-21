@@ -1,5 +1,6 @@
 book/
 output/
-build/
+/.cache/
+/build/
 
-node_modules/
+/node_modules/
