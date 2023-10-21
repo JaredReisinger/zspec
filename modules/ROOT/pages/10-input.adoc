@@ -109,7 +109,7 @@ In Versions 4 and later, individual characters can be read from the current inp
 [#10_7]
 == 10.7 Reading ZSCII from the keyboard
 
-The only characters which can be read from the keyboard are ZSCII characters defined for input (see S 3).
+The only characters which can be read from the keyboard are ZSCII characters defined for input (see xref:03-text.adoc[**S**3]).
 
 === 10.7.1
 
